@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Contacting to dqdhdc</title>
+  <link rel="icon" type="image/x-icon" href="icon.png">
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="An easy way to Subscribe Us.">
+  <meta property="og:url" content="https://quaf.netlify.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="I Know about Quaf">
+  <meta property="og:description" content=
+  "An easy way to Subscribe Us.">
+  <meta property="og:image" content="https://quaf.netlify.app/images/footer.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="dqdhdc.app">
+  <meta property="twitter:url" content="https://quaf.netlify.app/">
+  <meta name="twitter:title" content="I Know about Quaf">
+  <meta name="twitter:description" content=
+  "An easy way to Subscribe Us.">
+  <meta name="twitter:image" content=
+  "https://quaf.netlify.app/images/footer.png">
+  <script async src=
+  "https://www.googletagmanager.com/gtag/js?id=G-K3NYD4K1WR"></script>
+  <script>
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-K3NYD4K1WR');
+  </script>
+  <script async src=
+  "https://www.googletagmanager.com/gtag/js?id=AW-11255152941"></script>
+  <script>
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-11255152941');
+  </script>
+  <link href=
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+  rel="stylesheet" integrity=
+  "sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+  crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+  integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+  crossorigin="anonymous"></script>
+  <style>
+  .logo {width: 100%; max-width: 70px;} .mailbox{max-height: 250px; overflow: scroll; overflow-x: hidden;} .container-card.card.border-success { margin: 20px 0; } #sendEmailButton { width: 100%; color: white; background: red; font-size: 25px; } #fillformbutton{ background: #6c757d; width: 100%; color: white; font-size: 25px; } @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } } .error-message { color: red; display: none; animation: blink 1s infinite; } .center{ text-align: center; } footer.navbar.navbar-expand-lg.bg-light.center { text-align: center; font-size: 12px; margin-top:3em; padding: 5px 10px; } 
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html"><img src="https://quaf.netlify.app/images/footer.png"
+      class="logo" alt=""></a>
+    </div>
+  </nav><br>
+  <div class="container">
+    <div class="text-center">
+      
+    </div>
+    <div class="container m-2" id="container">
+      <form action="index.html" method="post" onsubmit=
+      "return handleFormSubmit()">
+        <div class="container-card card border-success">
+          <div class="m-3">
+            <label for="name_box" class="form-label">Enter Your
+            Name</label> <input type="text" class="form-control"
+            name="name" id="name_box"> <span id="nameError" class=
+            "error-message">Please enter your name</span>
+          </div>
+        </div>
+        <div class="container-card card border-success">
+          <div class="mailbox px-3 pt-3 scroll-2">
+            <p>To,<br>
+            Admin of  Quaf Students Union <br>
+           Manoor,Edappal,Malappuram,Kerala<br>
+            679582(PIN).<br></p>
+            <p>Sub: I Need support from quaf.<br></p>
+            <p>Yours sincerely,</p>YOUR NAME<br>
+          </div>
+        </div>
+        <div class="container-card card border-success">
+          <div class="mx-3 my-3">
+            <div class="mx-3 my-3">
+              <button type="submit" id="sendEmailButton" name=
+              "send2" class="btn btn-dark">Send Email</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src=
+  "https://platform-api.sharethis.com/js/sharethis.js#property=64a5c0202e3f1d0019276937&product=inline-share-buttons"
+  async="async"></script>
+  <footer class="navbar navbar-expand-lg bg-light center">
+    NB: We will contact you after receiving your response
+  </footer>
+  <script>
+  function handleFormSubmit() {
+    var nameInput = document.getElementById('name_box');
+    var name = nameInput.value.trim();
+    var nameError = document.getElementById('nameError');
+    if (name === '') {
+      nameError.style.display = 'block';
+      return false; 
+    }
+    nameError.style.display = 'none';
+    console.log(name);
+    var body = `I need to know more about organization (Quaf),%0D%0A%0D%0A Type your message here...........%0D%0A%0D%0AYours sincerely,%0D%0A` + name;
+    gtag('event', 'click', {
+      'event_category': 'Button',
+      'event_label': 'sendEmailButton'
+    });
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      var mail = "mailto:quaf2024@gmail.com?subject=I, " + name + ", Need support from QUAF&body=" + body;
+      window.location.href = mail;
+    } else {
+      var emailLink = "https://mail.google.com/mail/?view=cm&fs=1&to=quaf2024@gmail.com&su=I, " + name + ", I Want Support form you";
+      var modifiedEmailLink = emailLink + "&body=" + body;
+      window.open(modifiedEmailLink);
+    }
+    return false; 
+  }
+  </script> 
+  <script src=
+  "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+  integrity=
+  "sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+  crossorigin="anonymous"></script> 
+  <script src=
+  "https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+  integrity=
+  "sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+  crossorigin="anonymous"></script>
+</body>
+  </html>
