@@ -1,0 +1,530 @@
+body{
+    margin: 0;
+    background: #bcb9b9;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.slider{
+    width: 100%;
+}
+
+.slider input{
+    display: none;
+}
+
+.cards{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    min-height: 350px;
+    perspective: 1000px;
+}
+
+.cards .item{
+    width: 300px;
+    height: 400px;
+    border-radius: 5px;
+    background-color: #21262d;
+    color: #fff;
+    position: absolute;
+    top: 0;
+    text-align: center;
+    box-sizing: border-box;
+    user-select: none;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    transition: transform 0.4s;
+    border: 3px solid #fff;
+    overflow: hidden;
+}
+
+.cards .item .main_content{
+    width: 100%;
+}
+
+.cards .item .main_content .img{
+    width: 100%;
+    height: 100%;
+}
+
+.cards .item .main_content .img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cards .item .main_content .content{
+    display: none;
+}
+
+.cards .item .main_content .content h1{
+    font-size: 30px;
+    color: #fff;
+}
+
+.cards .item .main_content .content h4,
+.cards .item .main_content .content p{
+    margin-top: -10px;
+}
+
+.cards .item .main_content .content p{
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.cards .item .main_content .content .social{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.content .social .icon{
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content .social .icon i{
+    color: #000;
+    font-size: 22px;
+    transition: 0.5s;
+}
+
+.content .social .icon:hover i{
+    color: var(--color);
+}
+
+
+.dots{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+}
+
+.dots label{
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    background-color: #21262d;
+    cursor: pointer;
+    margin: 7px;
+    transition-duration: 0.2s;
+}
+
+
+
+#c-1:checked ~ .dots label[for="c-1"],
+#c-2:checked ~ .dots label[for="c-2"],
+#c-3:checked ~ .dots label[for="c-3"],
+#c-4:checked ~ .dots label[for="c-4"],
+#c-5:checked ~ .dots label[for="c-5"],
+#c-6:checked ~ .dots label[for="c-6"],
+#c-7:checked ~ .dots label[for="c-7"],
+#c-8:checked ~ .dots label[for="c-8"],
+#c-9:checked ~ .dots label[for="c-9"],
+#c-10:checked ~ .dots label[for="c-10"],
+#c-11:checked ~ .dots label[for="c-11"],
+#c-12:checked ~ .dots label[for="c-12"],
+#c-13:checked ~ .dots label[for="c-13"],
+#c-14:checked ~ .dots label[for="c-14"],
+#c-15:checked ~ .dots label[for="c-15"],
+#c-16:checked ~ .dots label[for="c-16"],
+#c-17:checked ~ .dots label[for="c-17"],
+#c-18:checked ~ .dots label[for="c-18"],
+#c-19:checked ~ .dots label[for="c-19"],
+#c-20:checked ~ .dots label[for="c-20"],
+#c-21:checked ~ .dots label[for="c-21"],
+#c-22:checked ~ .dots label[for="c-22"],
+#c-23:checked ~ .dots label[for="c-23"],
+#c-24:checked ~ .dots label[for="c-24"],
+#c-25:checked ~ .dots label[for="c-25"],
+#c-26:checked ~ .dots label[for="c-26"],
+#c-27:checked ~ .dots label[for="c-27"],
+#c-28:checked ~ .dots label[for="c-28"],
+#c-29:checked ~ .dots label[for="c-29"],
+#c-30:checked ~ .dots label[for="c-30"],
+#c-31:checked ~ .dots label[for="c-31"],
+#c-32:checked ~ .dots label[for="c-32"],
+#c-33:checked ~ .dots label[for="c-33"]{
+    transform: scale(2);
+    background-color: #fff;
+    box-shadow: 0px 0px 0px 3px #342f2fe6;
+}
+
+#c-1:checked ~ .dots label[for="c-2"],
+#c-2:checked ~ .dots label[for="c-1"],
+#c-2:checked ~ .dots label[for="c-3"],
+#c-3:checked ~ .dots label[for="c-2"],
+#c-3:checked ~ .dots label[for="c-4"],
+#c-4:checked ~ .dots label[for="c-3"],
+#c-4:checked ~ .dots label[for="c-5"],
+#c-5:checked ~ .dots label[for="c-4"],
+#c-5:checked ~ .dots label[for="c-6"],
+#c-6:checked ~ .dots label[for="c-5"],
+#c-6:checked ~ .dots label[for="c-7"],
+#c-7:checked ~ .dots label[for="c-6"],
+#c-7:checked ~ .dots label[for="c-8"],
+#c-8:checked ~ .dots label[for="c-7"],
+#c-8:checked ~ .dots label[for="c-9"],
+#c-9:checked ~ .dots label[for="c-8"],
+#c-9:checked ~ .dots label[for="c-10"],
+#c-10:checked ~ .dots label[for="c-9"],
+#c-10:checked ~ .dots label[for="c-11"],
+#c-11:checked ~ .dots label[for="c-10"],
+#c-11:checked ~ .dots label[for="c-12"],
+#c-12:checked ~ .dots label[for="c-11"],
+#c-12:checked ~ .dots label[for="c-13"],
+#c-13:checked ~ .dots label[for="c-12"],
+#c-13:checked ~ .dots label[for="c-14"],
+#c-14:checked ~ .dots label[for="c-13"],
+#c-14:checked ~ .dots label[for="c-15"],
+#c-15:checked ~ .dots label[for="c-14"],
+#c-15:checked ~ .dots label[for="c-16"],
+#c-16:checked ~ .dots label[for="c-15"],
+#c-16:checked ~ .dots label[for="c-17"],
+#c-17:checked ~ .dots label[for="c-16"],
+#c-17:checked ~ .dots label[for="c-18"],
+#c-18:checked ~ .dots label[for="c-17"],
+#c-18:checked ~ .dots label[for="c-19"],
+#c-19:checked ~ .dots label[for="c-18"],
+#c-19:checked ~ .dots label[for="c-20"],
+#c-20:checked ~ .dots label[for="c-19"],
+#c-20:checked ~ .dots label[for="c-21"],
+#c-21:checked ~ .dots label[for="c-20"],
+#c-21:checked ~ .dots label[for="c-22"],
+#c-22:checked ~ .dots label[for="c-21"],
+#c-22:checked ~ .dots label[for="c-23"],
+#c-23:checked ~ .dots label[for="c-22"],
+#c-23:checked ~ .dots label[for="c-24"],
+#c-24:checked ~ .dots label[for="c-23"],
+#c-24:checked ~ .dots label[for="c-25"],
+#c-25:checked ~ .dots label[for="c-24"],
+#c-25:checked ~ .dots label[for="c-26"],
+#c-26:checked ~ .dots label[for="c-25"],
+#c-26:checked ~ .dots label[for="c-27"],
+#c-27:checked ~ .dots label[for="c-26"],
+#c-27:checked ~ .dots label[for="c-28"],
+#c-28:checked ~ .dots label[for="c-27"],
+#c-28:checked ~ .dots label[for="c-29"],
+#c-29:checked ~ .dots label[for="c-28"],
+#c-29:checked ~ .dots label[for="c-30"],
+#c-30:checked ~ .dots label[for="c-29"],
+#c-30:checked ~ .dots label[for="c-31"],
+#c-31:checked ~ .dots label[for="c-30"],
+#c-31:checked ~ .dots label[for="c-32"],
+#c-32:checked ~ .dots label[for="c-31"],
+#c-32:checked ~ .dots label[for="c-33"],
+#c-33:checked ~ .dots label[for="c-32"]{
+    transform: scale(1.5);
+}
+
+
+#c-1:checked ~ .cards label[for="c-17"],
+#c-2:checked ~ .cards label[for="c-18"],
+#c-3:checked ~ .cards label[for="c-19"],
+#c-4:checked ~ .cards label[for="c-20"],
+#c-5:checked ~ .cards label[for="c-21"],
+#c-6:checked ~ .cards label[for="c-22"],
+#c-7:checked ~ .cards label[for="c-23"],
+#c-8:checked ~ .cards label[for="c-24"],
+#c-9:checked ~ .cards label[for="c-25"],
+#c-10:checked ~ .cards label[for="c-26"],
+#c-11:checked ~ .cards label[for="c-27"],
+#c-12:checked ~ .cards label[for="c-28"],
+#c-13:checked ~ .cards label[for="c-29"],
+#c-14:checked ~ .cards label[for="c-30"],
+#c-15:checked ~ .cards label[for="c-31"],
+#c-16:checked ~ .cards label[for="c-32"],
+#c-17:checked ~ .cards label[for="c-33"],
+#c-18:checked ~ .cards label[for="c-1"],
+#c-19:checked ~ .cards label[for="c-2"],
+#c-20:checked ~ .cards label[for="c-3"],
+#c-21:checked ~ .cards label[for="c-4"],
+#c-22:checked ~ .cards label[for="c-5"],
+#c-23:checked ~ .cards label[for="c-6"],
+#c-24:checked ~ .cards label[for="c-7"],
+#c-25:checked ~ .cards label[for="c-8"],
+#c-26:checked ~ .cards label[for="c-9"],
+#c-27:checked ~ .cards label[for="c-10"],
+#c-28:checked ~ .cards label[for="c-11"],
+#c-29:checked ~ .cards label[for="c-12"],
+#c-30:checked ~ .cards label[for="c-13"],
+#c-31:checked ~ .cards label[for="c-14"],
+#c-32:checked ~ .cards label[for="c-15"],
+#c-33:checked ~ .cards label[for="c-16"]{
+    transform: translate3d(600px, 0, -180px) rotateY(-25deg);
+    z-index: 2;
+}
+
+#c-1:checked ~ .cards label[for="c-2"],
+#c-2:checked ~ .cards label[for="c-3"],
+#c-3:checked ~ .cards label[for="c-4"],
+#c-4:checked ~ .cards label[for="c-5"],
+#c-5:checked ~ .cards label[for="c-6"],
+#c-6:checked ~ .cards label[for="c-7"],
+#c-7:checked ~ .cards label[for="c-8"],
+#c-8:checked ~ .cards label[for="c-9"],
+#c-9:checked ~ .cards label[for="c-10"],
+#c-10:checked ~ .cards label[for="c-11"],
+#c-11:checked ~ .cards label[for="c-12"],
+#c-12:checked ~ .cards label[for="c-13"],
+#c-13:checked ~ .cards label[for="c-14"],
+#c-14:checked ~ .cards label[for="c-15"],
+#c-15:checked ~ .cards label[for="c-16"],
+#c-16:checked ~ .cards label[for="c-17"],
+#c-17:checked ~ .cards label[for="c-18"],
+#c-18:checked ~ .cards label[for="c-19"],
+#c-19:checked ~ .cards label[for="c-20"],
+#c-20:checked ~ .cards label[for="c-21"],
+#c-21:checked ~ .cards label[for="c-22"],
+#c-22:checked ~ .cards label[for="c-23"],
+#c-23:checked ~ .cards label[for="c-24"],
+#c-24:checked ~ .cards label[for="c-25"],
+#c-25:checked ~ .cards label[for="c-26"],
+#c-26:checked ~ .cards label[for="c-27"],
+#c-27:checked ~ .cards label[for="c-28"],
+#c-28:checked ~ .cards label[for="c-29"],
+#c-29:checked ~ .cards label[for="c-30"],
+#c-30:checked ~ .cards label[for="c-31"],
+#c-31:checked ~ .cards label[for="c-32"],
+#c-32:checked ~ .cards label[for="c-33"],
+#c-33:checked ~ .cards label[for="c-1"]{
+    transform: translate3d(300px, 0, -90px) rotateY(-15deg);
+    z-index: 3;
+}
+
+#c-2:checked ~ .cards label[for="c-1"],
+#c-3:checked ~ .cards label[for="c-2"],
+#c-4:checked ~ .cards label[for="c-3"],
+#c-5:checked ~ .cards label[for="c-4"],
+#c-6:checked ~ .cards label[for="c-5"],
+#c-7:checked ~ .cards label[for="c-6"],
+#c-8:checked ~ .cards label[for="c-7"],
+#c-9:checked ~ .cards label[for="c-8"],
+#c-10:checked ~ .cards label[for="c-9"],
+#c-11:checked ~ .cards label[for="c-10"],
+#c-12:checked ~ .cards label[for="c-11"],
+#c-13:checked ~ .cards label[for="c-12"],
+#c-14:checked ~ .cards label[for="c-13"],
+#c-15:checked ~ .cards label[for="c-14"],
+#c-16:checked ~ .cards label[for="c-15"],
+#c-17:checked ~ .cards label[for="c-16"],
+#c-18:checked ~ .cards label[for="c-17"],
+#c-19:checked ~ .cards label[for="c-18"],
+#c-20:checked ~ .cards label[for="c-19"],
+#c-21:checked ~ .cards label[for="c-20"],
+#c-22:checked ~ .cards label[for="c-21"],
+#c-23:checked ~ .cards label[for="c-22"],
+#c-24:checked ~ .cards label[for="c-23"],
+#c-25:checked ~ .cards label[for="c-24"],
+#c-26:checked ~ .cards label[for="c-25"],
+#c-27:checked ~ .cards label[for="c-26"],
+#c-28:checked ~ .cards label[for="c-27"],
+#c-29:checked ~ .cards label[for="c-28"],
+#c-30:checked ~ .cards label[for="c-29"],
+#c-31:checked ~ .cards label[for="c-30"],
+#c-32:checked ~ .cards label[for="c-31"],
+#c-33:checked ~ .cards label[for="c-32"],
+#c-1:checked ~ .cards label[for="c-33"]{
+    transform: translate3d(-300px, 0, -90px) rotateY(15deg);
+    z-index: 3;
+}
+
+#c-17:checked ~ .cards label[for="c-1"],
+#c-18:checked ~ .cards label[for="c-2"],
+#c-19:checked ~ .cards label[for="c-3"],
+#c-20:checked ~ .cards label[for="c-4"],
+#c-21:checked ~ .cards label[for="c-5"],
+#c-22:checked ~ .cards label[for="c-6"],
+#c-23:checked ~ .cards label[for="c-7"],
+#c-24:checked ~ .cards label[for="c-8"],
+#c-25:checked ~ .cards label[for="c-9"],
+#c-26:checked ~ .cards label[for="c-10"],
+#c-27:checked ~ .cards label[for="c-11"],
+#c-28:checked ~ .cards label[for="c-12"],
+#c-29:checked ~ .cards label[for="c-13"],
+#c-30:checked ~ .cards label[for="c-14"],
+#c-31:checked ~ .cards label[for="c-15"],
+#c-32:checked ~ .cards label[for="c-16"],
+#c-33:checked ~ .cards label[for="c-33"],
+#c-16:checked ~ .cards label[for="c-32"],
+#c-15:checked ~ .cards label[for="c-31"],
+#c-14:checked ~ .cards label[for="c-30"],
+#c-13:checked ~ .cards label[for="c-29"],
+#c-12:checked ~ .cards label[for="c-28"],
+#c-11:checked ~ .cards label[for="c-27"],
+#c-10:checked ~ .cards label[for="c-26"],
+#c-9:checked ~ .cards label[for="c-25"],
+#c-8:checked ~ .cards label[for="c-24"],
+#c-7:checked ~ .cards label[for="c-23"],
+#c-6:checked ~ .cards label[for="c-22"],
+#c-5:checked ~ .cards label[for="c-21"],
+#c-4:checked ~ .cards label[for="c-20"],
+#c-3:checked ~ .cards label[for="c-19"],
+#c-2:checked ~ .cards label[for="c-18"],
+#c-1:checked ~ .cards label[for="c-17"]{
+    transform: translate3d(-600px, 0, -180px) rotateY(25deg);
+}
+
+#c-1:checked ~ .cards label[for="c-1"],
+#c-2:checked ~ .cards label[for="c-2"],
+#c-3:checked ~ .cards label[for="c-3"],
+#c-4:checked ~ .cards label[for="c-4"],
+#c-5:checked ~ .cards label[for="c-5"],
+#c-6:checked ~ .cards label[for="c-6"],
+#c-7:checked ~ .cards label[for="c-7"],
+#c-8:checked ~ .cards label[for="c-8"],
+#c-9:checked ~ .cards label[for="c-9"],
+#c-10:checked ~ .cards label[for="c-10"],
+#c-11:checked ~ .cards label[for="c-11"],
+#c-12:checked ~ .cards label[for="c-12"],
+#c-13:checked ~ .cards label[for="c-13"],
+#c-14:checked ~ .cards label[for="c-14"],
+#c-15:checked ~ .cards label[for="c-15"],
+#c-16:checked ~ .cards label[for="c-16"],
+#c-17:checked ~ .cards label[for="c-17"],
+#c-18:checked ~ .cards label[for="c-18"],
+#c-19:checked ~ .cards label[for="c-19"],
+#c-20:checked ~ .cards label[for="c-20"],
+#c-21:checked ~ .cards label[for="c-21"],
+#c-22:checked ~ .cards label[for="c-22"],
+#c-23:checked ~ .cards label[for="c-23"],
+#c-24:checked ~ .cards label[for="c-24"],
+#c-25:checked ~ .cards label[for="c-25"],
+#c-26:checked ~ .cards label[for="c-26"],
+#c-27:checked ~ .cards label[for="c-27"],
+#c-28:checked ~ .cards label[for="c-28"],
+#c-29:checked ~ .cards label[for="c-29"],
+#c-30:checked ~ .cards label[for="c-30"],
+#c-31:checked ~ .cards label[for="c-31"],
+#c-32:checked ~ .cards label[for="c-32"],
+#c-33:checked ~ .cards label[for="c-33"]{
+    z-index: 4;
+    padding: 30px;
+}
+
+#c-1:checked ~ .cards label[for="c-1"] .main_content .img,
+#c-2:checked ~ .cards label[for="c-2"] .main_content .img,
+#c-3:checked ~ .cards label[for="c-3"] .main_content .img,
+#c-4:checked ~ .cards label[for="c-4"] .main_content .img,
+#c-5:checked ~ .cards label[for="c-5"] .main_content .img,
+#c-6:checked ~ .cards label[for="c-6"] .main_content .img,
+#c-7:checked ~ .cards label[for="c-7"] .main_content .img,
+#c-8:checked ~ .cards label[for="c-8"] .main_content .img,
+#c-9:checked ~ .cards label[for="c-9"] .main_content .img,
+#c-10:checked ~ .cards label[for="c-10"] .main_content .img,
+#c-11:checked ~ .cards label[for="c-11"] .main_content .img,
+#c-12:checked ~ .cards label[for="c-12"] .main_content .img,
+#c-13:checked ~ .cards label[for="c-13"] .main_content .img,
+#c-14:checked ~ .cards label[for="c-14"] .main_content .img,
+#c-15:checked ~ .cards label[for="c-15"] .main_content .img,
+#c-16:checked ~ .cards label[for="c-16"] .main_content .img,
+#c-17:checked ~ .cards label[for="c-17"] .main_content .img,
+#c-18:checked ~ .cards label[for="c-18"] .main_content .img,
+#c-19:checked ~ .cards label[for="c-19"] .main_content .img,
+#c-20:checked ~ .cards label[for="c-20"] .main_content .img,
+#c-21:checked ~ .cards label[for="c-21"] .main_content .img,
+#c-22:checked ~ .cards label[for="c-22"] .main_content .img,
+#c-23:checked ~ .cards label[for="c-23"] .main_content .img,
+#c-24:checked ~ .cards label[for="c-24"] .main_content .img,
+#c-25:checked ~ .cards label[for="c-25"] .main_content .img,
+#c-26:checked ~ .cards label[for="c-26"] .main_content .img,
+#c-27:checked ~ .cards label[for="c-27"] .main_content .img,
+#c-28:checked ~ .cards label[for="c-28"] .main_content .img,
+#c-29:checked ~ .cards label[for="c-29"] .main_content .img,
+#c-30:checked ~ .cards label[for="c-30"] .main_content .img,
+#c-31:checked ~ .cards label[for="c-31"] .main_content .img,
+#c-32:checked ~ .cards label[for="c-32"] .main_content .img,
+#c-33:checked ~ .cards label[for="c-33"] .main_content .img{
+    margin: auto;
+    width: 150px;
+    height: 150px;
+    background: #fff;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+
+#c-1:checked ~ .cards label[for="c-1"] .main_content .img img,
+#c-2:checked ~ .cards label[for="c-2"] .main_content .img img,
+#c-3:checked ~ .cards label[for="c-3"] .main_content .img img,
+#c-4:checked ~ .cards label[for="c-4"] .main_content .img img,
+#c-5:checked ~ .cards label[for="c-5"] .main_content .img img,
+#c-6:checked ~ .cards label[for="c-6"] .main_content .img img,
+#c-7:checked ~ .cards label[for="c-7"] .main_content .img img,
+#c-8:checked ~ .cards label[for="c-8"] .main_content .img img,
+#c-9:checked ~ .cards label[for="c-9"] .main_content .img img,
+#c-10:checked ~ .cards label[for="c-10"] .main_content .img img,
+#c-11:checked ~ .cards label[for="c-11"] .main_content .img img,
+#c-12:checked ~ .cards label[for="c-12"] .main_content .img img,
+#c-13:checked ~ .cards label[for="c-13"] .main_content .img img,
+#c-14:checked ~ .cards label[for="c-14"] .main_content .img img,
+#c-15:checked ~ .cards label[for="c-15"] .main_content .img img,
+#c-16:checked ~ .cards label[for="c-16"] .main_content .img img,
+#c-17:checked ~ .cards label[for="c-17"] .main_content .img img,
+#c-18:checked ~ .cards label[for="c-18"] .main_content .img img,
+#c-19:checked ~ .cards label[for="c-19"] .main_content .img img,
+#c-20:checked ~ .cards label[for="c-20"] .main_content .img img,
+#c-21:checked ~ .cards label[for="c-21"] .main_content .img img,
+#c-22:checked ~ .cards label[for="c-22"] .main_content .img img,
+#c-23:checked ~ .cards label[for="c-23"] .main_content .img img,
+#c-24:checked ~ .cards label[for="c-24"] .main_content .img img,
+#c-25:checked ~ .cards label[for="c-25"] .main_content .img img,
+#c-26:checked ~ .cards label[for="c-26"] .main_content .img img,
+#c-27:checked ~ .cards label[for="c-27"] .main_content .img img,
+#c-28:checked ~ .cards label[for="c-28"] .main_content .img img,
+#c-29:checked ~ .cards label[for="c-29"] .main_content .img img,
+#c-30:checked ~ .cards label[for="c-30"] .main_content .img img,
+#c-31:checked ~ .cards label[for="c-31"] .main_content .img img,
+#c-32:checked ~ .cards label[for="c-32"] .main_content .img img,
+#c-33:checked ~ .cards label[for="c-33"] .main_content .img img{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#c-1:checked ~ .cards label[for="c-1"] .main_content .content,
+#c-2:checked ~ .cards label[for="c-2"] .main_content .content,
+#c-3:checked ~ .cards label[for="c-3"] .main_content .content,
+#c-4:checked ~ .cards label[for="c-4"] .main_content .content,
+#c-5:checked ~ .cards label[for="c-5"] .main_content .content,
+#c-6:checked ~ .cards label[for="c-6"] .main_content .content,
+#c-7:checked ~ .cards label[for="c-7"] .main_content .content,
+#c-8:checked ~ .cards label[for="c-8"] .main_content .content,
+#c-9:checked ~ .cards label[for="c-9"] .main_content .content,
+#c-10:checked ~ .cards label[for="c-10"] .main_content .content,
+#c-11:checked ~ .cards label[for="c-11"] .main_content .content,
+#c-12:checked ~ .cards label[for="c-12"] .main_content .content,
+#c-13:checked ~ .cards label[for="c-13"] .main_content .content,
+#c-14:checked ~ .cards label[for="c-14"] .main_content .content,
+#c-15:checked ~ .cards label[for="c-15"] .main_content .content,
+#c-16:checked ~ .cards label[for="c-16"] .main_content .content,
+#c-17:checked ~ .cards label[for="c-17"] .main_content .content,
+#c-18:checked ~ .cards label[for="c-18"] .main_content .content,
+#c-19:checked ~ .cards label[for="c-19"] .main_content .content,
+#c-20:checked ~ .cards label[for="c-20"] .main_content .content,
+#c-21:checked ~ .cards label[for="c-21"] .main_content .content,
+#c-22:checked ~ .cards label[for="c-22"] .main_content .content,
+#c-23:checked ~ .cards label[for="c-23"] .main_content .content,
+#c-24:checked ~ .cards label[for="c-24"] .main_content .content,
+#c-25:checked ~ .cards label[for="c-25"] .main_content .content,
+#c-26:checked ~ .cards label[for="c-26"] .main_content .content,
+#c-27:checked ~ .cards label[for="c-27"] .main_content .content,
+#c-28:checked ~ .cards label[for="c-28"] .main_content .content,
+#c-29:checked ~ .cards label[for="c-29"] .main_content .content,
+#c-30:checked ~ .cards label[for="c-30"] .main_content .content,
+#c-31:checked ~ .cards label[for="c-31"] .main_content .content,
+#c-32:checked ~ .cards label[for="c-32"] .main_content .content,
+#c-33:checked ~ .cards label[for="c-33"] .main_content .content{
+    display: block;
+}
