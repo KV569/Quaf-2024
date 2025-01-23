@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <audio src="fest/otmnbg.mp3"></audio>
     
     <header>
 
@@ -609,5 +610,12 @@
     </div>
 
     <script src="app.js"></script>
+     <script>
+           window.addEventListener("DOMContentLoaded", event => {
+  const audio = document.querySelector("audio");
+  audio.volume = 1;
+  audio.play();
+});
+        </script>
 </body>
 </html>
