@@ -597,10 +597,18 @@
         </div>
 
         <!--next prev button-->
-        <div class="arrows">
-            <button class="prev"><</button>
-            <button class="next">></button>
+              <div class="arrows">
+        	<audio id="audio" src="fest/otmnbg.mp3"></audio>
+            <button class="prev" onclick="play()"><</button>
+            <button class="next" onclick="play()">></button>
         </div>
+         <script>
+    function play() {
+      var audio = document.getElementById("audio");
+      audio.play();
+    }
+  </script> 
+
 
 
         <!-- time running -->
@@ -609,13 +617,5 @@
     </div>
 
     <script src="app.js"></script>
-     <audio src="fest/otmnbg.mp3"></audio>
-     <script>
-           window.addEventListener("DOMContentLoaded", event => {
-  const audio = document.querySelector("audio");
-  audio.volume = 0.5;
-  audio.play();
-});
-        </script>
 </body>
 </html>
