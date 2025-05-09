@@ -495,3 +495,13 @@ body, html{
 		opacity: 1
 	}
 }
+
+.navbar-brand {
+    padding-top: .3125rem;
+    padding-bottom: .3125rem;
+    margin-right: 1rem;
+    
+    text-decoration: none;
+    white-space: nowrap
+}
+
