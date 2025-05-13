@@ -517,6 +517,18 @@ body, html{
   z-index: 0;
   border-radius: 12px;
 }
+.btn {
+  margin: 50px;
+  padding: 20px 60px;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 12px;
+  font-weight: bold;
+}
 .btn::after {
   content: "";
   z-index: -1;
