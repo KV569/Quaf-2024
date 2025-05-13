@@ -61,7 +61,7 @@ body, html{
 .first--slide .slide--content h1{
 	position: relative;
 	animation: firstSlideTextOne 500ms ease 0s 1 forwards;
-	font-size: 6em;
+	font-size: 2em;
 	margin:0;
 	line-height: 1.2em;
 	opacity: 0;
@@ -71,7 +71,7 @@ body, html{
 .first--slide .slide--content h2{
 	position: relative;
 	color:#fcbb5e;
-	font-size:4em;
+	font-size: 2em;
 	line-height: 1em;
 	margin:0;
 	top:-1.6em;
@@ -236,21 +236,21 @@ body, html{
 } 
 
 .slide--content--one h1.first{
-	font-size: 6em;
+	font-size: 2em;
 	opacity: 0;
 	transform:rotate(-180deg) scale(0);
 	animation:secondSlideTextOne 500ms ease 0s 1 forwards;
 }
 
 .slide--content--one h2.first{
-	font-size: 5em;
+	font-size: 2em;
 	transform: scale(0);
 	opacity: 0;
 	animation:secondSlideTextTwo 300ms ease 490ms 1 forwards;
 }
 
 .slide--content--one h2.second{
-	font-size: 5em;
+	font-size: 2em;
 	transform: scale(0);
 	opacity: 0;
 	animation:secondSlideTextThree 200ms ease 1000ms 1 forwards;
@@ -259,7 +259,7 @@ body, html{
 .slide--content--one h1.second{
 	top:3em;
 	color:#fcbb5e;
-	font-size: 6em;
+	font-size: 2em;
 	opacity: 0;
 	animation: secondSlideTextFour 300ms ease 1200ms 1 forwards;
 }
@@ -395,7 +395,7 @@ body, html{
 	transform: translateY(-40%);
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
-	font-size:5em;
+	font-size:2em;
 	color:#fff;
 }
 
