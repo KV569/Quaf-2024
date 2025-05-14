@@ -12,13 +12,20 @@
 <body> 
  
 <div class="container">
-  <h2>2025-26 Committee</h2>
-  <p><strong>QUAF</strong> Qualitative Union For Academic Focus</p>
+  <div class="text">
+    <span style="--i:1">Q</span>
+    <span style="--i:2">U</span>
+    <span style="--i:3">A</span>
+    <span style="--i:4">F</span>
+  </div>
+  
+  <p><strong>Qualitative Union For Academic Focus</strong> </p>
+  <h3>2025-26 COMMITTEE</h3>
   
   
   <div class="card-columns">
     <div class="card" style="width:300px">
-    <img class="card-img-top" src="https://quaf.netlify.app/pic/pic/1010.jpg" alt="Card image" style="width:100%">
+    <img class="card-img-top" src="pic/pic/1010.jpg" alt="Card image" style="width:100%">
     <div class="card-body">
       <h4 class="card-title">SADHAQATHULLA</h4>
        <p class="neon-text"><strong>President</strong></p>
@@ -288,7 +295,44 @@
 <button onclick="location.href='index.html'" type="button" class="btn">HOME</button>
 <style> 
 /* button */
+.text span {
+  font-size: 30px;
+  text-transform: uppercase;
+  color: #0000e6;
+  font-weight: bold;
+  animation: zoomup 2s linear ;
+  animation-delay: calc(200ms * var(--i));
+}
 
+@keyframes zoomup {
+  0% {
+    color: #3366ff;
+    filter: blur(0px);
+    text-shadow: 0 0 10px #00c2ba, 0 0 20px #00c2ba, 0 0 30px #00c2ba,
+      0 0 40px #00c2ba, 0 0 60px #00c2ba, 0 0 80px #00c2ba, 0 0 100px #00c2ba,
+      0 0 120px #00c2ba;
+  }
+  
+  100% {
+    color: #00cc44;
+    filter: blur(0px);
+    text-shadow: 0 0 10px #00c2ba, 0 0 20px #00c2ba, 0 0 30px #00c2ba,
+      0 0 40px #00c2ba, 0 0 60px #00c2ba, 0 0 80px #00c2ba, 0 0 100px #00c2ba,
+      0 0 120px #00c2ba;
+  }
+
+  5%{
+    filter: blur(0);
+    color: #3366ff;
+    text-shadow: none;
+  }
+  
+  95% {
+    filter: blur(0);
+    color: #00cc44;
+    text-shadow: none;
+  }
+}
   
 .btn {
   margin: 50px;
