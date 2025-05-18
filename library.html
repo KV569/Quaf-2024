@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAF-LIBRARY</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background: linear-gradient(135deg, #1e3c72, #2a5298); /* Dark gradient background */
+            height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center-align for better layout */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            z-index: 3;
+            position: relative;
+            backdrop-filter: blur(10px);
+            width: 100%; /* Full width navbar */
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Logo styles */
+        .logo {
+            width: 60px; /* Set the width of the logo */
+            height: 60px; /* Set the height for a round shape */
+            border-radius: 50%; /* Round the logo */
+            margin: 0 20px; /* Margin around the logo */
+            cursor: pointer; /* Pointer cursor for logo */
+        }
+
+        .container {
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 15px;
+            width: 300px;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white; /* Text color */
+            margin-bottom: 10px; /* Add gap between inputs */
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            background-color: #ff0055;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+
+        #loginError {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Cards for results */
+        #results,
+        #additionalResults {
+            display: flex;
+            flex-wrap: wrap; /* Allow results to wrap */
+            justify-content: center; /* Center align results */
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .result-item,
+        .additional-result-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            width: 250px; /* Change as needed */
+            height: auto;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .result-item:hover,
+        .additional-result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 123, 255, 1);
+        }
+
+        .result-name,
+        .additional-result-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #000000; /* Color for name */
+            margin-bottom: 10px;
+        }
+
+        .result-details,
+        .additional-result-details {
+            color: white;
+            text-align: left;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <img src="https://quaf.netlify.app/images/logo.jpg" alt="Logo" class="logo" onclick="showLogin()">
+        <a href="students.html">Students</a>
+    </div>
+
+    <div class="container">
+        <h1 id="libraryTitle">QUAF-LIBRARY</h1>
+        <div id="loginForm" style="display: none;">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="validateLogin()">Submit</button>
+            <div id="loginError" style="display: none;"></div>
+        </div>
+
+        <div id="mainContent" style="display: block;">
+            <input type="text" id="searchBox" placeholder="Enter book name...">
+            <button id="searchButton">Search</button>
+            <div id="results"></div> <!-- Container for book search results -->
+        </div>
+
+        <div id="additionalSearch" style="display: none; margin-top: 20px;">
+            <h2>WINGS POINTS</h2>
+            <input type="text" id="additionalSearchBox" placeholder="Enter wing or points...">
+            <button id="additionalSearchButton">Search</button>
+            <div id="additionalResults"></div> <!-- Container for additional search results -->
+        </div>
+    </div>
+
+    <script>
+        // URL of the published Google Sheets CSV for books
+        const booksSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRjeadWcSnQEtjxlrIJc1OZ6nbuuKEzbUwn7kZtWIhm3zJ2a8AjNAUp8j8o01OOlwoc5y9Bl0_qg8pr/pub?output=csv';
+
+        // URL of the published Google Sheets CSV for points
+        const pointsSheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPiOQ0DNaDMUqPWqgzO0sZ10AL0hyaHSwiDCVbYcneZct33A0FizLWS8LOf4SbEbKNBGxlsxoZJKAY/pub?gid=0&single=true&output=csv';
+
+        let books = [];
+        let pointsData = [];
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block'; // Show login form
+            document.getElementById('mainContent').style.display = 'none'; // Hide book search
+            document.getElementById('additionalSearch').style.display = 'none'; // Hide additional search
+        }
+
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginError = document.getElementById('loginError');
+
+            if (username === "quaf" && password === "result") {
+                loginError.style.display = 'none';
+                document.getElementById('libraryTitle').style.display = 'none'; // Hide title on login
+                document.getElementById('mainContent').style.display = 'none'; // Hide book search
+                document.getElementById('loginForm').style.display = 'none'; // Hide login form
+                document.getElementById('additionalSearch').style.display = 'block'; // Show additional search
+                loadPoints(); // Load points data after successful login
+            } else {
+                loginError.textContent = 'Rejected'; // Show error message
+                loginError.style.display = 'block';
+            }
+        }
+
+        // Function to load books from Google Sheets
+        async function loadBooks() {
+            const response = await fetch(booksSheetUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Remove header row
+
+            books = rows.map(row => {
+                const [bookName, author, language, no] = row.split(',');
+                return { bookName, author, language, no };
+            });
+        }
+
+        // Function to load points from the CSV link
+        async function loadPoints() {
+            const response = await fetch(pointsSheetUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Remove header row
+
+            pointsData = rows.map(row => {
+                const [wing, points] = row.split(',');
+                return { wing, points: parseInt(points, 10) }; // Convert points to integer
+            });
+        }
+
+        // Event listener for the book search button
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const query = document.getElementById('searchBox').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Clear previous results
+
+            // Filter books based on search input
+            const results = books.filter(book =>
+                book.bookName.toLowerCase().includes(query)
+            );
+
+            if (results.length > 0) {
+                results.forEach(book => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.innerHTML = `
+                        <div class="result-name">${book.bookName}</div>
+                        <div class="result-details">Author: ${book.author}</div>
+                        <div class="result-details">Language: ${book.language}</div>
+                        <div class="result-details">No: ${book.no}</div>
+                    `;
+                    resultsDiv.appendChild(div);
+                });
+            } else {
+                resultsDiv.textContent = 'No results matched.';
+            }
+        });
+
+        // Event listener for additional search button
+        document.getElementById('additionalSearchButton').addEventListener('click', () => {
+            const query = document.getElementById('additionalSearchBox').value.trim().toLowerCase();
+            const additionalResultsDiv = document.getElementById('additionalResults');
+            additionalResultsDiv.innerHTML = ''; // Clear previous results
+
+            const results = pointsData.filter(item =>
+                item.wing.toLowerCase().includes(query) ||
+                item.points.toString().includes(query)
+            );
+
+            if (results.length > 0) {
+                results.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'additional-result-item';
+                    div.innerHTML = `
+                        <div class="additional-result-name">${item.wing}</div>
+                        <div class="additional-result-details">Points: ${item.points}</div>
+                    `;
+                    additionalResultsDiv.appendChild(div);
+                });
+            } else {
+                additionalResultsDiv.textContent = 'No results matched.';
+            }
+        });
+
+        // Initial load of books on page load
+        window.onload = loadBooks;
+    </script>
+</body>
+
+</html>
