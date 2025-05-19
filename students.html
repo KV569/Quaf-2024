@@ -126,12 +126,63 @@
             text-align: left;
             margin: 2px 0;
         }
+
+        /* Success Modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .modal-content button {
+            background-color: #ff0055;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #statusContainer {
+            display: none; /* Hidden by default */
+            margin-top: 20px;
+        }
+
+        #statusHeader {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #statusChart {
+            /* Placeholder for chart styling */
+            width: 300px;
+            height: 300px;
+            margin: auto;
+        }
     </style>
 </head>
 
 <body>
     <div class="navbar">
-        <a href="library">Home</a>
+        <a href="index.html">Home</a>
         <a id="resultsLink" href="#" onclick="showLogin()">Results</a>
         <a href="students.html">Students</a>
     </div>
@@ -150,6 +201,19 @@
             <input type="text" id="searchBox" placeholder="Enter student AD NO or Name...">
             <button id="searchButton">Search</button>
             <div id="results"></div> <!-- Container for search results -->
+        </div>
+
+        <div id="statusContainer">
+            <div id="statusHeader">Your Status</div>
+            <canvas id="statusChart"></canvas> <!-- Placeholder for pie chart -->
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h2>Login Successfully</h2>
+            <button onclick="redirectToStatus()">OK</button>
         </div>
     </div>
 
@@ -211,14 +275,59 @@
             if (validCredentials[username] === password) {
                 loginError.style.display = 'none';
                 document.getElementById('libraryTitle').style.display = 'none'; // Hide title on login
-                document.getElementById('mainContent').style.display = 'none'; // Hide student search
                 document.getElementById('loginForm').style.display = 'none'; // Hide login form
-                // Redirect to profile page or show personal content
-                alert('Login successful! Redirecting to your profile...'); // Replace with actual profile display
+                
+                // Show success modal
+                document.getElementById('successModal').style.display = 'flex';
             } else {
                 loginError.textContent = 'Invalid username or password'; // Show error message
                 loginError.style.display = 'block';
             }
+        }
+
+        // Redirect to status display
+        function redirectToStatus() {
+            document.getElementById('successModal').style.display = 'none'; // Hide modal
+            document.getElementById('mainContent').style.display = 'none'; // Hide the search area
+            document.getElementById('statusContainer').style.display = 'block'; // Show status area
+            
+            // Here you can generate random points and percentages for demonstration
+            const totalPoints = Math.floor(Math.random() * 100); // Random total points
+            const percentage = Math.floor(Math.random() * 100); // Random percentage
+
+            // Create a pie chart for display using Chart.js
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Total Points', 'Remaining Points'],
+                    datasets: [{
+                        label: 'Student Status',
+                        data: [totalPoints, 100 - totalPoints],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Your Points Status'
+                        }
+                    }
+                }
+            });
         }
 
         // Load students from Google Sheets
@@ -303,6 +412,7 @@
         // Load students on page load
         window.onload = loadStudents;
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>
