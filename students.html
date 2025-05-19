@@ -181,6 +181,11 @@
             margin-bottom: 10px;
         }
 
+        #rank {
+            color: white;
+            margin-bottom: 10px;
+        }
+
         #statusChart {
             /* Placeholder for chart styling */
             width: 300px;
@@ -192,7 +197,7 @@
 
 <body>
     <div class="navbar">
-        <a href="index.html">Home</a>
+        <a href="library.html">Home</a>
         <a id="resultsLink" href="#" onclick="showLogin()">Results</a>
         <a href="students.html">Students</a>
     </div>
@@ -216,6 +221,7 @@
         <div id="statusContainer">
             <div id="statusHeader">Your Status</div>
             <div id="userInfo"></div>
+            <div id="rank"></div>
             <canvas id="statusChart"></canvas> <!-- Placeholder for pie chart -->
         </div>
     </div>
@@ -233,6 +239,7 @@
         const pointsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSrBHU5bbXJq9wujA69yybY2gi1Lmg3r9wb9fNNrhknuxIFMHCZonSzQX22NkHAPF_qqSbyNpS3R0x_/pub?gid=0&single=true&output=csv';
         let students = [];
         let userPoints = {}; // Store points related to each user
+        let userRanks = {}; // Store rank data
 
         // Define valid credentials
         const validCredentials = {
@@ -293,8 +300,9 @@
                 // Show success modal
                 document.getElementById('successModal').style.display = 'flex';
 
-                // Fetch user points
+                // Fetch user points and rank
                 fetchUserPoints(username);
+                fetchUserRank(username);
             } else {
                 loginError.textContent = 'Invalid username or password'; // Show error message
                 loginError.style.display = 'block';
@@ -321,53 +329,36 @@
             displayUserStatus(username);
         }
 
-        async function fetchStudentDetails() {
-            const response = await fetch(studentDetailsUrl);
+        async function fetchUserRank(username) {
+            const response = await fetch(pointsUrl);
             const data = await response.text();
             const rows = data.split('\n').slice(1); // Remove header row
+            
+            // Assuming the rank is based on totalPoints, sort and assign rank
+            const scores = {};
+            rows.forEach(row => {
+                const [name, adNo, totalPoints, remainingPoints] = row.split(',');
+                scores[name] = parseInt(totalPoints, 10);
+            });
 
-            // Map the student data
-            students = rows.map(row => {
-                const [
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                ] = row.split(',');
+            // Sort by points and assign rank
+            const sortedNames = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+            sortedNames.forEach((name, index) => {
+                userRanks[name] = index + 1; // Rank starts at 1
+            });
 
-                return {
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                };
-            }).filter(student => student.name); // Ensure each student object is valid
+            // After fetching ranks, display the user's information
+            const rank = userRanks[username];
+            displayUserStatus(username, rank);
         }
 
-        function displayUserStatus(username) {
+        function displayUserStatus(username, rank) {
             const userInfo = document.getElementById('userInfo');
             const userData = userPoints[username];
 
             if (userData) {
                 userInfo.innerHTML = `Name: ${username}<br>AD NO: ${userData.adNo}`;
+                document.getElementById('rank').innerHTML = `Rank: ${rank}`;
                 document.getElementById('statusContainer').style.display = 'block'; // Show status area
 
                 // Populate the pie chart
@@ -412,12 +403,49 @@
         // Redirect to status display
         function redirectToStatus() {
             document.getElementById('successModal').style.display = 'none'; // Hide modal
-            fetchStudentDetails(); // Fetch student details
+            // User information will be displayed through user status
         }
 
         // Load students from Google Sheets
         async function loadStudents() {
-            await fetchStudentDetails();
+            const response = await fetch(studentDetailsUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Remove header row
+
+            // Map the student data
+            students = rows.map(row => {
+                const [
+                    name,
+                    adNo,
+                    sO,
+                    houseName,
+                    place,
+                    post,
+                    pin,
+                    district,
+                    state,
+                    bloodGroup,
+                    dob,
+                    phoneNumber,
+                    email
+                ] = row.split(',');
+
+                return {
+                    name,
+                    adNo,
+                    sO,
+                    houseName,
+                    place,
+                    post,
+                    pin,
+                    district,
+                    state,
+                    bloodGroup,
+                    dob,
+                    phoneNumber,
+                    email
+                };
+            }).filter(student => student.name); // Ensure each student object is valid
         }
 
         // Event listener for the search button
