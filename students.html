@@ -294,6 +294,48 @@
             document.getElementById('eventPlace').value = '';
         }
 
+        // Load students from Google Sheets
+        async function loadStudents() {
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Remove header row
+
+            // Map the student data
+            students = rows.map(row => {
+                const [
+                    name,
+                    adNo,
+                    sO,
+                    houseName,
+                    place,
+                    post,
+                    pin,
+                    district,
+                    state,
+                    bloodGroup,
+                    dob,
+                    phoneNumber,
+                    email
+                ] = row.split(',');
+
+                return { 
+                    name,
+                    adNo,
+                    sO,
+                    houseName,
+                    place,
+                    post,
+                    pin,
+                    district,
+                    state,
+                    bloodGroup,
+                    dob,
+                    phoneNumber,
+                    email
+                };
+            }).filter(student => student.name); // Ensure each student object is valid
+        }
+
         // Event listener for the search button
         document.getElementById('searchButton').addEventListener('click', () => {
             const query = document.getElementById('searchBox').value.trim().toLowerCase();
