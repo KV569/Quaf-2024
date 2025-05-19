@@ -127,12 +127,6 @@
             margin: 2px 0;
         }
 
-        #statusChart {
-            width: 100%;
-            height: 200px; /* Adjust height for better visibility */
-            margin: 20px 0;
-        }
-
         /* Success Modal */
         .modal {
             display: none; /* Hidden by default */
@@ -175,6 +169,17 @@
         #statusContainer {
             display: none; /* Hidden by default */
             margin-top: 20px;
+        }
+
+        #statusHeader {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #statusChart {
+            width: 300px;
+            height: 300px;
+            margin: auto;
         }
 
         #userInfo {
@@ -221,40 +226,39 @@
     </div>
 
     <script>
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYd5HVi2ehHX75k62gciAcf1a8pTwKi3M0Mpyc4Fzlx8PgYCxWFI4BYCqjqnzm5w/pub?gid=1359753454&single=true&output=csv';
         const totalPointsData = {
             "MUHAMMED YASEEN K": 100,
-            "MUHAMMED LASIN KC": 98,
-            "MOHAMMED HADI V": 97,
-            "MUHAMMED HAYYAN VP": 96,
-            "MOHAMMED AFRAH N": 95,
-            "MUHAMMED ZIYAD C": 94,
-            "MUHAMMED SHAHAL": 93,
-            "AQIB MUHAMMED KT": 92,
-            "FARSHAD MR": 91,
-            "MUHAMMED RABEEH PP": 90,
-            "MUHAMMED SHAFEEQUE T": 89,
-            "MUHAMMED QASIM MP": 88,
-            "MUHAMMED HASHIM V": 87,
-            "MUHAMMED RASAL PP": 86,
-            "ALI RAFI EP": 85,
-            "MUHAMMED SINAN CK": 84,
-            "HAMDAN CC": 83,
-            "MUHAMMED ALI M": 82,
-            "MUHAMMED SHAFAN AK": 81,
-            "MUHAMMED ANSHAD VP": 80,
-            "MUHAMMED NASWIH IK": 79,
-            "HISHAM RAHMATHULLAH O": 78,
-            "SAHL SHAN O": 77,
-            "SADHAQATHULLA C": 76,
-            "MUHAMMED SAHL": 75,
-            "MUHAMMED HASHIM KH": 74,
-            "SAIDALAVI SHAMIL MC": 73,
-            "MISHAB PT": 72,
-            "MUHAMMED RASIN KP": 71,
-            "MUHAMMED ASLAM": 70,
-            "MUHAMMED MUSTHAFA SM": 69,
-            "MUHAMMED SHAFIN": 66,
+            "MUHAMMED LASIN KC": 99,
+            "MOHAMMED HADI V": 98,
+            "MUHAMMED HAYYAN VP": 97,
+            "MOHAMMED AFRAH N": 96,
+            "MUHAMMED ZIYAD C": 95,
+            "MUHAMMED SHAHAL": 94,
+            "AQIB MUHAMMED KT": 93,
+            "FARSHAD MR": 92,
+            "MUHAMMED RABEEH PP": 91,
+            "MUHAMMED SHAFEEQUE T": 90,
+            "MUHAMMED QASIM MP": 89,
+            "MUHAMMED HASHIM V": 88,
+            "MUHAMMED RASAL PP": 87,
+            "ALI RAFI EP": 86,
+            "MUHAMMED SINAN CK": 85,
+            "HAMDAN CC": 84,
+            "MUHAMMED ALI M": 83,
+            "MUHAMMED SHAFAN AK": 82,
+            "MUHAMMED ANSHAD VP": 81,
+            "MUHAMMED NASWIH IK": 80,
+            "HISHAM RAHMATHULLAH O": 79,
+            "SAHL SHAN O": 78,
+            "SADHAQATHULLA C": 77,
+            "MUHAMMED SAHL": 76,
+            "MUHAMMED HASHIM KH": 75,
+            "SAIDALAVI SHAMIL MC": 74,
+            "MISHAB PT": 73,
+            "MUHAMMED RASIN KP": 72,
+            "MUHAMMED ASLAM": 71,
+            "MUHAMMED MUSTHAFA SM": 70,
+            "MUHAMMED SHAFIN": 69,
             "MUHAMMED RAMEES VP": 68,
             "ABDAUL HADI": 67,
             "MUHAMMED FAHEEM NP": 66
@@ -292,48 +296,55 @@
             "MUHAMMED RASIN KP": 29,
             "MUHAMMED ASLAM": 30,
             "MUHAMMED MUSTHAFA SM": 31,
-            "MUHAMMED SHAFIN": 1,
-            "MUHAMMED RAMEES VP": 32,
-            "ABDAUL HADI": 33,
-            "MUHAMMED FAHEEM NP": 34
+            "MUHAMMED SHAFIN": 32,
+            "MUHAMMED RAMEES VP": 33,
+            "ABDAUL HADI": 34,
+            "MUHAMMED FAHEEM NP": 35
         };
 
-        const studentsData = []; // Array to hold the student data from the CSV
+        // Define valid credentials
+        const validCredentials = {
+            "MUHAMMED YASEEN K": "986",
+            "MUHAMMED LASIN KC": "987",
+            "MOHAMMED HADI V": "988",
+            "MUHAMMED HAYYAN VP": "989",
+            "MOHAMMED AFRAH N": "990",
+            "MUHAMMED ZIYAD C": "991",
+            "MUHAMMED SHAHAL": "992",
+            "AQIB MUHAMMED KT": "993",
+            "FARSHAD MR": "994",
+            "MUHAMMED RABEEH PP": "995",
+            "MUHAMMED SHAFEEQUE T": "996",
+            "MUHAMMED QASIM MP": "997",
+            "MUHAMMED HASHIM V": "998",
+            "MUHAMMED RASAL PP": "999",
+            "ALI RAFI EP": "1000",
+            "MUHAMMED SINAN CK": "1001",
+            "HAMDAN CC": "1002",
+            "MUHAMMED ALI M": "1003",
+            "MUHAMMED SHAFAN AK": "1004",
+            "MUHAMMED ANSHAD VP": "1005",
+            "MUHAMMED NASWIH IK": "1006",
+            "HISHAM RAHMATHULLAH O": "1008",
+            "SAHL SHAN O": "1009",
+            "SADHAQATHULLA C": "1010",
+            "MUHAMMED SAHL": "1011",
+            "MUHAMMED HASHIM KH": "1012",
+            "SAIDALAVI SHAMIL MC": "1013",
+            "MISHAB PT": "1014",
+            "MUHAMMED RASIN KP": "1015",
+            "MUHAMMED ASLAM": "1016",
+            "MUHAMMED MUSTHAFA SM": "1017",
+            "MUHAMMED SHAFIN": "1018",
+            "MUHAMMED RAMEES VP": "1019",
+            "ABDAUL HADI": "1020",
+            "MUHAMMED FAHEEM NP": "960"
+        };
 
         // Function to show the login form
         function showLogin() {
             document.getElementById('loginForm').style.display = 'block'; // Show login form
             document.getElementById('mainContent').style.display = 'none'; // Hide student search
-        }
-
-        // Load student data from Google Sheets
-        async function loadStudents() {
-            const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1); // Remove the header row
-
-            // Map the student data
-            studentsData.push(...rows.map(row => {
-                const [
-                    name, adNo, sO, houseName, place, post, pin, district, state, bloodGroup, dob, phoneNumber, email
-                ] = row.split(',');
-
-                return {
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                };
-            }).filter(student => student.name)); // Ensure each student object is valid
         }
 
         // Validate login credentials
@@ -346,7 +357,7 @@
                 loginError.style.display = 'none';
                 document.getElementById('libraryTitle').style.display = 'none'; // Hide title on login
                 document.getElementById('loginForm').style.display = 'none'; // Hide login form
-                
+               
                 // Show success modal
                 document.getElementById('successModal').style.display = 'flex';
             } else {
@@ -354,17 +365,17 @@
                 loginError.style.display = 'block';
             }
         }
-
+       
         // Redirect to status display
         function redirectToStatus() {
             document.getElementById('successModal').style.display = 'none'; // Hide modal
             document.getElementById('mainContent').style.display = 'none'; // Hide the search area
             document.getElementById('statusContainer').style.display = 'block'; // Show status area
-            
+           
             const username = document.getElementById('username').value; // Get username for display
             const adNo = validCredentials[username]; // Get corresponding AD NO by username
             document.getElementById('userInfo').innerHTML = `Name: ${username}<br>AD NO: ${adNo}`;
-            
+           
             // Display total and remaining points on the pie chart
             const totalPoints = totalPointsData[username];
             const remainingPoints = remainingPointsData[username];
@@ -380,17 +391,17 @@
                 data: {
                     labels: ['Total Points', 'Remaining Points'],
                     datasets: [{
-                        label: 'Student Points Overview',
+                        label: 'Student Status',
                         data: [total, remaining],
                         backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)'
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
                             'rgba(54, 162, 235, 1)'
                         ],
-                        borderWidth: 2
+                        borderWidth: 1
                     }]
                 },
                 options: {
@@ -414,29 +425,19 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = ''; // Clear previous results
 
-            // Filter students based on search input
-            const results = studentsData.filter(student =>
-                student.adNo === query || student.name.toLowerCase().includes(query)
+            const results = Object.entries(validCredentials).filter(([name]) =>
+                name.toLowerCase().includes(query) || validCredentials[name].toString() === query
             );
 
             if (results.length > 0) {
-                results.forEach(student => {
+                results.forEach(([name, adNo]) => {
                     const div = document.createElement('div');
                     div.className = 'student-item';
                     div.innerHTML = `
-                        <div class="student-details">Name: ${student.name}</div>
-                        <div class="student-details">AD NO: ${student.adNo}</div>
-                        <div class="student-details">S/O: ${student.sO}</div>
-                        <div class="student-details">House Name: ${student.houseName}</div>
-                        <div class="student-details">Place: ${student.place}</div>
-                        <div class="student-details">Post: ${student.post}</div>
-                        <div class="student-details">PIN: ${student.pin}</div>
-                        <div class="student-details">District: ${student.district}</div>
-                        <div class="student-details">State: ${student.state}</div>
-                        <div class="student-details">Blood Group: ${student.bloodGroup}</div>
-                        <div class="student-details">DOB: ${student.dob}</div>
-                        <div class="student-details">Phone: ${student.phoneNumber}</div>
-                        <div class="student-details">Email: ${student.email}</div>
+                        <div class="student-details">Name: ${name}</div>
+                        <div class="student-details">AD NO: ${adNo}</div>
+                        <div class="student-details">Total Points: ${totalPointsData[name]}</div>
+                        <div class="student-details">Remaining Points: ${remainingPointsData[name]}</div>
                     `;
                     resultsDiv.appendChild(div);
                 });
@@ -446,7 +447,9 @@
         });
 
         // Load students on page load
-        window.onload = loadStudents;
+        window.onload = function() {
+            // Optionally use the loadStudents function here if you want to load other student data
+        };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
