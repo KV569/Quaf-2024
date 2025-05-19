@@ -62,7 +62,8 @@
         input[type="text"],
         input[type="password"],
         input[type="date"],
-        input[type="time"] {
+        input[type="time"],
+        select {
             padding: 15px;
             width: 300px;
             border: none;
@@ -191,10 +192,24 @@
 
         <div id="eventScheduling">
             <h2>QUAF-EVENTS</h2>
+            <select id="wingName">
+                <option value="" disabled selected>Select Wing Name</option>
+                <option value="LIBRARY WING">LIBRARY WING</option>
+                <option value="ARABIC WING">ARABIC WING</option>
+                <option value="URDU WING">URDU WING</option>
+                <option value="MALAYALAM WING">MALAYALAM WING</option>
+                <option value="ENGLISH WING">ENGLISH WING</option>
+                <option value="IT WING">IT WING</option>
+                <option value="SIGMA WING">SIGMA WING</option>
+                <option value="ART WING">ART WING</option>
+                <option value="ORATION WING">ORATION WING</option>
+                <option value="GK WING">GK WING</option>
+                <option value="HIMAYA WING">HIMAYA WING</option>
+            </select>
+            <input type="text" id="eventPlace" placeholder="Event Place">
             <input type="text" id="eventName" placeholder="Event Name">
             <input type="date" id="eventDate">
             <input type="time" id="eventTime">
-            <input type="text" id="eventPlace" placeholder="Event Place">
             <button onclick="addEvent()">Add Event</button>
             <div id="eventList" style="margin-top: 20px;"></div> <!-- Container for events -->
         </div>
@@ -235,12 +250,13 @@
         }
 
         function addEvent() {
+            const wingName = document.getElementById('wingName').value;
+            const eventPlace = document.getElementById('eventPlace').value;
             const eventName = document.getElementById('eventName').value;
             const eventDate = document.getElementById('eventDate').value;
             const eventTime = document.getElementById('eventTime').value;
-            const eventPlace = document.getElementById('eventPlace').value;
 
-            if (!eventName || !eventDate || !eventTime || !eventPlace) {
+            if (!wingName || !eventPlace || !eventName || !eventDate || !eventTime) {
                 alert('Please fill in all fields.');
                 return;
             }
@@ -268,9 +284,10 @@
 
             eventItem.innerHTML = `
                 <strong>${eventName}</strong><br>
+                Wing: ${wingName}<br>
+                Place: ${eventPlace}<br>
                 Date: ${eventDate}<br>
-                Time: ${eventTime}<br>
-                Place: ${eventPlace}
+                Time: ${eventTime}
             `;
 
             const completeCheckbox = document.createElement('input');
@@ -291,10 +308,11 @@
             eventsContainer.appendChild(eventItem);
 
             // Clear input fields after adding the event
+            document.getElementById('wingName').selectedIndex = 0; // Reset wing dropdown
+            document.getElementById('eventPlace').value = '';
             document.getElementById('eventName').value = '';
             document.getElementById('eventDate').value = '';
             document.getElementById('eventTime').value = '';
-            document.getElementById('eventPlace').value = '';
         }
 
         // Load students from Google Sheets
