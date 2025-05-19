@@ -226,8 +226,81 @@
     </div>
 
     <script>
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYd5HVi2ehHX75k62gciAcf1a8pTwKi3M0Mpyc4Fzlx8PgYCxWFI4BYCqjqnzm5w/pub?gid=1359753454&single=true&output=csv';
-        let students = [];
+        const totalPointsData = {
+            "MUHAMMED YASEEN K": 100,
+            "MUHAMMED LASIN KC": 98,
+            "MOHAMMED HADI V": 97,
+            "MUHAMMED HAYYAN VP": 96,
+            "MOHAMMED AFRAH N": 95,
+            "MUHAMMED ZIYAD C": 94,
+            "MUHAMMED SHAHAL": 93,
+            "AQIB MUHAMMED KT": 92,
+            "FARSHAD MR": 91,
+            "MUHAMMED RABEEH PP": 90,
+            "MUHAMMED SHAFEEQUE T": 89,
+            "MUHAMMED QASIM MP": 88,
+            "MUHAMMED HASHIM V": 87,
+            "MUHAMMED RASAL PP": 86,
+            "ALI RAFI EP": 85,
+            "MUHAMMED SINAN CK": 84,
+            "HAMDAN CC": 83,
+            "MUHAMMED ALI M": 82,
+            "MUHAMMED SHAFAN AK": 81,
+            "MUHAMMED ANSHAD VP": 80,
+            "MUHAMMED NASWIH IK": 79,
+            "HISHAM RAHMATHULLAH O": 78,
+            "SAHL SHAN O": 77,
+            "SADHAQATHULLA C": 76,
+            "MUHAMMED SAHL": 75,
+            "MUHAMMED HASHIM KH": 74,
+            "SAIDALAVI SHAMIL MC": 73,
+            "MISHAB PT": 72,
+            "MUHAMMED RASIN KP": 71,
+            "MUHAMMED ASLAM": 70,
+            "MUHAMMED MUSTHAFA SM": 69,
+            "MUHAMMED SHAFIN": 66,
+            "MUHAMMED RAMEES VP": 68,
+            "ABDAUL HADI": 67,
+            "MUHAMMED FAHEEM NP": 66
+        };
+
+        const remainingPointsData = {
+            "MUHAMMED YASEEN K": 1,
+            "MUHAMMED LASIN KC": 2,
+            "MOHAMMED HADI V": 3,
+            "MUHAMMED HAYYAN VP": 4,
+            "MOHAMMED AFRAH N": 5,
+            "MUHAMMED ZIYAD C": 6,
+            "MUHAMMED SHAHAL": 7,
+            "AQIB MUHAMMED KT": 8,
+            "FARSHAD MR": 9,
+            "MUHAMMED RABEEH PP": 10,
+            "MUHAMMED SHAFEEQUE T": 11,
+            "MUHAMMED QASIM MP": 12,
+            "MUHAMMED HASHIM V": 13,
+            "MUHAMMED RASAL PP": 14,
+            "ALI RAFI EP": 15,
+            "MUHAMMED SINAN CK": 16,
+            "HAMDAN CC": 17,
+            "MUHAMMED ALI M": 18,
+            "MUHAMMED SHAFAN AK": 19,
+            "MUHAMMED ANSHAD VP": 20,
+            "MUHAMMED NASWIH IK": 21,
+            "HISHAM RAHMATHULLAH O": 22,
+            "SAHL SHAN O": 23,
+            "SADHAQATHULLA C": 24,
+            "MUHAMMED SAHL": 25,
+            "MUHAMMED HASHIM KH": 26,
+            "SAIDALAVI SHAMIL MC": 27,
+            "MISHAB PT": 28,
+            "MUHAMMED RASIN KP": 29,
+            "MUHAMMED ASLAM": 30,
+            "MUHAMMED MUSTHAFA SM": 31,
+            "MUHAMMED SHAFIN": 1,
+            "MUHAMMED RAMEES VP": 32,
+            "ABDAUL HADI": 33,
+            "MUHAMMED FAHEEM NP": 34
+        };
 
         // Define valid credentials
         const validCredentials = {
@@ -236,7 +309,7 @@
             "MOHAMMED HADI V": "988",
             "MUHAMMED HAYYAN VP": "989",
             "MOHAMMED AFRAH N": "990",
-            "MOHAMMED ZIYAD C": "991",
+            "MUHAMMED ZIYAD C": "991",
             "MUHAMMED SHAHAL": "992",
             "AQIB MUHAMMED KT": "993",
             "FARSHAD MR": "994",
@@ -292,7 +365,7 @@
                 loginError.style.display = 'block';
             }
         }
-
+        
         // Redirect to status display
         function redirectToStatus() {
             document.getElementById('successModal').style.display = 'none'; // Hide modal
@@ -302,26 +375,16 @@
             const username = document.getElementById('username').value; // Get username for display
             const adNo = validCredentials[username]; // Get corresponding AD NO by username
             document.getElementById('userInfo').innerHTML = `Name: ${username}<br>AD NO: ${adNo}`;
+            
+            // Display total and remaining points on the pie chart
+            const totalPoints = totalPointsData[username];
+            const remainingPoints = remainingPointsData[username];
 
-            fetchUserData(); // Fetch user data to display in the pie chart
+            createChart(totalPoints, remainingPoints);
         }
 
-        async function fetchUserData() {
-            const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1); // Remove header row
-
-            let totalPoints = 0;
-            let remainingPoints = 0;
-
-            // Collect total points and remaining points for all students
-            rows.forEach(row => {
-                const [name, adNo, total, remaining] = row.split(',');
-                totalPoints += parseInt(total);
-                remainingPoints += parseInt(remaining);
-            });
-
-            // Create a pie chart for display using Chart.js
+        // Create pie chart function
+        function createChart(total, remaining) {
             const ctx = document.getElementById('statusChart').getContext('2d');
             const chart = new Chart(ctx, {
                 type: 'pie',
@@ -329,7 +392,7 @@
                     labels: ['Total Points', 'Remaining Points'],
                     datasets: [{
                         label: 'Student Status',
-                        data: [totalPoints, remainingPoints],
+                        data: [total, remaining],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)'
@@ -349,53 +412,11 @@
                         },
                         title: {
                             display: true,
-                            text: 'Total and Remaining Points'
+                            text: 'Points Overview'
                         }
                     }
                 }
             });
-        }
-
-        // Load students from Google Sheets
-        async function loadStudents() {
-            const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1); // Remove header row
-
-            // Map the student data
-            students = rows.map(row => {
-                const [
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                ] = row.split(',');
-
-                return {
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                };
-            }).filter(student => student.name); // Ensure each student object is valid
         }
 
         // Event listener for the search button
@@ -404,29 +425,19 @@
             const resultsDiv = document.getElementById('results');
             resultsDiv.innerHTML = ''; // Clear previous results
 
-            // Filter students based on search input
-            const results = students.filter(student =>
-                student.adNo === query || student.name.toLowerCase().includes(query)
+            const results = Object.entries(validCredentials).filter(([name]) =>
+                name.toLowerCase().includes(query) || validCredentials[name].toString() === query
             );
 
             if (results.length > 0) {
-                results.forEach(student => {
+                results.forEach(([name, adNo]) => {
                     const div = document.createElement('div');
                     div.className = 'student-item';
                     div.innerHTML = `
-                        <div class="student-details">Name: ${student.name}</div>
-                        <div class="student-details">AD NO: ${student.adNo}</div>
-                        <div class="student-details">S/O: ${student.sO}</div>
-                        <div class="student-details">House Name: ${student.houseName}</div>
-                        <div class="student-details">Place: ${student.place}</div>
-                        <div class="student-details">Post: ${student.post}</div>
-                        <div class="student-details">PIN: ${student.pin}</div>
-                        <div class="student-details">District: ${student.district}</div>
-                        <div class="student-details">State: ${student.state}</div>
-                        <div class="student-details">Blood Group: ${student.bloodGroup}</div>
-                        <div class="student-details">DOB: ${student.dob}</div>
-                        <div class="student-details">Phone: ${student.phoneNumber}</div>
-                        <div class="student-details">Email: ${student.email}</div>
+                        <div class="student-details">Name: ${name}</div>
+                        <div class="student-details">AD NO: ${adNo}</div>
+                        <div class="student-details">Total Points: ${totalPointsData[name]}</div>
+                        <div class="student-details">Remaining Points: ${remainingPointsData[name]}</div>
                     `;
                     resultsDiv.appendChild(div);
                 });
@@ -436,7 +447,9 @@
         });
 
         // Load students on page load
-        window.onload = loadStudents;
+        window.onload = function() {
+            // Optionally use the loadStudents function here if you want to load other student data
+        };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
