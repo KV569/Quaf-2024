@@ -108,6 +108,7 @@
             width: 300px;
             position: relative;
             text-align: left;
+            border: 2px solid transparent;
         }
 
         .status {
@@ -117,6 +118,7 @@
             padding: 5px 10px;
             border-radius: 5px;
             color: white;
+            font-weight: bold;
         }
 
         .pending {
@@ -167,7 +169,7 @@
 <body>
     <div class="navbar">
         <a href="index.html">Home</a>
-        <a href="#" onclick="showLogin()">Events</a> <!-- Events link triggers showLogin -->
+        <a id="eventStatusLink" href="#" onclick="showLogin()">Events</a> <!-- Events link triggers showLogin -->
         <a href="students.html">Students</a>
     </div>
 
@@ -198,7 +200,7 @@
         </div>
 
         <div id="submittedEvents" style="display: none;">
-            <h2>Submitted Events</h2>
+            <h2>Events Status</h2>
             <div id="eventsContainer"></div> <!-- Container for displayed events -->
         </div>
     </div>
@@ -224,6 +226,7 @@
                 document.getElementById('libraryTitle').style.display = 'none'; // Hide title on login
                 document.getElementById('mainContent').style.display = 'none'; // Hide student search
                 document.getElementById('loginForm').style.display = 'none'; // Hide login form
+                document.getElementById('eventStatusLink').textContent = 'Events Status'; // Change link text
                 document.getElementById('eventScheduling').style.display = 'block'; // Show event scheduling
             } else {
                 loginError.textContent = 'Invalid username or password'; // Show error message
