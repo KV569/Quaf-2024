@@ -176,16 +176,6 @@
             margin-bottom: 20px;
         }
 
-        #userInfo {
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        #rank {
-            color: white;
-            margin-bottom: 10px;
-        }
-
         #statusChart {
             /* Placeholder for chart styling */
             width: 300px;
@@ -220,8 +210,6 @@
 
         <div id="statusContainer">
             <div id="statusHeader">Your Status</div>
-            <div id="userInfo"></div>
-            <div id="rank"></div>
             <canvas id="statusChart"></canvas> <!-- Placeholder for pie chart -->
         </div>
     </div>
@@ -235,11 +223,8 @@
     </div>
 
     <script>
-        const studentDetailsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYd5HVi2ehHX75k62gciAcf1a8pTwKi3M0Mpyc4Fzlx8PgYCxWFI4BYCqjqnzm5w/pub?gid=1359753454&single=true&output=csv';
-        const pointsUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSrBHU5bbXJq9wujA69yybY2gi1Lmg3r9wb9fNNrhknuxIFMHCZonSzQX22NkHAPF_qqSbyNpS3R0x_/pub?gid=0&single=true&output=csv';
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYd5HVi2ehHX75k62gciAcf1a8pTwKi3M0Mpyc4Fzlx8PgYCxWFI4BYCqjqnzm5w/pub?gid=1359753454&single=true&output=csv';
         let students = [];
-        let userPoints = {}; // Store points related to each user
-        let userRanks = {}; // Store rank data
 
         // Define valid credentials
         const validCredentials = {
@@ -299,116 +284,60 @@
                 
                 // Show success modal
                 document.getElementById('successModal').style.display = 'flex';
-
-                // Fetch user points and rank
-                fetchUserPoints(username);
-                fetchUserRank(username);
             } else {
                 loginError.textContent = 'Invalid username or password'; // Show error message
                 loginError.style.display = 'block';
             }
         }
 
-        async function fetchUserPoints(username) {
-            const response = await fetch(pointsUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1); // Remove header row
-
-            // Map the points data
-            userPoints = {};
-            rows.forEach(row => {
-                const [name, adNo, totalPoints, remainingPoints] = row.split(',');
-                userPoints[name] = {
-                    adNo: adNo,
-                    totalPoints: parseInt(totalPoints, 10),
-                    remainingPoints: parseInt(remainingPoints, 10)
-                };
-            });
-
-            // After fetching points, display the user's information
-            displayUserStatus(username);
-        }
-
-        async function fetchUserRank(username) {
-            const response = await fetch(pointsUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1); // Remove header row
-            
-            // Assuming the rank is based on totalPoints, sort and assign rank
-            const scores = {};
-            rows.forEach(row => {
-                const [name, adNo, totalPoints, remainingPoints] = row.split(',');
-                scores[name] = parseInt(totalPoints, 10);
-            });
-
-            // Sort by points and assign rank
-            const sortedNames = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-            sortedNames.forEach((name, index) => {
-                userRanks[name] = index + 1; // Rank starts at 1
-            });
-
-            // After fetching ranks, display the user's information
-            const rank = userRanks[username];
-            displayUserStatus(username, rank);
-        }
-
-        function displayUserStatus(username, rank) {
-            const userInfo = document.getElementById('userInfo');
-            const userData = userPoints[username];
-
-            if (userData) {
-                userInfo.innerHTML = `Name: ${username}<br>AD NO: ${userData.adNo}`;
-                document.getElementById('rank').innerHTML = `Rank: ${rank}`;
-                document.getElementById('statusContainer').style.display = 'block'; // Show status area
-
-                // Populate the pie chart
-                const totalPoints = userData.totalPoints;
-                const remainingPoints = userData.remainingPoints;
-
-                const ctx = document.getElementById('statusChart').getContext('2d');
-                const chart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['Total Points', 'Remaining Points'],
-                        datasets: [{
-                            label: 'Student Status',
-                            data: [totalPoints, remainingPoints],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Your Points Status'
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
         // Redirect to status display
         function redirectToStatus() {
             document.getElementById('successModal').style.display = 'none'; // Hide modal
-            // User information will be displayed through user status
+            document.getElementById('mainContent').style.display = 'none'; // Hide the search area
+            document.getElementById('statusContainer').style.display = 'block'; // Show status area
+            
+            // Here you can generate random points and percentages for demonstration
+            const totalPoints = Math.floor(Math.random() * 100); // Random total points
+            const percentage = Math.floor(Math.random() * 100); // Random percentage
+
+            // Create a pie chart for display using Chart.js
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Total Points', 'Remaining Points'],
+                    datasets: [{
+                        label: 'Student Status',
+                        data: [totalPoints, 100 - totalPoints],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Your Points Status'
+                        }
+                    }
+                }
+            });
         }
 
         // Load students from Google Sheets
         async function loadStudents() {
-            const response = await fetch(studentDetailsUrl);
+            const response = await fetch(sheetUrl);
             const data = await response.text();
             const rows = data.split('\n').slice(1); // Remove header row
 
