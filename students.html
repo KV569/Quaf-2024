@@ -60,6 +60,7 @@
         }
 
         input[type="text"],
+        input[type="password"],
         input[type="date"],
         input[type="time"] {
             padding: 15px;
@@ -106,6 +107,7 @@
             margin: 15px;
             width: 300px;
             position: relative;
+            text-align: left;
         }
 
         .status {
@@ -194,6 +196,11 @@
             <button onclick="addEvent()">Add Event</button>
             <div id="eventList" style="margin-top: 20px;"></div> <!-- Container for events -->
         </div>
+
+        <div id="submittedEvents" style="display: none;">
+            <h2>Submitted Events</h2>
+            <div id="eventsContainer"></div> <!-- Container for displayed events -->
+        </div>
     </div>
 
     <script>
@@ -204,6 +211,7 @@
             document.getElementById('loginForm').style.display = 'block'; // Show login form
             document.getElementById('mainContent').style.display = 'none'; // Hide student search
             document.getElementById('eventScheduling').style.display = 'none'; // Hide event scheduling
+            document.getElementById('submittedEvents').style.display = 'none'; // Hide submitted events
         }
 
         function validateLogin() {
@@ -223,48 +231,6 @@
             }
         }
 
-        // Function to load students from Google Sheets
-        async function loadStudents() {
-            const response = await fetch(sheetUrl);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1); // Remove header row
-
-            // Map the student data
-            students = rows.map(row => {
-                const [
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                ] = row.split(',');
-
-                return { 
-                    name,
-                    adNo,
-                    sO,
-                    houseName,
-                    place,
-                    post,
-                    pin,
-                    district,
-                    state,
-                    bloodGroup,
-                    dob,
-                    phoneNumber,
-                    email
-                };
-            }).filter(student => student.name); // Ensure each student object is valid
-        }
-
         function addEvent() {
             const eventName = document.getElementById('eventName').value;
             const eventDate = document.getElementById('eventDate').value;
@@ -276,7 +242,11 @@
                 return;
             }
 
-            const eventList = document.getElementById('eventList');
+            // Redirect to submitted events section
+            document.getElementById('submittedEvents').style.display = 'block'; // Show submitted events
+            document.getElementById('eventScheduling').style.display = 'none'; // Hide event scheduling
+            const eventsContainer = document.getElementById('eventsContainer');
+
             const eventItem = document.createElement('div');
             eventItem.className = 'event-item';
 
@@ -294,12 +264,10 @@
             }
 
             eventItem.innerHTML = `
-                <div>
-                    <strong>${eventName}</strong><br>
-                    Date: ${eventDate}<br>
-                    Time: ${eventTime}<br>
-                    Place: ${eventPlace}
-                </div>
+                <strong>${eventName}</strong><br>
+                Date: ${eventDate}<br>
+                Time: ${eventTime}<br>
+                Place: ${eventPlace}
             `;
 
             const completeCheckbox = document.createElement('input');
@@ -317,7 +285,7 @@
 
             eventItem.appendChild(completeCheckbox);
             eventItem.appendChild(statusSpan);
-            eventList.appendChild(eventItem);
+            eventsContainer.appendChild(eventItem);
 
             // Clear input fields after adding the event
             document.getElementById('eventName').value = '';
