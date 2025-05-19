@@ -177,10 +177,13 @@
         }
 
         #statusChart {
-            /* Placeholder for chart styling */
             width: 300px;
             height: 300px;
             margin: auto;
+        }
+
+        #userInfo {
+            margin: 10px 0;
         }
     </style>
 </head>
@@ -209,7 +212,7 @@
         </div>
 
         <div id="statusContainer">
-            <div id="statusHeader">Your Status</div>
+            <div id="userInfo"></div> <!-- Displays the name and AD number -->
             <canvas id="statusChart"></canvas> <!-- Placeholder for pie chart -->
         </div>
     </div>
@@ -281,7 +284,7 @@
                 loginError.style.display = 'none';
                 document.getElementById('libraryTitle').style.display = 'none'; // Hide title on login
                 document.getElementById('loginForm').style.display = 'none'; // Hide login form
-               
+                
                 // Show success modal
                 document.getElementById('successModal').style.display = 'flex';
             } else {
@@ -295,10 +298,28 @@
             document.getElementById('successModal').style.display = 'none'; // Hide modal
             document.getElementById('mainContent').style.display = 'none'; // Hide the search area
             document.getElementById('statusContainer').style.display = 'block'; // Show status area
-           
-            // Here you can generate random points and percentages for demonstration
-            const totalPoints = Math.floor(Math.random() * 100); // Random total points
-            const percentage = Math.floor(Math.random() * 100); // Random percentage
+            
+            const username = document.getElementById('username').value; // Get username for display
+            const adNo = validCredentials[username]; // Get corresponding AD NO by username
+            document.getElementById('userInfo').innerHTML = `Name: ${username}<br>AD NO: ${adNo}`;
+
+            fetchUserData(); // Fetch user data to display in the pie chart
+        }
+
+        async function fetchUserData() {
+            const response = await fetch(sheetUrl);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1); // Remove header row
+
+            let totalPoints = 0;
+            let remainingPoints = 0;
+
+            // Collect total points and remaining points for all students
+            rows.forEach(row => {
+                const [name, adNo, total, remaining] = row.split(',');
+                totalPoints += parseInt(total);
+                remainingPoints += parseInt(remaining);
+            });
 
             // Create a pie chart for display using Chart.js
             const ctx = document.getElementById('statusChart').getContext('2d');
@@ -308,7 +329,7 @@
                     labels: ['Total Points', 'Remaining Points'],
                     datasets: [{
                         label: 'Student Status',
-                        data: [totalPoints, 100 - totalPoints],
+                        data: [totalPoints, remainingPoints],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)'
@@ -328,7 +349,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Your Points Status'
+                            text: 'Total and Remaining Points'
                         }
                     }
                 }
