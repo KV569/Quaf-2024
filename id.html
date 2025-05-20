@@ -3,233 +3,860 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional ID Card Generator</title>
+    <title>QUAF-ID CARD</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #002b5c; /* Dark blue background */
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            color: white;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #1d3f72;
-            border: 5px solid #00ccff;
-            box-shadow: 0 0 20px rgba(0, 204, 255, 0.7);
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.2s, box-shadow 0.3s;
-            margin: 20px 0;
-        }
-
-        .circle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 204, 255, 1);
-        }
-
-        .circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Maintain aspect ratio */
-            display: none; /* Hide initially */
-            border-radius: 50%; /* Make the image circular */
-        }
-
-        .form-popup {
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            width: 300px;
-        }
-
-        .form-popup input {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #000;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
-        }
-
-        button:hover {
-            background-color: #0056b3;
-            box-shadow: 0 0 20px rgba(0, 123, 255, 1);
+            background: linear-gradient(135deg, #001845 0%, #003976 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .heading-container {
-            text-align: center;
-            margin-bottom: 10px;
+        .input-field {
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 204, 255, 0.5);
+        }
+        
+        .photo-circle {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #00ccff;
+            background-color: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+        }
+        
+        .id-card {
+            position: relative;
+            width: 350px;
+            height: 550px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .id-card-front {
+            position: relative;
+            background: linear-gradient(145deg, #002b5c 0%, #001a3a 100%);
+            padding: 15px;
+            height: 100%;
+        }
+        
+        .id-card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(90deg, rgba(0, 204, 255, 0.7) 0%, rgba(0, 102, 204, 0.7) 100%);
+            z-index: 1;
+        }
+        
+        .id-header {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .holographic-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.05) 25%, 
+                rgba(255,255,255,0.1) 50%, 
+                rgba(255,255,255,0.05) 75%, 
+                rgba(255,255,255,0) 100%);
+            background-size: 200% 200%;
+            animation: shine 3s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes shine {
+            0% { background-position: -100% -100%; }
+            100% { background-position: 100% 100%; }
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ccff, transparent);
+            margin: 10px 0;
+        }
+        
+        .animate-pulse-once {
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        input.error {
+            border: 2px solid #ff3860;
         }
 
-        .main-heading {
-            font-size: 26px;
-            font-weight: bold;
-            color: #00ccff; /* Main heading color */
+        .error-message {
+            color: #ff3860;
+            font-size: 12px;
+            height: 20px;
+            margin-top: -8px;
+            margin-bottom: 4px;
         }
-
-        .sub-heading {
-            font-size: 20px;
-            color: white; /* Subheading color */
+        
+        .card-wrapper {
+            perspective: 1000px;
+            margin-bottom: 20px;
         }
-
-        .small-sub-heading {
-            font-size: 16px; /* Smaller than the subheading */
-            color: white; /* Smaller subheading color */
+        
+        #canvas {
+            display: none;
+        }
+        
+        .preview-card {
+            transition: all 0.3s ease;
+        }
+        
+        .preview-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            opacity: 0.1;
+            font-size: 40px;
+            color: white;
+            transform: rotate(-45deg);
+            pointer-events: none;
+        }
+        
+        .signature-pad {
+            border: 1px dashed #007bff;
+            border-radius: 5px;
+            width: 100%;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            position: relative;
+        }
+        
+        .signature-pad::after {
+            content: 'Sign here';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #aaa;
+            font-size: 14px;
+            pointer-events: none;
         }
     </style>
 </head>
 
-<body>
+<body class="text-white p-4">
+    <div class="container mx-auto max-w-6xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-300 mb-2">QUAF ID-CARD </h1>
+            <p class="text-xl text-blue-100">Qualitative Union For Academic Focus</p>
+        </header>
 
-    <div class="container">
-        <!-- Headings -->
-        <div class="heading-container">
-            <div class="main-heading">QUAF-ID CARD</div>
-            <div class="sub-heading">Qualitative Union For Academic Focus</div>
-            <div class="small-sub-heading">27TH BATCH</div>
-        </div>
-
-        <!-- Circle for image upload -->
-        <div class="circle" onclick="document.getElementById('fileInput').click();">
-            <img id="uploadImg" src="" alt="Uploaded Image">
-            <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
+        <div class="flex flex-wrap">
+            <!-- Left column - Form -->
+            <div class="w-full lg:w-1/2 p-4">
+                <div class="bg-gray-900 bg-opacity-50 rounded-xl p-6 shadow-lg">
+                    
+                    
+                    <!-- Photo upload section -->
+                    <div class="flex justify-center mb-6">
+                        <div class="photo-circle flex items-center justify-center" onclick="document.getElementById('fileInput').click();">
+                            <img id="uploadImg" class="w-full h-full object-cover hidden" src="" alt="Upload Photo">
+                            <i id="photoPlaceholder" class="fas fa-user-alt text-5xl text-gray-300" ></i>
+                            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="previewImage(event)">
+                        </div>
+                    </div>
+                    <div id="photoError" class="error-message text-center"></div>
+                    
+                    <!-- Form -->
+                    <form id="idCardForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <label class="block text-blue-300 text-sm mb-1">Full Name*</label>
+                            <input type="text" id="name" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="nameError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">Admission Number*</label>
+                            <input type="text" id="adNo" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="adNoError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">S/O*</label>
+                            <input type="text" id="sO" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">House Name*</label>
+                            <input type="text" id="houseName" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">Place*</label>
+                            <input type="text" id="place" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="placeError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">Post*</label>
+                            <input type="text" id="post" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="postError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">PIN Code*</label>
+                            <input type="text" id="pin" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="pinError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">Blood Group*</label>
+                            <select id="bloodGroup" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                            <div id="bloodGroupError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">District*</label>
+                            <input type="text" id="district" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="districtError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">State*</label>
+                            <input type="text" id="state" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="stateError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">Phone Number*</label>
+                            <input type="text" id="phoneNumber" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div id="phoneNumberError" class="error-message"></div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-blue-300 text-sm mb-1">Valid Until</label>
+                            <input type="date" id="validUntil" class="input-field w-full px-4 py-2 rounded text-gray-800" required>
+                            <div class="error-message"></div>
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-blue-300 text-sm mb-1">Signature</label>
+                            <div id="signatureContainer" class="signature-pad"></div>
+                            <button type="button" id="clearSignature" class="mt-2 text-sm text-blue-300 hover:text-blue-100">Clear Signature</button>
+                        </div>
+                        
+                        <div class="md:col-span-2 mt-4">
+                            <button type="button" id="createButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-lg">
+                                <i class="fas fa-id-card mr-2"></i> CREATE ID CARD
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Right column - Preview -->
+            <div class="w-full lg:w-1/2 p-4">
+                <div class="bg-gray-900 bg-opacity-50 rounded-xl p-6 shadow-lg h-full flex flex-col items-center justify-center">
+                    <h2 class="text-2xl font-semibold text-blue-300 mb-4">Card Preview</h2>
+                    
+                    <div id="previewPlaceholder" class="text-center p-8">
+                        <i class="fas fa-id-card text-6xl text-blue-300 opacity-30 mb-4"></i>
+                        <p class="text-gray-400">Your ID card preview will appear here</p>
+                        <p class="text-xs text-gray-500 mt-4">Fill in the form and click CREATE to generate</p>
+                    </div>
+                    
+                    <div id="cardPreview" class="card-wrapper hidden">
+                        <div class="preview-card">
+                            <div class="id-card">
+                                <div class="id-card-front flex flex-col">
+                                    <div class="id-header text-center relative">
+                                        <h3 class="text-2xl font-bold text-white pt-3">QUAF-ID CARD</h3>
+                                        <p class="text-sm text-white">Qualitative Union For Academic Focus</p>
+                                        <p class="text-xs text-white">27TH BATCH</p>
+                                    </div>
+                                    
+                                    <div class="flex justify-center mt-10 mb-3">
+                                        <div class="photo-holder w-24 h-24 rounded-full border-4 border-blue-400 overflow-hidden bg-white">
+                                            <img id="previewImg" class="w-full h-full object-cover" src="" alt="Student Photo">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="divider"></div>
+                                    
+                                    <div class="details-section px-2 py-2 flex-grow">
+                                        <div class="grid grid-cols-3 gap-1 text-sm">
+                                            <div class="col-span-3 mb-1">
+                                                <span class="text-blue-300">Name:</span> 
+                                                <span id="previewName" class="font-semibold text-white"></span>
+                                            </div>
+                                            <div class="col-span-3 mb-1">
+                                                <span class="text-blue-300">Ad No:</span> 
+                                                <span id="previewAdNo" class="font-semibold text-white"></span>
+                                            </div>
+                                            <div class="col-span-3 mb-1">
+                                                <span class="text-blue-300">S/O:</span> 
+                                                <span id="previewSO" class="text-white"></span>
+                                            </div>
+                                            <div class="col-span-3 mb-1">
+                                                <span class="text-blue-300">Address:</span>
+                                            </div>
+                                            <div class="col-span-3 pl-4 text-xs mb-1">
+                                                <span id="previewHouseName" class="text-white"></span>,
+                                                <span id="previewPlace" class="text-white"></span>,
+                                                <span id="previewPost" class="text-white"></span> - 
+                                                <span id="previewPin" class="text-white"></span>
+                                            </div>
+                                            <div class="col-span-3 pl-4 text-xs mb-1">
+                                                <span id="previewDistrict" class="text-white"></span>,
+                                                <span id="previewState" class="text-white"></span>
+                                            </div>
+                                            <div class="col-span-2 mb-1">
+                                                <span class="text-blue-300">Blood Group:</span> 
+                                                <span id="previewBloodGroup" class="font-semibold text-white"></span>
+                                            </div>
+                                            <div class="col-span-3 mb-1">
+                                                <span class="text-blue-300">Phone:</span> 
+                                                <span id="previewPhone" class="text-white"></span>
+                                            </div>
+                                            <div class="col-span-3 mb-1">
+                                                <span class="text-blue-300">Valid Until:</span> 
+                                                <span id="previewValidUntil" class="text-white"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex justify-between items-end mt-2">
+                                        <div class="qr-section w-20 h-20 bg-white p-1 rounded">
+                                            <div id="previewQR" class="w-full h-full"></div>
+                                        </div>
+                                        <div class="signature-section">
+                                            <div id="previewSignature" class="w-32 h-16 bg-white bg-opacity-90 rounded p-1 flex items-center justify-center">
+                                                <span class="text-gray-300 text-xs">Signature</span>
+                                            </div>
+                                            <div class="text-center text-xs mt-1">Authorized Signature</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="watermark">QUAF</div>
+                                    <div class="holographic-effect"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <button id="downloadButton" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 shadow-lg">
+                                <i class="fas fa-download mr-2"></i> Download ID Card
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <canvas id="canvas" width="1050" height="1650"></canvas>
+                </div>
+            </div>
         </div>
         
-        <!-- Form to collect data -->
-        <div class="form-popup">
-            <input type="text" id="name" placeholder="Name" required>
-            <input type="text" id="adNo" placeholder="Ad No" required>
-            <input type="text" id="sO" placeholder="S/O">
-            <input type="text" id="houseName" placeholder="House Name">
-            <input type="text" id="place" placeholder="Place">
-            <input type="text" id="post" placeholder="Post">
-            <input type="text" id="pin" placeholder="Pin">
-            <input type="text" id="bloodGroup" placeholder="Blood Group">
-            <input type="text" id="district" placeholder="District">
-            <input type="text" id="state" placeholder="State">
-            <input type="text" id="phoneNumber" placeholder="Phone Number">
-            <button onclick="createIDCard()">CREATE</button>
-        </div>
+        <footer class="mt-8 text-center text-gray-400 text-sm">
+            <p>QUAF ID Card Generator &copy; 2025 | Professional ID Card </p>
+        </footer>
     </div>
 
     <script>
+        // Initialize signature pad
+        let signaturePad;
+        let isDrawing = false;
+        const signatureContainer = document.getElementById('signatureContainer');
+        
+        function initSignaturePad() {
+            signatureContainer.innerHTML = '';
+            const canvas = document.createElement('canvas');
+            canvas.width = signatureContainer.offsetWidth;
+            canvas.height = signatureContainer.offsetHeight;
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.id = 'signatureCanvas';
+            signatureContainer.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000';
+            
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events
+            canvas.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                startDrawing(e.touches[0]);
+            });
+            canvas.addEventListener('touchmove', function(e) {
+                e.preventDefault();
+                draw(e.touches[0]);
+            });
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            signaturePad = {
+                canvas: canvas,
+                context: ctx,
+                isEmpty: true,
+                clear: function() {
+                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.isEmpty = true;
+                }
+            };
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            signaturePad.isEmpty = false;
+            const rect = signaturePad.canvas.getBoundingClientRect();
+            const x = (e.clientX || e.pageX) - rect.left;
+            const y = (e.clientY || e.pageY) - rect.top;
+            
+            signaturePad.context.beginPath();
+            signaturePad.context.moveTo(x, y);
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = signaturePad.canvas.getBoundingClientRect();
+            const x = (e.clientX || e.pageX) - rect.left;
+            const y = (e.clientY || e.pageY) - rect.top;
+            
+            signaturePad.context.lineTo(x, y);
+            signaturePad.context.stroke();
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+        }
+        
+        document.getElementById('clearSignature').addEventListener('click', function() {
+            if (signaturePad) {
+                signaturePad.clear();
+            }
+        });
+        
+        // Preview image upload
         function previewImage(event) {
             const imgElement = document.getElementById('uploadImg');
+            const placeholderElement = document.getElementById('photoPlaceholder');
             const file = event.target.files[0];
-
+            
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     imgElement.src = e.target.result;
-                    imgElement.style.display = "block"; // Show the image in the circle
+                    imgElement.classList.remove('hidden');
+                    placeholderElement.classList.add('hidden');
+                    
+                    // Update preview image as well
+                    document.getElementById('previewImg').src = e.target.result;
+                    updatePreview();
                 }
                 reader.readAsDataURL(file);
+                document.getElementById('photoError').textContent = '';
             }
         }
-
+        
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = ['name', 'adNo', 'place', 'post', 'pin', 'bloodGroup', 'district', 'state', 'phoneNumber'];
+            
+            // Check if photo is uploaded
+            if (!document.getElementById('uploadImg').src) {
+                document.getElementById('photoError').textContent = 'Please upload a photo';
+                isValid = false;
+            } else {
+                document.getElementById('photoError').textContent = '';
+            }
+            
+            // Validate required text fields
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field);
+                const errorElement = document.getElementById(field + 'Error');
+                
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    errorElement.textContent = 'This field is required';
+                    isValid = false;
+                } else {
+                    input.classList.remove('error');
+                    errorElement.textContent = '';
+                }
+            });
+            
+            // Validate phone number format
+            const phoneInput = document.getElementById('phoneNumber');
+            const phoneError = document.getElementById('phoneNumberError');
+            if (phoneInput.value.trim() && !/^\d{10}$/.test(phoneInput.value.trim())) {
+                phoneInput.classList.add('error');
+                phoneError.textContent = 'Please enter a valid 10-digit phone number';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Update preview in real-time
+        function updatePreview() {
+            // Get form values
+            const name = document.getElementById('name').value || '[Full Name]';
+            const adNo = document.getElementById('adNo').value || '[ID Number]';
+            const sO = document.getElementById('sO').value || '[Guardian]';
+            const houseName = document.getElementById('houseName').value || '[House]';
+            const place = document.getElementById('place').value || '[Place]';
+            const post = document.getElementById('post').value || '[Post]';
+            const pin = document.getElementById('pin').value || '[PIN]';
+            const bloodGroup = document.getElementById('bloodGroup').value || '[BG]';
+            const district = document.getElementById('district').value || '[District]';
+            const state = document.getElementById('state').value || '[State]';
+            const phoneNumber = document.getElementById('phoneNumber').value || '[Phone]';
+            const validUntil = document.getElementById('validUntil').value ? 
+                new Date(document.getElementById('validUntil').value).toLocaleDateString('en-US', {day: '2-digit', month: 'short', year: 'numeric'}) : 
+                '[Date]';
+                
+            // Update preview elements
+            document.getElementById('previewName').textContent = name;
+            document.getElementById('previewAdNo').textContent = adNo;
+            document.getElementById('previewSO').textContent = sO;
+            document.getElementById('previewHouseName').textContent = houseName;
+            document.getElementById('previewPlace').textContent = place;
+            document.getElementById('previewPost').textContent = post;
+            document.getElementById('previewPin').textContent = pin;
+            document.getElementById('previewBloodGroup').textContent = bloodGroup;
+            document.getElementById('previewDistrict').textContent = district;
+            document.getElementById('previewState').textContent = state;
+            document.getElementById('previewPhone').textContent = phoneNumber;
+            document.getElementById('previewValidUntil').textContent = validUntil;
+            
+            // Generate QR code
+            generateQRCode();
+            
+            // Show preview
+            document.getElementById('previewPlaceholder').classList.add('hidden');
+            document.getElementById('cardPreview').classList.remove('hidden');
+        }
+        
+        // Generate QR code
+        function generateQRCode() {
+            const qrContainer = document.getElementById('previewQR');
+            qrContainer.innerHTML = '';
+            
+            const name = document.getElementById('name').value;
+            const adNo = document.getElementById('adNo').value;
+            const phone = document.getElementById('phoneNumber').value;
+            
+            if (name && adNo) {
+                const qrData = `QUAF ID: ${adNo}\nName: ${name}\nPhone: ${phone}`;
+                const qr = qrcode(4, 'L');
+                qr.addData(qrData);
+                qr.make();
+                qrContainer.innerHTML = qr.createImgTag(3, 0);
+                
+                const img = qrContainer.querySelector('img');
+                img.style.width = '100%';
+                img.style.height = '100%';
+            }
+        }
+        
+        // Create ID card
         function createIDCard() {
-            const canvas = document.createElement('canvas');
+            if (!validateForm()) {
+                return false;
+            }
+            
+            const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
-
-            // Set canvas dimensions for ID Card (width and height)
-            canvas.width = 400; // Adjust width as needed
-            canvas.height = 600; // Adjust height as needed
-
-            // Draw background of the ID card
-            ctx.fillStyle = "#002b5c"; // Background color of ID card
+            
+            // Clear canvas
+            ctx.fillStyle = "#002b5c";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+            
+            // Draw gradient background
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#002b5c');
+            gradient.addColorStop(1, '#001835');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw header background
+            const headerGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            headerGradient.addColorStop(0, 'rgba(0, 204, 255, 0.7)');
+            headerGradient.addColorStop(1, 'rgba(0, 102, 204, 0.7)');
+            ctx.fillStyle = headerGradient;
+            ctx.fillRect(0, 0, canvas.width, 240);
+            
             // Draw headings
-            ctx.fillStyle = "#00ccff"; // Main heading color
-            ctx.font = "26px Arial";
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 80px Arial";
             ctx.textAlign = "center";
-            ctx.fillText("QUAF-ID CARD", canvas.width / 2, 40);
-            ctx.font = "20px Arial";
-            ctx.fillText("Qualitative Union For Academic Focus", canvas.width / 2, 75);
-            ctx.font = "16px Arial";
-            ctx.fillText("27TH BATCH", canvas.width / 2, 105);
-
+            ctx.fillText("QUAF-ID CARD", canvas.width / 2, 120);
+            
+            ctx.font = "40px Arial";
+            ctx.fillText("Qualitative Union For Academic Focus", canvas.width / 2, 180);
+            
+            ctx.font = "30px Arial";
+            ctx.fillText("27TH BATCH", canvas.width / 2, 230);
+            
             // Draw uploaded image
             const imgElement = document.getElementById('uploadImg');
-
             if (imgElement.src) {
-                const img = new Image();
-                img.onload = function () {
-                    ctx.drawImage(img, (canvas.width - 100) / 2, 120, 100, 100); // Centering the image
-                    drawDetails(ctx, canvas);
-                };
-                img.src = imgElement.src; // Use the source of the uploaded image
-            } else {
-                drawDetails(ctx, canvas); // If no image, still draw details
+                ctx.save();
+                ctx.beginPath();
+                const centerX = canvas.width / 2;
+                const radius = 150;
+                const y = 400;
+                ctx.arc(centerX, y, radius, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                
+                ctx.drawImage(imgElement, centerX - radius, y - radius, radius * 2, radius * 2);
+                
+                ctx.beginPath();
+                ctx.arc(centerX, y, radius, 0, Math.PI * 2);
+                ctx.strokeStyle = '#00ccff';
+                ctx.lineWidth = 15;
+                ctx.stroke();
+                ctx.restore();
             }
+            
+            // Draw divider
+            const dividerGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            dividerGradient.addColorStop(0, 'transparent');
+            dividerGradient.addColorStop(0.5, '#00ccff');
+            dividerGradient.addColorStop(1, 'transparent');
+            ctx.fillStyle = dividerGradient;
+            ctx.fillRect(50, 580, canvas.width - 100, 6);
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const adNo = document.getElementById('adNo').value;
+            const sO = document.getElementById('sO').value;
+            const houseName = document.getElementById('houseName').value;
+            const place = document.getElementById('place').value;
+            const post = document.getElementById('post').value;
+            const pin = document.getElementById('pin').value;
+            const bloodGroup = document.getElementById('bloodGroup').value;
+            const district = document.getElementById('district').value;
+            const state = document.getElementById('state').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const validUntil = document.getElementById('validUntil').value ? 
+                new Date(document.getElementById('validUntil').value).toLocaleDateString('en-US', {day: '2-digit', month: 'short', year: 'numeric'}) : 
+                '';
+            
+            // Draw personal details
+            ctx.textAlign = "left";
+            ctx.font = "bold 40px Arial";
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText("Personal Details", 60, 650);
+            
+            const startY = 710;
+            const lineHeight = 60;
+            
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "#00ccff";
+            ctx.fillText("Name:", 60, startY);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(name, 200, startY);
+            
+            ctx.fillStyle = "#00ccff";
+            ctx.fillText("Ad No:", 60, startY + lineHeight);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(adNo, 200, startY + lineHeight);
+            
+            ctx.fillStyle = "#00ccff";
+            ctx.fillText("S/O:", 60, startY + lineHeight * 2);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(sO, 200, startY + lineHeight * 2);
+            
+            ctx.fillStyle = "#00ccff";
+            ctx.fillText("Address:", 60, startY + lineHeight * 3);
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "28px Arial";
+            ctx.fillText(`${houseName}, ${place},`, 200, startY + lineHeight * 3);
+            ctx.fillText(`${post} - ${pin}`, 200, startY + lineHeight * 3 + 40);
+            ctx.fillText(`${district}, ${state}`, 200, startY + lineHeight * 3 + 80);
+            
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "#00ccff";
+            ctx.fillText("Blood Group:", 60, startY + lineHeight * 6);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(bloodGroup, 250, startY + lineHeight * 6);
+            
+            ctx.fillStyle = "#00ccff";
+            ctx.fillText("Phone:", 60, startY + lineHeight * 7);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(phoneNumber, 200, startY + lineHeight * 7);
+            
+            if (validUntil) {
+                ctx.fillStyle = "#00ccff";
+                ctx.fillText("Valid Until:", 60, startY + lineHeight * 8);
+                ctx.fillStyle = "#ffffff";
+                ctx.fillText(validUntil, 250, startY + lineHeight * 8);
+            }
+            
+            // Draw QR code
+            if (name && adNo) {
+                const qrCanvas = document.createElement('canvas');
+                const qrSize = 200;
+                qrCanvas.width = qrSize;
+                qrCanvas.height = qrSize;
+                const qrContext = qrCanvas.getContext('2d');
+                
+                const qr = qrcode(4, 'L');
+                qr.addData(`QUAF ID: ${adNo}\nName: ${name}\nPhone: ${phoneNumber}`);
+                qr.make();
+                
+                const cell = qrSize / qr.getModuleCount();
+                qrContext.fillStyle = '#FFFFFF';
+                qrContext.fillRect(0, 0, qrCanvas.width, qrCanvas.height);
+                
+                for (let row = 0; row < qr.getModuleCount(); row++) {
+                    for (let col = 0; col < qr.getModuleCount(); col++) {
+                        qrContext.fillStyle = qr.isDark(row, col) ? '#000000' : '#FFFFFF';
+                        qrContext.fillRect(col * cell, row * cell, cell, cell);
+                    }
+                }
+                
+                // Draw QR background
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(60, startY + lineHeight * 9, qrSize, qrSize);
+                
+                // Draw QR code on main canvas
+                ctx.drawImage(qrCanvas, 60, startY + lineHeight * 9, qrSize, qrSize);
+            }
+            
+            // Draw signature
+            if (signaturePad && !signaturePad.isEmpty) {
+                const signatureCanvas = document.getElementById('signatureCanvas');
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(canvas.width - 360, startY + lineHeight * 9, 300, 150);
+                ctx.drawImage(signatureCanvas, canvas.width - 360, startY + lineHeight * 9, 300, 150);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.textAlign = "center";
+                ctx.font = "24px Arial";
+                ctx.fillText("Authorized Signature", canvas.width - 210, startY + lineHeight * 9 + 180);
+            }
+            
+            // Draw watermark
+            ctx.save();
+            ctx.translate(canvas.width - 200, canvas.height - 150);
+            ctx.rotate(-Math.PI / 4);
+            ctx.font = "120px Arial";
+            ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+            ctx.textAlign = "center";
+            ctx.fillText("QUAF", 0, 0);
+            ctx.restore();
+            
+            // Trigger download
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = `QUAF_ID_${adNo}_${name.replace(/\s+/g, '_')}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            return true;
         }
-
-        function drawDetails(ctx, canvas) {
-            ctx.fillStyle = "white"; // Text color for details
-            ctx.font = "12px Arial";
-            const details = [
-                `Name: ${document.getElementById('name').value}`,
-                `Ad No: ${document.getElementById('adNo').value}`,
-                `S/O: ${document.getElementById('sO').value}`,
-                `House Name: ${document.getElementById('houseName').value}`,
-                `Place: ${document.getElementById('place').value}`,
-                `Post: ${document.getElementById('post').value}`,
-                `Pin: ${document.getElementById('pin').value}`,
-                `Blood Group: ${document.getElementById('bloodGroup').value}`,
-                `District: ${document.getElementById('district').value}`,
-                `State: ${document.getElementById('state').value}`,
-                `Phone No: ${document.getElementById('phoneNumber').value}`,
-            ];
-
-            details.forEach((detail, index) => {
-                ctx.fillText(detail, 20, 160 + (index * 15)); // Adjust Y coordinates for each detail
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initSignaturePad();
+            
+            // Handle form input changes for real-time preview
+            const formInputs = document.querySelectorAll('#idCardForm input, #idCardForm select');
+            formInputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
             });
-
-            // Trigger the download of the ID Card image
-            downloadCanvas(canvas);
-        }
-
-        function downloadCanvas(canvas) {
-            canvas.toBlob(function(blob) {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob); // Create a blob URL
-                link.download = 'QUAF_ID_Card.png'; // Filename for the downloaded image
-                link.click(); // Programmatically click to trigger download
-            }, 'image/png');
-        }
+            
+            // Create button click handler
+            document.getElementById('createButton').addEventListener('click', function() {
+                if (createIDCard()) {
+                    this.classList.add('animate-pulse-once');
+                    setTimeout(() => {
+                        this.classList.remove('animate-pulse-once');
+                    }, 500);
+                }
+            });
+            
+            // Download button click handler
+            document.getElementById('downloadButton').addEventListener('click', function() {
+                createIDCard();
+            });
+            
+            // Set today's date as minimum for valid until
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('validUntil').min = today;
+            
+            // Set default valid until date (1 year from now)
+            const nextYear = new Date();
+            nextYear.setFullYear(nextYear.getFullYear() + 1);
+            document.getElementById('validUntil').value = nextYear.toISOString().split('T')[0];
+            
+            // Initialize preview with empty values
+            updatePreview();
+            
+            // Adjust canvas size if window resizes
+            window.addEventListener('resize', function() {
+                if (signaturePad) {
+                    const oldCanvas = document.getElementById('signatureCanvas');
+                    const dataURL = oldCanvas.toDataURL();
+                    initSignaturePad();
+                    if (!signaturePad.isEmpty) {
+                        const img = new Image();
+                        img.onload = function() {
+                            signaturePad.context.drawImage(img, 0, 0, signaturePad.canvas.width, signaturePad.canvas.height);
+                        };
+                        img.src = dataURL;
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
