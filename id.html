@@ -1,1 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional ID Card Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #002b5c;
+            /* Dark blue background */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            border: 2px solid #00ccff; /* Added border for visibility */
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #1d3f72;
+            border: 5px solid #00ccff;
+            box-shadow: 0 0 20px rgba(0, 204, 255, 0.7);
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.3s;
+            margin: 20px 0;
+        }
+
+        .circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Maintain aspect ratio */
+            display: none;
+            /* Hide initially */
+            border-radius: 50%;
+            /* Make the image circular */
+        }
+
+        .form-popup {
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 300px;
+        }
+
+        .form-popup input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.7);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 1);
+        }
+
+        .heading-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .main-heading {
+            font-size: 26px;
+            font-weight: bold;
+            color: #00ccff;
+            /* Main heading color */
+        }
+
+        .sub-heading {
+            font-size: 20px;
+            color: white;
+            /* Subheading color */
+        }
+
+        .small-sub-heading {
+            font-size: 16px;
+            /* Smaller than the subheading */
+            color: white;
+            /* Smaller subheading color */
+        }
+
+        /* Snapshot container for rendering */
+        .snapshot-container {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="idCardContainer">
+        <div class="heading-container">
+            <div class="main-heading">QUAF-ID CARD</div>
+            <div class="sub-heading">Qualitative Union For Academic Focus</div>
+            <div class="small-sub-heading">27TH BATCH</div>
+        </div>
+
+        <div class="circle" onclick="document.getElementById('fileInput').click();">
+            <img id="uploadImg" src="" alt="Uploaded Image">
+            <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
+        </div>
+
+        <div class="form-popup">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="text" id="adNo" placeholder="Ad No" required>
+            <input type="text" id="sO" placeholder="S/O" required>
+            <input type="text" id="houseName" placeholder="House Name" required>
+            <input type="text" id="place" placeholder="Place" required>
+            <input type="text" id="post" placeholder="Post" required>
+            <input type="text" id="pin" placeholder="Pin" required>
+            <input type="text" id="bloodGroup" placeholder="Blood Group" required>
+            <input type="text" id="district" placeholder="District" required>
+            <input type="text" id="state" placeholder="State" required>
+            <input type="text" id="phoneNumber" placeholder="Phone Number" required>
+            <button onclick="generateIDCard()">CREATE</button>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const imgElement = document.getElementById('uploadImg');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imgElement.src = e.target.result;
+                    imgElement.style.display = "block"; // Show the image in the circle
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function generateIDCard() {
+            // Use html2canvas to take a screenshot of the ID Card container
+            html2canvas(document.getElementById("idCardContainer")).then(function(canvas) {
+                canvas.toBlob(function(blob) {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'QUAF_ID_Card.png'; // Filename for the downloaded image
+                    document.body.appendChild(link); // Append link to body
+                    link.click(); // Programmatically click to trigger download
+                    document.body.removeChild(link); // Remove link after downloading
+                }, 'image/png');
+            });
+        }
+    </script>
+</body>
+
+</html>
