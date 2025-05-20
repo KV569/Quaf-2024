@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium QUAF ID Card Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #002E5D;
+            --secondary-color: #007BFF;
+            --accent-color: #00CCFF;
+            --dark-color: #001B38;
+            --light-color: #F0F8FF;
+            --success-color: #10B981;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f8fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .card-preview {
+            width: 350px;
+            height: 550px;
+            perspective: 1000px;
+            margin: 0 auto;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .card-preview.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .holographic-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.1) 25%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 75%, 
+                rgba(255,255,255,0) 100%);
+            background-size: 400% 400%;
+            animation: holographic 8s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .security-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                45deg,
+                rgba(0, 46, 93, 0.05) 0px,
+                rgba(0, 46, 93, 0.05) 1px,
+                transparent 1px,
+                transparent 5px
+            );
+            opacity: 0.7;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes holographic {
+            0% {
+                background-position: 0% 50%;
+                opacity: 0.5;
+            }
+            50% {
+                background-position: 100% 50%;
+                opacity: 0.8;
+            }
+            100% {
+                background-position: 0% 50%;
+                opacity: 0.5;
+            }
+        }
+
+        .logo-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.4) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            animation: logo-shine 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        @keyframes logo-shine {
+            0% { left: -100%; }
+            20% { left: 250%; }
+            100% { left: 250%; }
+        }
+
+        .photo-placeholder {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.6);
+        }
+
+        .photo-placeholder:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 204, 255, 0.8);
+        }
+
+        .photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background-color: #fff;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+            outline: none;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            padding: 0 5px;
+            font-size: 12px;
+            background-color: #fff;
+            color: var(--secondary-color);
+            transition: all 0.3s;
+        }
+
+        .animated-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .animated-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .animated-button:hover:before {
+            left: 100%;
+        }
+
+        .animation-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #007BFF, #00CCFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background-color: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive design for form layout */
+        @media (max-width: 768px) {
+            .form-container {
+                flex-direction: column;
+            }
+            
+            .card-preview {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Add watermark to card */
+        .watermark {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><text x="10" y="50" font-family="Arial" font-size="12" fill="rgba(0,0,0,0.05)" transform="rotate(-45 50 50)">QUAF SECURE</text></svg>');
+            background-repeat: repeat;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Loading spinner */
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Slideshow effect for tips */
+        .tips-container {
+            overflow: hidden;
+            height: 60px;
+            position: relative;
+        }
+
+        .tips-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .tips-slide.active {
+            opacity: 1;
+        }
+
+        /* Print styles */
+        @media print {
+            body, html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: white;
+            }
+            
+            .app-container {
+                display: none;
+            }
+            
+            .print-container {
+                display: block !important;
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                margin: 0;
+                padding: 0;
+            }
+            
+            #particles-js, .toast, #loadingModal {
+                display: none !important;
+            }
+        }
+        
+        .print-container {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100">
+    <div id="particles-js"></div>
+    
+    <div class="app-container container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <span class="gradient-text">Premium QUAF ID Card Generator</span>
+            </h1>
+            <p class="text-gray-600 mb-4">Qualitative Union For Academic Focus - 27th Batch</p>
+            <div class="w-32 h-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full mx-auto"></div>
+        </header>
+
+        <!-- Tips Slideshow -->
+        <div class="bg-white rounded-lg shadow-md p-4 mb-8 tips-container">
+            <div class="tips-slide active">
+                <p class="text-gray-700"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> <strong>Tip:</strong> Upload a square photo for best results.</p>
+            </div>
+            <div class="tips-slide">
+                <p class="text-gray-700"><i class="fas fa-shield-alt text-blue-500 mr-2"></i> <strong>Security:</strong> Your data is processed locally and never uploaded to any servers.</p>
+            </div>
+            <div class="tips-slide">
+                <p class="text-gray-700"><i class="fas fa-print text-purple-500 mr-2"></i> <strong>Printing:</strong> Use high-quality paper for professional results.</p>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex flex-wrap md:flex-nowrap form-container">
+            <!-- ID Card Preview Area -->
+            <div class="w-full md:w-1/2 mb-8 md:mb-0 md:pr-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">ID Card Preview</h2>
+                    <p class="text-gray-600 mb-4">Click on the card to see front and back views</p>
+                    
+                    <div class="card-preview" id="cardPreview">
+                        <div class="card-inner">
+                            <!-- Front of the card -->
+                            <div class="card-front bg-gradient-to-br from-blue-800 to-blue-900 text-white p-6">
+                                <div class="security-pattern"></div>
+                                <div class="watermark"></div>
+                                
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-bold relative inline-block">
+                                            QUAF-ID CARD
+                                            <div class="logo-shine"></div>
+                                        </h3>
+                                        <p class="text-sm text-blue-200">Qualitative Union For Academic Focus</p>
+                                        <p class="text-xs text-blue-300">27TH BATCH</p>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <p class="text-xs bg-yellow-500 text-blue-900 px-2 py-1 rounded font-bold">
+                                            <span id="validUntilDisplay">VALID UNTIL: 2025</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col items-center mb-4 relative">
+                                    <div class="photo-placeholder-preview bg-gray-200 w-32 h-32 rounded-full mb-3 overflow-hidden border-4 border-blue-400 shadow-lg">
+                                        <img id="photoPreview" src="" alt="Your photo" class="w-full h-full object-cover hidden">
+                                        <div id="photoPlaceholderText" class="text-center text-gray-500 flex items-center justify-center h-full">
+                                            <i class="fas fa-user text-4xl"></i>
+                                        </div>
+                                    </div>
+                                    <div class="holographic-overlay rounded-full"></div>
+                                    
+                                    <h4 id="nameDisplay" class="text-xl font-bold tracking-wide text-center">Your Name</h4>
+                                    <p id="adNoDisplay" class="text-sm font-semibold bg-blue-700 px-3 py-1 rounded-full">QUAF-XXXX</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div>
+                                        <p class="text-blue-300 text-xs">S/O:</p>
+                                        <p id="sODisplay" class="font-semibold mb-2">Parent Name</p>
+                                        
+                                        <p class="text-blue-300 text-xs">Address:</p>
+                                        <p id="addressDisplay" class="font-semibold mb-2">Address</p>
+                                        
+                                        <p class="text-blue-300 text-xs">District:</p>
+                                        <p id="districtDisplay" class="font-semibold">District</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-blue-300 text-xs">Phone:</p>
+                                        <p id="phoneDisplay" class="font-semibold mb-2">Phone</p>
+                                        
+                                        <p class="text-blue-300 text-xs">Blood Group:</p>
+                                        <p id="bloodGroupDisplay" class="font-semibold mb-2">N/A</p>
+                                        
+                                        <p class="text-blue-300 text-xs">State:</p>
+                                        <p id="stateDisplay" class="font-semibold">State</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 pt-4 border-t border-blue-700 flex justify-between items-end">
+                                    <div>
+                                        <div class="qr-code bg-white p-1 rounded">
+                                            <div id="qrcode" class="w-16 h-16"></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="border-b border-white w-32 mb-1">
+                                            <span id="signatureDisplay" class="italic text-sm">signature</span>
+                                        </div>
+                                        <p class="text-xs">Authorized Signature</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Back of the card -->
+                            <div class="card-back bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+                                <div class="security-pattern"></div>
+                                <div class="watermark"></div>
+                                
+                                <div class="text-center mb-6">
+                                    <h3 class="text-xl font-bold text-blue-900">QUAF - 27TH BATCH</h3>
+                                    <p class="text-sm text-gray-700">Official Identification</p>
+                                </div>
+                                
+                                <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+                                    <h4 class="text-lg font-semibold text-blue-900 mb-2">Terms & Conditions</h4>
+                                    <ol class="text-xs text-gray-700 list-decimal pl-4 space-y-1">
+                                        <li>This card is the property of QUAF and must be returned upon request.</li>
+                                        <li>If found, please return to the QUAF office or contact the number on this card.</li>
+                                        <li>This card must be carried at all times while on QUAF premises.</li>
+                                        <li>Any misuse of this card will result in disciplinary action.</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="bg-blue-900 text-white p-3 rounded-lg">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-sm">Issue Date:</span>
+                                        <span class="text-sm" id="issueDateDisplay"></span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm">Card No:</span>
+                                        <span class="text-sm" id="cardNoDisplay"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 text-center">
+                                    <p class="text-xs text-gray-600">For inquiries: contact@quaf.edu</p>
+                                    <p class="text-xs text-gray-600">www.quaf.edu</p>
+                                </div>
+                                
+                                <div class="absolute bottom-4 right-4">
+                                    <div class="text-xs text-gray-500 italic">Secure ID • QUAF</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center text-sm text-gray-600 mt-3">
+                        <i class="fas fa-info-circle mr-1"></i> Click on the card to flip
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Form Area -->
+            <div class="w-full md:w-1/2">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Personal Information</h2>
+                    
+                    <div class="flex justify-center mb-6">
+                        <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">
+                            <input type="file" id="photoInput" class="hidden" accept="image/*">
+                            <div id="placeholderIcon">
+                                <i class="fas fa-camera text-gray-400 text-3xl"></i>
+                                <p class="text-xs text-gray-500 mt-2">Click to upload</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="idCardForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="input-group col-span-2">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="adNo">Admission No</label>
+                            <input type="text" id="adNo" name="adNo" placeholder="QUAF-XXXX" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="sO">S/O or D/O</label>
+                            <input type="text" id="sO" name="sO" placeholder="Parent's name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="houseName">House Name</label>
+                            <input type="text" id="houseName" name="houseName" placeholder="House name">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="place">Place</label>
+                            <input type="text" id="place" name="place" placeholder="Place/Locality">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="post">Post</label>
+                            <input type="text" id="post" name="post" placeholder="Post office">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="pin">PIN Code</label>
+                            <input type="text" id="pin" name="pin" placeholder="PIN code">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="bloodGroup">Blood Group</label>
+                            <select id="bloodGroup" name="bloodGroup">
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="district">District</label>
+                            <input type="text" id="district" name="district" placeholder="District">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" placeholder="State">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="phoneNumber">Phone Number</label>
+                            <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+XX XXXXX XXXXX">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="validUntil">Valid Until</label>
+                            <input type="text" id="validUntil" name="validUntil" placeholder="YYYY" value="2025">
+                        </div>
+                        
+                        <div class="input-group col-span-2">
+                            <label for="signature">Signature</label>
+                            <input type="text" id="signature" name="signature" placeholder="Your Name">
+                        </div>
+                    </form>
+                    
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <button id="previewBtn" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg shadow transition duration-300 ease-in-out animated-button">
+                            <i class="fas fa-eye mr-2"></i> Preview
+                        </button>
+                        <button id="createBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow transition duration-300 ease-in-out animated-button animation-pulse">
+                            <i class="fas fa-download mr-2"></i> Create & Download
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Additional features -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Additional Options</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button id="printBtn" class="flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-300 ease-in-out">
+                            <i class="fas fa-print mr-2"></i> Print ID Card
+                        </button>
+                        <button id="resetBtn" class="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-300 ease-in-out">
+                            <i class="fas fa-redo-alt mr-2"></i> Reset Form
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="mt-12 text-center text-gray-600 text-sm">
+            <p>QUAF ID Card Generator | Qualitative Union For Academic Focus</p>
+            <p class="mt-1">© 2023 QUAF. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Print Container (hidden by default) -->
+    <div class="print-container" id="printContainer"></div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
+    
+    <!-- Modal for loading -->
+    <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-sm text-center">
+            <div class="loader mb-4"></div>
+            <p class="text-gray-700">Generating your ID card...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
+    <script>
+        // Initialize particles background
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize particles.js
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#007BFF"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#007BFF",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Initialize tips slideshow
+            initTipsSlideshow();
+
+            // Generate initial QR code
+            generateQRCode('https://quaf.edu/verify');
+            
+            // Set current date for issue date
+            const currentDate = new Date();
+            document.getElementById('issueDateDisplay').textContent = 
+                currentDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            
+            // Set random card number
+            const randomCardNo = 'QUAF-' + Math.floor(10000 + Math.random() * 90000);
+            document.getElementById('cardNoDisplay').textContent = randomCardNo;
+
+            // Add event listeners to form elements for real-time update
+            const formInputs = document.querySelectorAll('#idCardForm input, #idCardForm select');
+            formInputs.forEach(input => {
+                input.addEventListener('input', updateCardPreview);
+            });
+
+            // Add event listeners to buttons
+            document.getElementById('previewBtn').addEventListener('click', updateCardPreview);
+            document.getElementById('createBtn').addEventListener('click', createAndDownloadIDCard);
+            document.getElementById('printBtn').addEventListener('click', printIDCard);
+            document.getElementById('resetBtn').addEventListener('click', resetForm);
+            
+            // Photo upload preview
+            document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
+            
+            // Card flip effect
+            document.getElementById('cardPreview').addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+        });
+
+        // Generate QR Code using the QRCode.js library
+        function generateQRCode(data) {
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            
+            QRCode.toCanvas(qrContainer, data, {
+                width: 64,
+                height: 64,
+                margin: 0,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function(error) {
+                if (error) console.error(error);
+            });
+        }
+
+        // Handle photo upload
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update form photo placeholder
+                const photoPlaceholder = document.getElementById('photoPlaceholder');
+                const placeholderIcon = document.getElementById('placeholderIcon');
+                
+                // Remove any existing image
+                const existingImg = photoPlaceholder.querySelector('img');
+                if (existingImg) {
+                    photoPlaceholder.removeChild(existingImg);
+                }
+                
+                // Create and add new image
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-full h-full object-cover';
+                placeholderIcon.style.display = 'none';
+                photoPlaceholder.appendChild(img);
+                
+                // Update card preview photo
+                const photoPreview = document.getElementById('photoPreview');
+                const photoPlaceholderText = document.getElementById('photoPlaceholderText');
+                
+                photoPreview.src = e.target.result;
+                photoPreview.classList.remove('hidden');
+                photoPlaceholderText.classList.add('hidden');
+                
+                showToast('Photo uploaded successfully!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Update card preview from form inputs
+        function updateCardPreview() {
+            const name = document.getElementById('name').value || 'Your Name';
+            const adNo = document.getElementById('adNo').value || 'QUAF-XXXX';
+            const sO = document.getElementById('sO').value || 'Parent Name';
+            const houseName = document.getElementById('houseName').value || '';
+            const place = document.getElementById('place').value || '';
+            const post = document.getElementById('post').value || '';
+            const pin = document.getElementById('pin').value || '';
+            const bloodGroup = document.getElementById('bloodGroup').value || 'N/A';
+            const district = document.getElementById('district').value || 'District';
+            const state = document.getElementById('state').value || 'State';
+            const phoneNumber = document.getElementById('phoneNumber').value || 'Phone';
+            const validUntil = document.getElementById('validUntil').value || '2025';
+            const signature = document.getElementById('signature').value || 'Signature';
+            
+            // Update card preview with form values
+            document.getElementById('nameDisplay').textContent = name;
+            document.getElementById('adNoDisplay').textContent = adNo;
+            document.getElementById('sODisplay').textContent = sO;
+            
+            // Combine address elements
+            const addressParts = [houseName, place, post, pin].filter(Boolean);
+            const address = addressParts.length > 0 ? addressParts.join(', ') : 'Address';
+            document.getElementById('addressDisplay').textContent = address;
+            
+            document.getElementById('bloodGroupDisplay').textContent = bloodGroup;
+            document.getElementById('districtDisplay').textContent = district;
+            document.getElementById('stateDisplay').textContent = state;
+            document.getElementById('phoneDisplay').textContent = phoneNumber;
+            document.getElementById('validUntilDisplay').textContent = 'VALID UNTIL: ' + validUntil;
+            document.getElementById('signatureDisplay').textContent = signature;
+            
+            // Generate QR code with student info
+            const qrData = `QUAF-ID:${adNo}\nName:${name}\nPhone:${phoneNumber}`;
+            generateQRCode(qrData);
+            
+            showToast('Preview updated!');
+        }
+
+        // Create and download ID card
+        function createAndDownloadIDCard() {
+            if (!validateForm()) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            showLoadingModal();
+            
+            // Use html2canvas to capture the card
+            const cardPreview = document.querySelector('.card-front');
+            
+            html2canvas(cardPreview, {
+                scale: 3, // Higher scale for better quality
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: null
+            }).then(function(canvas) {
+                try {
+                    // Create download link
+                    const link = document.createElement('a');
+                    link.download = 'QUAF_ID_Card.png';
+                    
+                    // Convert canvas to blob and create URL
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        link.href = url;
+                        link.click();
+                        URL.revokeObjectURL(url);
+                        
+                        hideLoadingModal();
+                        showToast('ID Card downloaded successfully!');
+                    }, 'image/png');
+                } catch (error) {
+                    console.error('Error creating download:', error);
+                    hideLoadingModal();
+                    showToast('Error creating download. Please try again.', 'error');
+                }
+            }).catch(function(error) {
+                console.error('Error capturing card:', error);
+                hideLoadingModal();
+                showToast('Error capturing card. Please try again.', 'error');
+            });
+        }
+
+        // Print ID card
+        function printIDCard() {
+            if (!validateForm()) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            showLoadingModal();
+            
+            // Clone the card for printing
+            const cardPreview = document.getElementById('cardPreview');
+            const printContainer = document.getElementById('printContainer');
+            printContainer.innerHTML = '';
+            
+            const cardClone = cardPreview.cloneNode(true);
+            cardClone.style.margin = 'auto';
+            printContainer.appendChild(cardClone);
+            
+            // Give a moment for the clone to render
+            setTimeout(function() {
+                hideLoadingModal();
+                window.print();
+                showToast('Print dialog opened!');
+            }, 500);
+        }
+
+        // Reset form
+        function resetForm() {
+            // Clear form
+            document.getElementById('idCardForm').reset();
+            
+            // Reset photo placeholder
+            const photoPlaceholder = document.getElementById('photoPlaceholder');
+            const uploadedImg = photoPlaceholder.querySelector('img');
+            if (uploadedImg) {
+                uploadedImg.remove();
+            }
+            document.getElementById('placeholderIcon').style.display = 'block';
+            
+            // Reset photo preview
+            const photoPreview = document.getElementById('photoPreview');
+            const photoPlaceholderText = document.getElementById('photoPlaceholderText');
+            photoPreview.src = '';
+            photoPreview.classList.add('hidden');
+            photoPlaceholderText.classList.remove('hidden');
+            
+            // Reset preview text
+            document.getElementById('nameDisplay').textContent = 'Your Name';
+            document.getElementById('adNoDisplay').textContent = 'QUAF-XXXX';
+            document.getElementById('sODisplay').textContent = 'Parent Name';
+            document.getElementById('addressDisplay').textContent = 'Address';
+            document.getElementById('districtDisplay').textContent = 'District';
+            document.getElementById('phoneDisplay').textContent = 'Phone';
+            document.getElementById('bloodGroupDisplay').textContent = 'N/A';
+            document.getElementById('stateDisplay').textContent = 'State';
+            document.getElementById('validUntilDisplay').textContent = 'VALID UNTIL: 2025';
+            document.getElementById('signatureDisplay').textContent = 'Signature';
+            
+            // Regenerate QR code
+            generateQRCode('https://quaf.edu/verify');
+            
+            showToast('Form has been reset');
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                toast.style.backgroundColor = '#dc3545';
+            } else {
+                toast.style.backgroundColor = '#10B981';
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show loading modal
+        function showLoadingModal() {
+            document.getElementById('loadingModal').classList.remove('hidden');
+        }
+
+        // Hide loading modal
+        function hideLoadingModal() {
+            document.getElementById('loadingModal').classList.add('hidden');
+        }
+
+        // Form validation
+        function validateForm() {
+            let valid = true;
+            const requiredFields = ['name', 'adNo'];
+            
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) {
+                    input.style.borderColor = '#dc3545';
+                    valid = false;
+                } else {
+                    input.style.borderColor = '#d1d5db';
+                }
+            });
+            
+            return valid;
+        }
+
+        // Tips slideshow
+        function initTipsSlideshow() {
+            const slides = document.querySelectorAll('.tips-slide');
+            let current = 0;
+            
+            setInterval(() => {
+                slides[current].classList.remove('active');
+                current = (current + 1) % slides.length;
+                slides[current].classList.add('active');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
