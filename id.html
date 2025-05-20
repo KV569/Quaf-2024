@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional ID Card Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #002b5c;
-            /* Dark blue background */
+            background-color: #002b5c; /* Dark blue background */
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
@@ -25,10 +22,6 @@
             align-items: center;
             margin-bottom: 20px;
             position: relative;
-            border: 2px solid #00ccff; /* Added border for visibility */
-            padding: 20px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
         }
 
         .circle {
@@ -47,21 +40,23 @@
             margin: 20px 0;
         }
 
+        .circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 204, 255, 1);
+        }
+
         .circle img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            /* Maintain aspect ratio */
-            display: none;
-            /* Hide initially */
-            border-radius: 50%;
-            /* Make the image circular */
+            object-fit: cover; /* Maintain aspect ratio */
+            display: none; /* Hide initially */
+            border-radius: 50%; /* Make the image circular */
         }
 
         .form-popup {
             display: flex;
             flex-direction: column;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -93,7 +88,7 @@
             background-color: #0056b3;
             box-shadow: 0 0 20px rgba(0, 123, 255, 1);
         }
-
+        
         .heading-container {
             text-align: center;
             margin-bottom: 10px;
@@ -102,57 +97,51 @@
         .main-heading {
             font-size: 26px;
             font-weight: bold;
-            color: #00ccff;
-            /* Main heading color */
+            color: #00ccff; /* Main heading color */
         }
 
         .sub-heading {
             font-size: 20px;
-            color: white;
-            /* Subheading color */
+            color: white; /* Subheading color */
         }
 
         .small-sub-heading {
-            font-size: 16px;
-            /* Smaller than the subheading */
-            color: white;
-            /* Smaller subheading color */
-        }
-
-        /* Snapshot container for rendering */
-        .snapshot-container {
-            display: none;
+            font-size: 16px; /* Smaller than the subheading */
+            color: white; /* Smaller subheading color */
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container" id="idCardContainer">
+    <div class="container">
+        <!-- Headings -->
         <div class="heading-container">
             <div class="main-heading">QUAF-ID CARD</div>
             <div class="sub-heading">Qualitative Union For Academic Focus</div>
             <div class="small-sub-heading">27TH BATCH</div>
         </div>
 
+        <!-- Circle for image upload -->
         <div class="circle" onclick="document.getElementById('fileInput').click();">
             <img id="uploadImg" src="" alt="Uploaded Image">
             <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
         </div>
-
+        
+        <!-- Form to collect data -->
         <div class="form-popup">
             <input type="text" id="name" placeholder="Name" required>
             <input type="text" id="adNo" placeholder="Ad No" required>
-            <input type="text" id="sO" placeholder="S/O" required>
-            <input type="text" id="houseName" placeholder="House Name" required>
-            <input type="text" id="place" placeholder="Place" required>
-            <input type="text" id="post" placeholder="Post" required>
-            <input type="text" id="pin" placeholder="Pin" required>
-            <input type="text" id="bloodGroup" placeholder="Blood Group" required>
-            <input type="text" id="district" placeholder="District" required>
-            <input type="text" id="state" placeholder="State" required>
-            <input type="text" id="phoneNumber" placeholder="Phone Number" required>
-            <button onclick="generateIDCard()">CREATE</button>
+            <input type="text" id="sO" placeholder="S/O">
+            <input type="text" id="houseName" placeholder="House Name">
+            <input type="text" id="place" placeholder="Place">
+            <input type="text" id="post" placeholder="Post">
+            <input type="text" id="pin" placeholder="Pin">
+            <input type="text" id="bloodGroup" placeholder="Blood Group">
+            <input type="text" id="district" placeholder="District">
+            <input type="text" id="state" placeholder="State">
+            <input type="text" id="phoneNumber" placeholder="Phone Number">
+            <button onclick="createIDCard()">CREATE</button>
         </div>
     </div>
 
@@ -166,25 +155,81 @@
                 reader.onload = function (e) {
                     imgElement.src = e.target.result;
                     imgElement.style.display = "block"; // Show the image in the circle
-                };
+                }
                 reader.readAsDataURL(file);
             }
         }
 
-        function generateIDCard() {
-            // Use html2canvas to take a screenshot of the ID Card container
-            html2canvas(document.getElementById("idCardContainer")).then(function(canvas) {
-                canvas.toBlob(function(blob) {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = 'QUAF_ID_Card.png'; // Filename for the downloaded image
-                    document.body.appendChild(link); // Append link to body
-                    link.click(); // Programmatically click to trigger download
-                    document.body.removeChild(link); // Remove link after downloading
-                }, 'image/png');
+        function createIDCard() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas dimensions for ID Card (width and height)
+            canvas.width = 400; // Adjust width as needed
+            canvas.height = 600; // Adjust height as needed
+
+            // Draw background of the ID card
+            ctx.fillStyle = "#002b5c"; // Background color of ID card
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw headings
+            ctx.fillStyle = "#00ccff"; // Main heading color
+            ctx.font = "26px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("QUAF-ID CARD", canvas.width / 2, 40);
+            ctx.font = "20px Arial";
+            ctx.fillText("Qualitative Union For Academic Focus", canvas.width / 2, 75);
+            ctx.font = "16px Arial";
+            ctx.fillText("27TH BATCH", canvas.width / 2, 105);
+
+            // Draw uploaded image
+            const imgElement = document.getElementById('uploadImg');
+
+            if (imgElement.src) {
+                const img = new Image();
+                img.onload = function () {
+                    ctx.drawImage(img, (canvas.width - 100) / 2, 120, 100, 100); // Centering the image
+                    drawDetails(ctx, canvas);
+                };
+                img.src = imgElement.src; // Use the source of the uploaded image
+            } else {
+                drawDetails(ctx, canvas); // If no image, still draw details
+            }
+        }
+
+        function drawDetails(ctx, canvas) {
+            ctx.fillStyle = "white"; // Text color for details
+            ctx.font = "12px Arial";
+            const details = [
+                `Name: ${document.getElementById('name').value}`,
+                `Ad No: ${document.getElementById('adNo').value}`,
+                `S/O: ${document.getElementById('sO').value}`,
+                `House Name: ${document.getElementById('houseName').value}`,
+                `Place: ${document.getElementById('place').value}`,
+                `Post: ${document.getElementById('post').value}`,
+                `Pin: ${document.getElementById('pin').value}`,
+                `Blood Group: ${document.getElementById('bloodGroup').value}`,
+                `District: ${document.getElementById('district').value}`,
+                `State: ${document.getElementById('state').value}`,
+                `Phone No: ${document.getElementById('phoneNumber').value}`,
+            ];
+
+            details.forEach((detail, index) => {
+                ctx.fillText(detail, 20, 160 + (index * 15)); // Adjust Y coordinates for each detail
             });
+
+            // Trigger the download of the ID Card image
+            downloadCanvas(canvas);
+        }
+
+        function downloadCanvas(canvas) {
+            canvas.toBlob(function(blob) {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob); // Create a blob URL
+                link.download = 'QUAF_ID_Card.png'; // Filename for the downloaded image
+                link.click(); // Programmatically click to trigger download
+            }, 'image/png');
         }
     </script>
 </body>
-
 </html>
