@@ -121,21 +121,10 @@
             </div>
 
             <div class="mb-8">
-                <h3 class="text-2xl font-semibold mb-4">Your Performance</h3>
-                <div class="bg-blue-900 rounded-lg p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <div>
-                            <p class="text-lg font-medium">Overall Score</p>
-                            <p id="total-score" class="text-3xl font-bold text-blue-300">0/320</p>
-                        </div>
-                        <div>
-                            <p class="text-lg font-medium">Percentage</p>
-                            <p id="total-percentage" class="text-3xl font-bold text-blue-300">0%</p>
-                        </div>
-                    </div>
-                    <div class="chart-container my-4">
-                        <canvas id="overall-chart"></canvas>
-                    </div>
+                <h3 class="text-2xl font-semibold mb-4">Your Total Achieved Points</h3>
+                <p id="total-points" class="text-3xl font-bold text-blue-300">0</p>
+                <div class="chart-container my-4">
+                    <canvas id="overall-chart"></canvas>
                 </div>
             </div>
 
@@ -238,6 +227,7 @@
             <div class="mt-8 flex justify-center space-x-4">
                 <button id="try-another-subject" class="btn-primary">Try Another Subject</button>
                 <button id="back-to-dashboard-from-results" class="btn-primary bg-blue-800 hover:bg-blue-700">Back to Dashboard</button>
+                <button id="download-results-btn" class="btn-primary bg-green-600 hover:bg-green-700">Download Results</button>
             </div>
         </div>
     </div>
@@ -324,28 +314,23 @@
         function initDashboard() {
             const userName = document.getElementById('user-name');
             const userAdmission = document.getElementById('user-admission');
-            const totalScore = document.getElementById('total-score');
-            const totalPercentage = document.getElementById('total-percentage');
+            const totalPoints = document.getElementById('total-points');
             const subjectPerformance = document.getElementById('subject-performance');
             
             userName.textContent = userData.name;
             userAdmission.textContent = userData.admissionNumber;
-            
+
             // Calculate total score
             let sum = 0;
-            let attempted = 0;
             Object.keys(userData.subjectScores).forEach(subjectId => {
                 sum += userData.subjectScores[subjectId];
-                attempted++;
             });
             
-            totalScore.textContent = `${sum}/320`;
-            const percentage = Math.floor((sum / 320) * 100);
-            totalPercentage.textContent = `${percentage}%`;
+            totalPoints.textContent = sum;
             
             // Update overall chart
-            updateOverallChart(sum, 320 - sum);
-            
+            updateOverallChart(sum, (subjects.length * 20) - sum);
+
             // Update subject performance cards
             subjectPerformance.innerHTML = '';
             subjects.forEach(subject => {
@@ -472,19 +457,48 @@
             document.getElementById('result-percentage').textContent = `${Math.floor((score / 20) * 100)}%`;
             document.getElementById('correct-answers').textContent = score;
             document.getElementById('incorrect-answers').textContent = 20 - score;
-            
+
             // Random time between 5 and 15 minutes for demo purposes
             const minutes = Math.floor(Math.random() * 10) + 5;
             const seconds = Math.floor(Math.random() * 60);
             document.getElementById('time-utilized').textContent = `${minutes} minutes ${seconds} seconds`;
-            
+
             // Update result chart
             updateResultChart(score, 20 - score);
             
-            showSection(resultsSection);
+            showSection(resultsSection); // Show result section after completing the quiz
         }
 
-        // Update charts
+        // Update overall performance chart
+        function updateOverallChart(score, remaining) {
+            const ctx = document.getElementById('overall-chart').getContext('2d');
+            const totalSubjects = subjects.length * 20; // Assuming 20 is the score per subject
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Achieved', 'Remaining'],
+                    datasets: [{
+                        data: [score, remaining],
+                        backgroundColor: ['#4ade80', '#64748b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update result chart
         function updateResultChart(correct, incorrect) {
             const ctx = document.getElementById('result-chart').getContext('2d');
             new Chart(ctx, {
@@ -512,31 +526,21 @@
             });
         }
 
-        function updateOverallChart(correct, incorrect) {
-            const ctx = document.getElementById('overall-chart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Scored', 'Remaining'],
-                    datasets: [{
-                        data: [correct, incorrect],
-                        backgroundColor: ['#4ade80', '#64748b'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: 'white'
-                            }
-                        }
-                    }
-                }
-            });
+        // Download results
+        function downloadResults() {
+            const subject = subjects.find(s => s.id === userData.currentSubject);
+            const score = userData.subjectScores[userData.currentSubject];
+            const content = `Quiz Result\nSubject: ${subject.name}\nName: ${userData.name}\nAdmission Number: ${userData.admissionNumber}\nScore: ${score}/20\n`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${subject.name}_Quiz_Results.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // Helper function to show a specific section and hide others
@@ -604,6 +608,8 @@
             initDashboard();
             showSection(dashboardSection);
         });
+
+        document.getElementById('download-results-btn').addEventListener('click', downloadResults);
 
         // Initialize app by showing login section
         showSection(loginSection);
