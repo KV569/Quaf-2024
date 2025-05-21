@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0a2351;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .login-container, .dashboard-container, .subject-container, 
+        .quiz-container, .results-container {
+            background-color: #0d316b;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #1e40af;
+        }
+        .subject-card {
+            background-color: #1e3a8a;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .option {
+            background-color: #1e3a8a;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            background-color: #2563eb;
+        }
+        .selected {
+            background-color: #2563eb;
+        }
+        .timer {
+            width: 100%;
+            height: 10px;
+            background-color: #1e3a8a;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .timer-fill {
+            height: 100%;
+            background-color: #2563eb;
+            border-radius: 5px;
+            transition: width 1s linear;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 300px;
+            margin: 0 auto;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div id="login-section" class="login-container my-10">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold text-white mb-2">QuizMaster Pro</h1>
+                <p class="text-lg text-blue-200">Test your knowledge across multiple subjects</p>
+            </div>
+            <div class="max-w-md mx-auto">
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label class="block text-blue-200 mb-2" for="name">Full Name</label>
+                        <input type="text" id="name" class="w-full px-4 py-2 rounded bg-blue-900 text-white border border-blue-700 focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-blue-200 mb-2" for="adNumber">Admission Number</label>
+                        <input type="text" id="adNumber" class="w-full px-4 py-2 rounded bg-blue-900 text-white border border-blue-700 focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <button type="submit" class="w-full btn-primary text-center py-3 rounded bg-blue-600 hover:bg-blue-700 transition duration-300">Login</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="dashboard-container my-10 hide">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold">Dashboard</h2>
+                    <p class="text-blue-300">Welcome, <span id="user-name">User</span>!</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-blue-300">Admission #: <span id="user-admission">12345</span></p>
+                    <button id="logout-btn" class="text-blue-300 hover:text-blue-100">Logout</button>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-semibold mb-4">Your Performance</h3>
+                <div class="bg-blue-900 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <p class="text-lg font-medium">Overall Score</p>
+                            <p id="total-score" class="text-3xl font-bold text-blue-300">0/320</p>
+                        </div>
+                        <div>
+                            <p class="text-lg font-medium">Percentage</p>
+                            <p id="total-percentage" class="text-3xl font-bold text-blue-300">0%</p>
+                        </div>
+                    </div>
+                    <div class="chart-container my-4">
+                        <canvas id="overall-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-2xl font-semibold mb-4">Subject Performance</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="subject-performance">
+                    <!-- Subject performance cards will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button id="start-quiz-btn" class="btn-primary text-lg font-medium">Start New Quiz</button>
+            </div>
+        </div>
+
+        <!-- Subject Selection Section -->
+        <div id="subject-selection-section" class="subject-container my-10 hide">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-2">Select a Subject</h2>
+                <p class="text-blue-300">Choose one of the 16 subjects to begin your quiz</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="subject-grid">
+                <!-- Subject cards will be added here dynamically -->
+            </div>
+
+            <div class="mt-8">
+                <button id="back-to-dashboard" class="text-blue-300 hover:text-blue-100">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz-section" class="quiz-container my-10 hide">
+            <div class="mb-4">
+                <div class="flex justify-between items-center">
+                    <h2 id="quiz-subject" class="text-2xl font-bold">Mathematics</h2>
+                    <div class="text-blue-300">
+                        <span>Time remaining: </span>
+                        <span id="timer-counter" class="font-medium">30</span>s
+                    </div>
+                </div>
+                <div class="timer">
+                    <div id="timer-bar" class="timer-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+
+            <div id="question-container" class="bg-blue-900 rounded-lg p-6 mb-6">
+                <div class="mb-4">
+                    <span id="question-number" class="inline-block bg-blue-700 text-white px-3 py-1 rounded-full text-sm mb-2">Question 1/20</span>
+                    <h3 id="question-text" class="text-xl font-medium">What is 2 + 2?</h3>
+                </div>
+                <div id="options-container" class="space-y-3">
+                    <!-- Options will be added here dynamically -->
+                </div>
+            </div>
+
+            <div class="flex justify-between">
+                <button id="previous-btn" class="btn-primary opacity-50 cursor-not-allowed" disabled>Previous</button>
+                <button id="next-btn" class="btn-primary">Next</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="results-container my-10 hide">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold mb-2">Quiz Results</h2>
+                <p id="result-subject" class="text-xl text-blue-300">Mathematics</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-blue-900 rounded-lg p-6 flex flex-col items-center">
+                    <p class="text-lg font-medium mb-2">Your Score</p>
+                    <p id="result-score" class="text-4xl font-bold text-blue-300 mb-2">15/20</p>
+                    <p id="result-percentage" class="text-2xl text-blue-200">75%</p>
+                    <div class="chart-container mt-4">
+                        <canvas id="result-chart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-blue-900 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold mb-4">Performance Analysis</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span>Correct Answers:</span>
+                            <span id="correct-answers" class="font-medium text-green-400">15</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Incorrect Answers:</span>
+                            <span id="incorrect-answers" class="font-medium text-red-400">5</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Time Utilized:</span>
+                            <span id="time-utilized" class="font-medium">8 minutes 45 seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-center space-x-4">
+                <button id="try-another-subject" class="btn-primary">Try Another Subject</button>
+                <button id="back-to-dashboard-from-results" class="btn-primary bg-blue-800 hover:bg-blue-700">Back to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for subjects and quiz questions
+        const subjects = [
+            { id: 1, name: "Mathematics", icon: "fa-calculator" },
+            { id: 2, name: "Physics", icon: "fa-atom" },
+            { id: 3, name: "Chemistry", icon: "fa-flask" },
+            { id: 4, name: "Biology", icon: "fa-dna" },
+            { id: 5, name: "Computer Science", icon: "fa-laptop-code" },
+            { id: 6, name: "History", icon: "fa-landmark" },
+            { id: 7, name: "Geography", icon: "fa-globe-americas" },
+            { id: 8, name: "Literature", icon: "fa-book-open" },
+            { id: 9, name: "Economics", icon: "fa-chart-line" },
+            { id: 10, name: "Psychology", icon: "fa-brain" },
+            { id: 11, name: "Sociology", icon: "fa-users" },
+            { id: 12, name: "Art", icon: "fa-palette" },
+            { id: 13, name: "Music", icon: "fa-music" },
+            { id: 14, name: "Physical Education", icon: "fa-running" },
+            { id: 15, name: "Foreign Languages", icon: "fa-language" },
+            { id: 16, name: "Astronomy", icon: "fa-star" }
+        ];
+
+        // Generate sample questions for each subject (in a real app, these would come from a database)
+        const questions = {};
+        subjects.forEach(subject => {
+            questions[subject.id] = [];
+            for (let i = 1; i <= 20; i++) {
+                questions[subject.id].push({
+                    id: i,
+                    question: `Sample Question ${i} for ${subject.name}?`,
+                    options: [
+                        `Option A for question ${i}`,
+                        `Option B for question ${i}`,
+                        `Option C for question ${i}`
+                    ],
+                    correctAnswer: Math.floor(Math.random() * 3) // Random correct answer (0, 1, or 2)
+                });
+            }
+        });
+
+        // User data store
+        let userData = {
+            name: "",
+            admissionNumber: "",
+            subjectScores: {},
+            currentSubject: null,
+            currentQuestionIndex: 0,
+            answers: [],
+            timer: null,
+            timeLeft: 30
+        };
+
+        // DOM Elements
+        const loginSection = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const subjectSelectionSection = document.getElementById('subject-selection-section');
+        const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+
+        // Initialize subjects in the grid
+        function initSubjects() {
+            const subjectGrid = document.getElementById('subject-grid');
+            subjectGrid.innerHTML = '';
+            
+            subjects.forEach(subject => {
+                const card = document.createElement('div');
+                card.className = 'subject-card hover:bg-blue-700';
+                card.innerHTML = `
+                    <div class="text-center">
+                        <div class="text-3xl mb-3"><i class="fas ${subject.icon}"></i></div>
+                        <h3 class="text-xl font-medium">${subject.name}</h3>
+                        <p class="text-blue-300 mt-2">${userData.subjectScores[subject.id] ? userData.subjectScores[subject.id] + '/20' : 'Not attempted'}</p>
+                    </div>
+                `;
+                card.addEventListener('click', () => startQuiz(subject.id));
+                subjectGrid.appendChild(card);
+            });
+        }
+
+        // Initialize dashboard performance
+        function initDashboard() {
+            const userName = document.getElementById('user-name');
+            const userAdmission = document.getElementById('user-admission');
+            const totalScore = document.getElementById('total-score');
+            const totalPercentage = document.getElementById('total-percentage');
+            const subjectPerformance = document.getElementById('subject-performance');
+            
+            userName.textContent = userData.name;
+            userAdmission.textContent = userData.admissionNumber;
+            
+            // Calculate total score
+            let sum = 0;
+            let attempted = 0;
+            Object.keys(userData.subjectScores).forEach(subjectId => {
+                sum += userData.subjectScores[subjectId];
+                attempted++;
+            });
+            
+            totalScore.textContent = `${sum}/320`;
+            const percentage = Math.floor((sum / 320) * 100);
+            totalPercentage.textContent = `${percentage}%`;
+            
+            // Update overall chart
+            updateOverallChart(sum, 320 - sum);
+            
+            // Update subject performance cards
+            subjectPerformance.innerHTML = '';
+            subjects.forEach(subject => {
+                if (userData.subjectScores[subject.id]) {
+                    const card = document.createElement('div');
+                    card.className = 'bg-blue-900 rounded-lg p-4';
+                    card.innerHTML = `
+                        <div class="flex items-center mb-2">
+                            <div class="text-xl mr-3"><i class="fas ${subject.icon}"></i></div>
+                            <h4 class="font-medium">${subject.name}</h4>
+                        </div>
+                        <p class="text-xl font-bold text-blue-300">${userData.subjectScores[subject.id]}/20</p>
+                    `;
+                    subjectPerformance.appendChild(card);
+                }
+            });
+        }
+
+        // Start quiz for a specific subject
+        function startQuiz(subjectId) {
+            userData.currentSubject = subjectId;
+            userData.currentQuestionIndex = 0;
+            userData.answers = Array(20).fill(null);
+            
+            showSection(quizSection);
+            loadQuestion();
+            startTimer();
+        }
+
+        // Load current question
+        function loadQuestion() {
+            const subject = subjects.find(s => s.id === userData.currentSubject);
+            const question = questions[userData.currentSubject][userData.currentQuestionIndex];
+            
+            document.getElementById('quiz-subject').textContent = subject.name;
+            document.getElementById('question-number').textContent = `Question ${userData.currentQuestionIndex + 1}/20`;
+            document.getElementById('question-text').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = `option ${userData.answers[userData.currentQuestionIndex] === index ? 'selected' : ''}`;
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            document.getElementById('previous-btn').disabled = userData.currentQuestionIndex === 0;
+            document.getElementById('previous-btn').classList.toggle('opacity-50', userData.currentQuestionIndex === 0);
+            document.getElementById('previous-btn').classList.toggle('cursor-not-allowed', userData.currentQuestionIndex === 0);
+            
+            document.getElementById('next-btn').textContent = userData.currentQuestionIndex === 19 ? 'Finish' : 'Next';
+        }
+
+        // Select an option
+        function selectOption(optionIndex) {
+            userData.answers[userData.currentQuestionIndex] = optionIndex;
+            
+            const options = document.querySelectorAll('#options-container .option');
+            options.forEach((option, index) => {
+                option.classList.toggle('selected', index === optionIndex);
+            });
+        }
+
+        // Start the timer
+        function startTimer() {
+            clearInterval(userData.timer);
+            userData.timeLeft = 30;
+            document.getElementById('timer-counter').textContent = userData.timeLeft;
+            document.getElementById('timer-bar').style.width = '100%';
+            
+            userData.timer = setInterval(() => {
+                userData.timeLeft--;
+                document.getElementById('timer-counter').textContent = userData.timeLeft;
+                document.getElementById('timer-bar').style.width = `${(userData.timeLeft / 30) * 100}%`;
+                
+                if (userData.timeLeft <= 0) {
+                    clearInterval(userData.timer);
+                    moveToNextQuestion();
+                }
+            }, 1000);
+        }
+
+        // Move to next question or finish quiz
+        function moveToNextQuestion() {
+            if (userData.currentQuestionIndex === 19) {
+                finishQuiz();
+            } else {
+                userData.currentQuestionIndex++;
+                loadQuestion();
+                startTimer();
+            }
+        }
+
+        // Move to previous question
+        function moveToPreviousQuestion() {
+            if (userData.currentQuestionIndex > 0) {
+                userData.currentQuestionIndex--;
+                loadQuestion();
+                startTimer();
+            }
+        }
+
+        // Finish quiz and calculate results
+        function finishQuiz() {
+            clearInterval(userData.timer);
+            
+            let score = 0;
+            userData.answers.forEach((answer, index) => {
+                if (answer === questions[userData.currentSubject][index].correctAnswer) {
+                    score++;
+                }
+            });
+            
+            userData.subjectScores[userData.currentSubject] = score;
+            
+            // Update result section
+            const subject = subjects.find(s => s.id === userData.currentSubject);
+            document.getElementById('result-subject').textContent = subject.name;
+            document.getElementById('result-score').textContent = `${score}/20`;
+            document.getElementById('result-percentage').textContent = `${Math.floor((score / 20) * 100)}%`;
+            document.getElementById('correct-answers').textContent = score;
+            document.getElementById('incorrect-answers').textContent = 20 - score;
+            
+            // Random time between 5 and 15 minutes for demo purposes
+            const minutes = Math.floor(Math.random() * 10) + 5;
+            const seconds = Math.floor(Math.random() * 60);
+            document.getElementById('time-utilized').textContent = `${minutes} minutes ${seconds} seconds`;
+            
+            // Update result chart
+            updateResultChart(score, 20 - score);
+            
+            showSection(resultsSection);
+        }
+
+        // Update charts
+        function updateResultChart(correct, incorrect) {
+            const ctx = document.getElementById('result-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [correct, incorrect],
+                        backgroundColor: ['#4ade80', '#f87171'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateOverallChart(correct, incorrect) {
+            const ctx = document.getElementById('overall-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Scored', 'Remaining'],
+                    datasets: [{
+                        data: [correct, incorrect],
+                        backgroundColor: ['#4ade80', '#64748b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Helper function to show a specific section and hide others
+        function showSection(section) {
+            loginSection.classList.add('hide');
+            dashboardSection.classList.add('hide');
+            subjectSelectionSection.classList.add('hide');
+            quizSection.classList.add('hide');
+            resultsSection.classList.add('hide');
+            
+            section.classList.remove('hide');
+        }
+
+        // Event Listeners
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            userData.name = document.getElementById('name').value;
+            userData.admissionNumber = document.getElementById('adNumber').value;
+            
+            initDashboard();
+            showSection(dashboardSection);
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            userData = {
+                name: "",
+                admissionNumber: "",
+                subjectScores: {},
+                currentSubject: null,
+                currentQuestionIndex: 0,
+                answers: [],
+                timer: null,
+                timeLeft: 30
+            };
+            document.getElementById('login-form').reset();
+            showSection(loginSection);
+        });
+
+        document.getElementById('start-quiz-btn').addEventListener('click', function() {
+            initSubjects();
+            showSection(subjectSelectionSection);
+        });
+
+        document.getElementById('back-to-dashboard').addEventListener('click', function() {
+            initDashboard();
+            showSection(dashboardSection);
+        });
+
+        document.getElementById('next-btn').addEventListener('click', function() {
+            clearInterval(userData.timer);
+            moveToNextQuestion();
+        });
+
+        document.getElementById('previous-btn').addEventListener('click', function() {
+            clearInterval(userData.timer);
+            moveToPreviousQuestion();
+        });
+
+        document.getElementById('try-another-subject').addEventListener('click', function() {
+            initSubjects();
+            showSection(subjectSelectionSection);
+        });
+
+        document.getElementById('back-to-dashboard-from-results').addEventListener('click', function() {
+            initDashboard();
+            showSection(dashboardSection);
+        });
+
+        // Initialize app by showing login section
+        showSection(loginSection);
+    </script>
+</body>
+</html>
