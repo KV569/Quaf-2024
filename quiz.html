@@ -3,483 +3,2529 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuizMaster Pro</title>
+    <title>QuizMaster Pro - Enhanced Quiz Application</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <style>
-        body {
-            background-color: #0a2351;
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary-dark: #0a1929;
+            --primary: #1a365d;
+            --primary-light: #2c5282;
+            --accent: #4299e1;
+            --accent-light: #63b3ed;
+            --text-light: #e2e8f0;
+            --success: #38a169;
+            --warning: #dd6b20;
+            --danger: #e53e3e;
         }
-        .container {
+        
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .app-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 1rem;
         }
-        .login-container, .dashboard-container, .subject-container, 
-        .quiz-container, .results-container {
-            background-color: #0d316b;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.4s;
         }
-        .btn-primary {
-            background-color: #2563eb;
+        
+        .active-page {
+            display: block;
+        }
+        
+        .card {
+            background-color: var(--primary);
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-4px);
+        }
+        
+        .input-field {
+            background-color: var(--primary-light);
+            border: 2px solid var(--accent);
+            border-radius: 0.5rem;
             color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover {
-            background-color: #1e40af;
-        }
-        .subject-card {
-            background-color: #1e3a8a;
-            border-radius: 8px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .subject-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        .option {
-            background-color: #1e3a8a;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .option:hover {
-            background-color: #2563eb;
-        }
-        .selected {
-            background-color: #2563eb;
-        }
-        .timer {
+            padding: 0.75rem 1rem;
             width: 100%;
-            height: 10px;
-            background-color: #1e3a8a;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            transition: all 0.2s ease;
         }
-        .timer-fill {
-            height: 100%;
-            background-color: #2563eb;
-            border-radius: 5px;
-            transition: width 1s linear;
+        
+        .input-field:focus {
+            border-color: var(--accent-light);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
         }
+        
+        .btn {
+            align-items: center;
+            background-color: var(--accent);
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            cursor: pointer;
+            display: inline-flex;
+            font-weight: 600;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-light);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+        }
+        
+        .subject-card {
+            background-color: var(--primary-light);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .subject-card:hover {
+            background-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .option-btn {
+            background-color: var(--primary-light);
+            border: 2px solid var(--accent);
+            border-radius: 0.5rem;
+            color: white;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 0.75rem;
+            padding: 1rem;
+            position: relative;
+            text-align: left;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+        
+        .option-btn:hover {
+            background-color: rgba(66, 153, 225, 0.2);
+        }
+        
+        .option-selected {
+            background-color: var(--accent);
+            border-color: white;
+            font-weight: bold;
+        }
+        
+        .option-correct {
+            background-color: var(--success);
+            border-color: white;
+        }
+        
+        .option-incorrect {
+            background-color: var(--danger);
+            border-color: white;
+        }
+        
+        .timer-bar {
+            background-color: var(--accent);
+            height: 8px;
+            width: 100%;
+            animation: timerAnimation 15s linear forwards;
+        }
+        
+        @keyframes timerAnimation {
+            from {
+                width: 100%;
+                background-color: var(--accent);
+            }
+            to {
+                width: 0%;
+                background-color: var(--danger);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
         .chart-container {
             position: relative;
-            height: 300px;
-            width: 300px;
+            height: 200px;
+            width: 200px;
             margin: 0 auto;
         }
-        .hide {
-            display: none;
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .circle-bg {
+            fill: none;
+            stroke: var(--primary-light);
+        }
+        
+        .circle {
+            fill: none;
+            stroke: var(--accent);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(66, 153, 225, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(66, 153, 225, 0);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Login Section -->
-        <div id="login-section" class="login-container my-10">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl font-bold text-white mb-2">QuizMaster Pro</h1>
-                <p class="text-lg text-blue-200">Test your knowledge across multiple subjects</p>
+    <div class="app-container">
+        <!-- Login Page -->
+        <div id="login-page" class="page active-page">
+            <div class="flex flex-col items-center justify-center min-h-screen">
+                <div class="w-full max-w-md">
+                    <div class="card p-8">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold mb-2">QuizMaster Pro</h1>
+                            <p class="text-sm text-gray-300">Test your knowledge across 16 subjects</p>
+                        </div>
+                        
+                        <form id="login-form" class="space-y-6">
+                            <div>
+                                <label for="username" class="block mb-2 text-sm font-medium">Username</label>
+                                <input type="text" id="username" class="input-field" placeholder="Enter your username" required>
+                            </div>
+                            
+                            <div>
+                                <label for="adno" class="block mb-2 text-sm font-medium">Admission Number</label>
+                                <input type="text" id="adno" class="input-field" placeholder="Enter your admission number" required>
+                            </div>
+                            
+                            <button type="submit" class="btn w-full">
+                                <i class="fas fa-sign-in-alt mr-2"></i> Login
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="max-w-md mx-auto">
-                <form id="login-form" class="space-y-6">
+        </div>
+        
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page">
+            <div class="py-6">
+                <div class="flex justify-between items-center mb-8">
                     <div>
-                        <label class="block text-blue-200 mb-2" for="name">Full Name</label>
-                        <input type="text" id="name" class="w-full px-4 py-2 rounded bg-blue-900 text-white border border-blue-700 focus:outline-none focus:border-blue-500" required>
+                        <h1 class="text-2xl font-bold">Welcome, <span id="user-name">User</span>!</h1>
+                        <p class="text-sm text-gray-300">Admission No: <span id="user-adno">12345</span></p>
                     </div>
+                    <button id="logout-btn" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </button>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="w-full md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                            <div class="chart-container">
+                                <canvas id="dashboard-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full md:w-2/3 flex flex-col items-center md:items-start">
+                            <h2 class="text-xl font-bold mb-2">Your Progress</h2>
+                            <p class="text-3xl font-bold mb-4"><span id="total-points">0</span> out of 320 points</p>
+                            <p class="mb-4"><span id="completed-subjects">0</span> out of 16 subjects completed</p>
+                            
+                            <button id="start-quiz-btn" class="btn pulse">
+                                <i class="fas fa-play-circle mr-2"></i> Start Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-6 mt-6">
+                    <h2 class="text-xl font-bold mb-4">Recent Activity</h2>
+                    <div id="recent-activity" class="space-y-2">
+                        <p class="text-gray-300 text-center">No activity yet. Start a quiz to begin!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Subject Selection Page -->
+        <div id="subjects-page" class="page">
+            <div class="py-6">
+                <div class="flex justify-between items-center mb-8">
                     <div>
-                        <label class="block text-blue-200 mb-2" for="adNumber">Admission Number</label>
-                        <input type="text" id="adNumber" class="w-full px-4 py-2 rounded bg-blue-900 text-white border border-blue-700 focus:outline-none focus:border-blue-500" required>
+                        <h1 class="text-2xl font-bold">Select a Subject</h1>
+                        <p class="text-sm text-gray-300">Choose a subject to start the quiz</p>
                     </div>
-                    <button type="submit" class="w-full btn-primary text-center py-3 rounded bg-blue-600 hover:bg-blue-700 transition duration-300">Login</button>
-                </form>
+                    <button id="back-to-dashboard" class="btn">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="subjects-container">
+                    <!-- Subject cards will be generated here -->
+                </div>
             </div>
         </div>
-
-        <!-- Dashboard Section -->
-        <div id="dashboard-section" class="dashboard-container my-10 hide">
-            <div class="flex justify-between items-center mb-8">
-                <div>
-                    <h2 class="text-3xl font-bold">Dashboard</h2>
-                    <p class="text-blue-300">Welcome, <span id="user-name">User</span>!</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-blue-300">Admission #: <span id="user-admission">12345</span></p>
-                    <button id="logout-btn" class="text-blue-300 hover:text-blue-100">Logout</button>
-                </div>
-            </div>
-
-            <div class="mb-8">
-                <h3 class="text-2xl font-semibold mb-4">Your Total Achieved Points</h3>
-                <p id="total-points" class="text-3xl font-bold text-blue-300">0</p>
-                <div class="chart-container my-4">
-                    <canvas id="overall-chart"></canvas>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-2xl font-semibold mb-4">Subject Performance</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="subject-performance">
-                    <!-- Subject performance cards will be added here dynamically -->
-                </div>
-            </div>
-
-            <div class="mt-8">
-                <button id="start-quiz-btn" class="btn-primary text-lg font-medium">Start New Quiz</button>
-            </div>
-        </div>
-
-        <!-- Subject Selection Section -->
-        <div id="subject-selection-section" class="subject-container my-10 hide">
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold mb-2">Select a Subject</h2>
-                <p class="text-blue-300">Choose one of the 16 subjects to begin your quiz</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="subject-grid">
-                <!-- Subject cards will be added here dynamically -->
-            </div>
-
-            <div class="mt-8">
-                <button id="back-to-dashboard" class="text-blue-300 hover:text-blue-100">
-                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
-                </button>
-            </div>
-        </div>
-
-        <!-- Quiz Section -->
-        <div id="quiz-section" class="quiz-container my-10 hide">
-            <div class="mb-4">
-                <div class="flex justify-between items-center">
-                    <h2 id="quiz-subject" class="text-2xl font-bold">Mathematics</h2>
-                    <div class="text-blue-300">
-                        <span>Time remaining: </span>
-                        <span id="timer-counter" class="font-medium">30</span>s
+        
+        <!-- Quiz Page -->
+        <div id="quiz-page" class="page">
+            <div class="py-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h1 class="text-2xl font-bold" id="quiz-subject-title">Subject Quiz</h1>
+                        <p class="text-sm text-gray-300">
+                            Question <span id="current-question">1</span> of 20
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-bold">Time Remaining</p>
+                        <p id="timer" class="text-2xl font-bold text-accent">15</p>
                     </div>
                 </div>
-                <div class="timer">
-                    <div id="timer-bar" class="timer-fill" style="width: 100%;"></div>
+                
+                <div class="w-full bg-primary-light rounded-full h-2 mb-6">
+                    <div id="timer-bar" class="timer-bar rounded-full"></div>
                 </div>
-            </div>
-
-            <div id="question-container" class="bg-blue-900 rounded-lg p-6 mb-6">
-                <div class="mb-4">
-                    <span id="question-number" class="inline-block bg-blue-700 text-white px-3 py-1 rounded-full text-sm mb-2">Question 1/20</span>
-                    <h3 id="question-text" class="text-xl font-medium">What is 2 + 2?</h3>
-                </div>
-                <div id="options-container" class="space-y-3">
-                    <!-- Options will be added here dynamically -->
-                </div>
-            </div>
-
-            <div class="flex justify-between">
-                <button id="previous-btn" class="btn-primary opacity-50 cursor-not-allowed" disabled>Previous</button>
-                <button id="next-btn" class="btn-primary">Next</button>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div id="results-section" class="results-container my-10 hide">
-            <div class="mb-8 text-center">
-                <h2 class="text-3xl font-bold mb-2">Quiz Results</h2>
-                <p id="result-subject" class="text-xl text-blue-300">Mathematics</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div class="bg-blue-900 rounded-lg p-6 flex flex-col items-center">
-                    <p class="text-lg font-medium mb-2">Your Score</p>
-                    <p id="result-score" class="text-4xl font-bold text-blue-300 mb-2">15/20</p>
-                    <p id="result-percentage" class="text-2xl text-blue-200">75%</p>
-                    <div class="chart-container mt-4">
-                        <canvas id="result-chart"></canvas>
+                
+                <div class="card p-6">
+                    <h2 id="question-text" class="text-xl font-bold mb-6">Question text goes here?</h2>
+                    
+                    <div id="options-container" class="space-y-3">
+                        <!-- Options will be generated here -->
                     </div>
                 </div>
-                <div class="bg-blue-900 rounded-lg p-6">
-                    <h3 class="text-xl font-semibold mb-4">Performance Analysis</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between">
-                            <span>Correct Answers:</span>
-                            <span id="correct-answers" class="font-medium text-green-400">15</span>
+                
+                <div class="mt-6 flex justify-between">
+                    <p>Score: <span id="current-score">0</span>/20</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results Page -->
+        <div id="results-page" class="page">
+            <div class="py-6">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-2xl font-bold">Quiz Results</h1>
+                </div>
+                
+                <div class="card p-6">
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="w-full md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                            <div class="chart-container">
+                                <canvas id="results-chart"></canvas>
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span>Incorrect Answers:</span>
-                            <span id="incorrect-answers" class="font-medium text-red-400">5</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Time Utilized:</span>
-                            <span id="time-utilized" class="font-medium">8 minutes 45 seconds</span>
+                        
+                        <div class="w-full md:w-2/3 flex flex-col items-center md:items-start">
+                            <h2 class="text-xl font-bold mb-2" id="result-subject-name">Subject Name</h2>
+                            <p class="text-3xl font-bold mb-4">
+                                <span id="result-score">0</span> out of 20 points
+                            </p>
+                            <p class="mb-2" id="result-percentage">0% correct</p>
+                            <p class="mb-4" id="result-message">Better luck next time!</p>
+                            
+                            <div class="flex flex-wrap gap-3 mt-4">
+                                <button id="download-result-btn" class="btn">
+                                    <i class="fas fa-download mr-2"></i> Download Result
+                                </button>
+                                <button id="try-another-btn" class="btn">
+                                    <i class="fas fa-sync-alt mr-2"></i> Try Another Subject
+                                </button>
+                                <button id="results-to-dashboard-btn" class="btn">
+                                    <i class="fas fa-tachometer-alt mr-2"></i> Go to Dashboard
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="mt-8 flex justify-center space-x-4">
-                <button id="try-another-subject" class="btn-primary">Try Another Subject</button>
-                <button id="back-to-dashboard-from-results" class="btn-primary bg-blue-800 hover:bg-blue-700">Back to Dashboard</button>
-                <button id="download-results-btn" class="btn-primary bg-green-600 hover:bg-green-700">Download Results</button>
+                
+                <div class="card p-6 mt-6">
+                    <h2 class="text-xl font-bold mb-4">Question Review</h2>
+                    <div id="question-review" class="space-y-4">
+                        <!-- Question review will be generated here -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
+    
     <script>
-        // Data for subjects and quiz questions
+        // Question dataset
+        const subjectQuestions = {
+            // 1. Mathematics
+            "1": [
+                {
+                    question: "What is the value of π (pi) to two decimal places?",
+                    options: ["3.14", "3.16", "3.12"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for the area of a circle?",
+                    options: ["πr²", "2πr", "πr³"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the Pythagorean theorem?",
+                    options: ["a² + b² = c²", "a² - b² = c²", "a × b = c"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the derivative of x² with respect to x?",
+                    options: ["2x", "x²", "2"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the integral of 2x with respect to x?",
+                    options: ["x² + C", "2x² + C", "2x + C"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the result of 7! (7 factorial)?",
+                    options: ["5040", "720", "120"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the value of sin(90°)?",
+                    options: ["1", "0", "Undefined"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the slope of a horizontal line?",
+                    options: ["0", "1", "Undefined"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the solution to the equation 3x + 5 = 11?",
+                    options: ["x = 2", "x = 3", "x = 6"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the quadratic formula?",
+                    options: ["x = (-b ± √(b² - 4ac)) / 2a", "x = -b / 2a", "x = a² + b² + c²"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the sum of interior angles in a triangle?",
+                    options: ["180°", "360°", "90°"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for the volume of a sphere?",
+                    options: ["(4/3)πr³", "πr²h", "πr²"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the limit of (sin x)/x as x approaches 0?",
+                    options: ["1", "0", "Undefined"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the value of log₁₀(100)?",
+                    options: ["2", "10", "1"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for the perimeter of a rectangle?",
+                    options: ["2(length + width)", "length × width", "2(length × width)"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In a right triangle, what is the sine of an angle equal to?",
+                    options: ["Opposite / Hypotenuse", "Adjacent / Hypotenuse", "Opposite / Adjacent"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the result of 5³?",
+                    options: ["125", "25", "15"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the value of cos(0°)?",
+                    options: ["1", "0", "Undefined"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the slope-intercept form of a linear equation?",
+                    options: ["y = mx + b", "y = ax² + bx + c", "y = x² + y²"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the definition of a prime number?",
+                    options: ["A number divisible only by 1 and itself", "Any even number", "A number divisible by 2"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 2. Physics
+            "2": [
+                {
+                    question: "What is Newton's First Law of Motion?",
+                    options: ["An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an external force", "Force equals mass times acceleration", "For every action, there is an equal and opposite reaction"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the SI unit of force?",
+                    options: ["Newton", "Joule", "Watt"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for kinetic energy?",
+                    options: ["½mv²", "mgh", "F = ma"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which scientist proposed the theory of general relativity?",
+                    options: ["Albert Einstein", "Isaac Newton", "Niels Bohr"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the speed of light in a vacuum?",
+                    options: ["3 × 10⁸ m/s", "3 × 10⁶ m/s", "3 × 10⁹ m/s"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is Ohm's Law?",
+                    options: ["V = IR", "P = VI", "F = ma"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for potential energy due to gravity?",
+                    options: ["mgh", "½mv²", "F = G(m₁m₂)/r²"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which particle has a positive charge?",
+                    options: ["Proton", "Neutron", "Electron"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the first law of thermodynamics?",
+                    options: ["Energy can neither be created nor destroyed, only transformed", "Heat flows from hot to cold", "Entropy always increases"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the unit of electric current?",
+                    options: ["Ampere", "Volt", "Ohm"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for pressure?",
+                    options: ["Force/Area", "Mass × Acceleration", "Work/Time"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which lens type is thicker at the edges than at the center?",
+                    options: ["Concave lens", "Convex lens", "Bifocal lens"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the SI unit of power?",
+                    options: ["Watt", "Joule", "Newton"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for work done?",
+                    options: ["Force × Distance", "Mass × Acceleration", "½mv²"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What happens to the wavelength of light as it passes from air into water?",
+                    options: ["It decreases", "It increases", "It remains the same"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which phenomenon explains the bending of light when it passes from one medium to another?",
+                    options: ["Refraction", "Reflection", "Diffraction"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the law of conservation of momentum?",
+                    options: ["Total momentum before a collision equals total momentum after collision", "Energy can neither be created nor destroyed", "For every action, there is an equal and opposite reaction"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the unit of electric potential difference?",
+                    options: ["Volt", "Ampere", "Ohm"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which color of visible light has the longest wavelength?",
+                    options: ["Red", "Violet", "Green"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the formula for acceleration?",
+                    options: ["Change in velocity/time", "Force × distance", "Mass × velocity"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 3. Chemistry
+            "3": [
+                {
+                    question: "What is the chemical symbol for gold?",
+                    options: ["Au", "Ag", "Fe"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the pH of a neutral solution?",
+                    options: ["7", "0", "14"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the most abundant element in Earth's atmosphere?",
+                    options: ["Nitrogen", "Oxygen", "Carbon dioxide"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the chemical formula for water?",
+                    options: ["H₂O", "CO₂", "NaCl"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What type of bond is formed by the sharing of electrons?",
+                    options: ["Covalent bond", "Ionic bond", "Metallic bond"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the atomic number of carbon?",
+                    options: ["6", "12", "14"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the chemical formula for table salt?",
+                    options: ["NaCl", "H₂O", "CO₂"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What gas makes up approximately 21% of Earth's atmosphere?",
+                    options: ["Oxygen", "Nitrogen", "Carbon dioxide"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the periodic law?",
+                    options: ["Elements' properties are periodic functions of their atomic numbers", "Matter cannot be created or destroyed", "Opposite charges attract"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the chemical symbol for silver?",
+                    options: ["Ag", "Si", "Au"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is an exothermic reaction?",
+                    options: ["A reaction that releases heat energy", "A reaction that absorbs heat energy", "A reaction that involves no heat transfer"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the main component of natural gas?",
+                    options: ["Methane", "Propane", "Ethane"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which element has the atomic number 1?",
+                    options: ["Hydrogen", "Helium", "Carbon"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the chemical formula for carbon dioxide?",
+                    options: ["CO₂", "H₂O", "O₂"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the process called when a solid changes directly to a gas?",
+                    options: ["Sublimation", "Condensation", "Evaporation"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for atoms of the same element with different numbers of neutrons?",
+                    options: ["Isotopes", "Ions", "Compounds"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the chemical symbol for sodium?",
+                    options: ["Na", "So", "Sd"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the charge of an electron?",
+                    options: ["Negative", "Positive", "Neutral"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which gas is responsible for the greenhouse effect?",
+                    options: ["Carbon dioxide", "Oxygen", "Nitrogen"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the chemical formula for methane?",
+                    options: ["CH₄", "CO₂", "H₂O"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 4. Biology
+            "4": [
+                {
+                    question: "What is the powerhouse of the cell?",
+                    options: ["Mitochondria", "Nucleus", "Ribosome"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the process by which plants make their own food?",
+                    options: ["Photosynthesis", "Respiration", "Digestion"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the basic unit of life?",
+                    options: ["Cell", "Tissue", "Organ"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the genetic material found in cells?",
+                    options: ["DNA", "RNA", "Protein"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the largest organ in the human body?",
+                    options: ["Skin", "Liver", "Brain"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the process of cell division called?",
+                    options: ["Mitosis", "Meiosis", "Photosynthesis"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which blood type is considered the universal donor?",
+                    options: ["O negative", "AB positive", "A positive"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the main function of red blood cells?",
+                    options: ["To carry oxygen", "To fight infection", "To form clots"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the process by which organisms maintain stable internal conditions?",
+                    options: ["Homeostasis", "Metabolism", "Adaptation"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which organelle is responsible for protein synthesis?",
+                    options: ["Ribosome", "Mitochondria", "Nucleus"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the theory that proposes all species evolve over time?",
+                    options: ["Evolution", "Cell theory", "Germ theory"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the main function of white blood cells?",
+                    options: ["To fight infection", "To carry oxygen", "To form clots"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which part of the plant absorbs water and nutrients from the soil?",
+                    options: ["Root", "Stem", "Leaf"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the process by which plants release water vapor?",
+                    options: ["Transpiration", "Respiration", "Photosynthesis"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the main function of the heart?",
+                    options: ["To pump blood", "To oxygenate blood", "To filter blood"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the process of breaking down food into nutrients called?",
+                    options: ["Digestion", "Respiration", "Excretion"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What structure in plant cells gives them rigidity?",
+                    options: ["Cell wall", "Cell membrane", "Vacuole"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the study of heredity and variation in organisms called?",
+                    options: ["Genetics", "Ecology", "Anatomy"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which gas do plants take in during photosynthesis?",
+                    options: ["Carbon dioxide", "Oxygen", "Nitrogen"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the fluid part of blood called?",
+                    options: ["Plasma", "Platelets", "Serum"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 5. Computer Science
+            "5": [
+                {
+                    question: "What does CPU stand for?",
+                    options: ["Central Processing Unit", "Computer Processing Unit", "Central Program Unit"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which programming language is known as the 'mother of all languages'?",
+                    options: ["C", "Java", "Python"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the binary code for the decimal number 10?",
+                    options: ["1010", "1000", "1110"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does RAM stand for?",
+                    options: ["Random Access Memory", "Read Access Memory", "Ready Access Memory"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which data structure operates on the principle of Last In, First Out (LIFO)?",
+                    options: ["Stack", "Queue", "Array"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does HTML stand for?",
+                    options: ["Hypertext Markup Language", "High Text Marking Language", "Hypertext Making Links"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which algorithm is used to find the shortest path between nodes in a graph?",
+                    options: ["Dijkstra's algorithm", "Bubble sort", "Binary search"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the time complexity of a binary search algorithm?",
+                    options: ["O(log n)", "O(n)", "O(n²)"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What type of attack attempts to make a resource unavailable by flooding it with traffic?",
+                    options: ["DDoS (Distributed Denial of Service)", "SQL Injection", "Cross-site Scripting"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of the following is not a programming paradigm?",
+                    options: ["Digital Logic", "Object-Oriented", "Procedural"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does SQL stand for?",
+                    options: ["Structured Query Language", "Simple Query Language", "Standard Question Language"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which component of a computer stores data even when power is turned off?",
+                    options: ["Hard Drive", "RAM", "CPU"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the purpose of a firewall in computer systems?",
+                    options: ["To monitor and control incoming and outgoing network traffic", "To increase processing speed", "To store temporary data"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does GUI stand for?",
+                    options: ["Graphical User Interface", "General User Input", "Guided User Interaction"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What type of loop executes a block of code at least once?",
+                    options: ["Do-While loop", "For loop", "While loop"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does API stand for?",
+                    options: ["Application Programming Interface", "Advanced Program Integration", "Automated Processing Input"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these is not a type of computer network?",
+                    options: ["PQN (Personal Query Network)", "LAN (Local Area Network)", "WAN (Wide Area Network)"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name for malicious software that encrypts your data and demands payment?",
+                    options: ["Ransomware", "Spyware", "Adware"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these is not a web browser?",
+                    options: ["Oracle", "Chrome", "Firefox"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the function of an operating system?",
+                    options: ["To manage computer hardware and software resources", "To create documents and spreadsheets", "To connect to the internet"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 6. History
+            "6": [
+                {
+                    question: "In which year did World War II end?",
+                    options: ["1945", "1939", "1950"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who was the first President of the United States?",
+                    options: ["George Washington", "Thomas Jefferson", "Abraham Lincoln"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which civilization built the Machu Picchu?",
+                    options: ["Inca", "Aztec", "Maya"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "The Renaissance period originated in which country?",
+                    options: ["Italy", "France", "England"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which event marked the beginning of World War I?",
+                    options: ["Assassination of Archduke Franz Ferdinand", "Attack on Pearl Harbor", "Russian Revolution"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who wrote the 'Communist Manifesto'?",
+                    options: ["Karl Marx and Friedrich Engels", "Vladimir Lenin", "Joseph Stalin"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which ancient wonder of the world was located in Alexandria, Egypt?",
+                    options: ["The Lighthouse", "The Hanging Gardens", "The Colossus"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In which year did Christopher Columbus first reach the Americas?",
+                    options: ["1492", "1500", "1520"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who was the first female Prime Minister of the United Kingdom?",
+                    options: ["Margaret Thatcher", "Theresa May", "Queen Elizabeth II"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "The French Revolution began in which year?",
+                    options: ["1789", "1776", "1804"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which empire was ruled by Genghis Khan?",
+                    options: ["Mongol Empire", "Roman Empire", "Persian Empire"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "The Cold War was primarily a conflict between which two powers?",
+                    options: ["United States and Soviet Union", "United States and China", "Germany and Japan"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who was the pharaoh for whom the Great Pyramid of Giza was built?",
+                    options: ["Khufu", "Tutankhamun", "Ramses II"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In which year did the Berlin Wall fall?",
+                    options: ["1989", "1991", "1985"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which treaty ended World War I?",
+                    options: ["Treaty of Versailles", "Treaty of Paris", "Treaty of Rome"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who was the leader of the civil rights movement in the United States?",
+                    options: ["Martin Luther King Jr.", "Malcolm X", "Rosa Parks"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "The Industrial Revolution began in which country?",
+                    options: ["Great Britain", "United States", "Germany"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which ancient civilization built the Pyramids of Giza?",
+                    options: ["Egyptian", "Mesopotamian", "Greek"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who was the first Emperor of Rome?",
+                    options: ["Augustus", "Julius Caesar", "Nero"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In which city was the Declaration of Independence signed?",
+                    options: ["Philadelphia", "Boston", "New York"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 7. Geography
+            "7": [
+                {
+                    question: "What is the largest ocean on Earth?",
+                    options: ["Pacific Ocean", "Atlantic Ocean", "Indian Ocean"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which country has the largest land area?",
+                    options: ["Russia", "China", "United States"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the capital of Australia?",
+                    options: ["Canberra", "Sydney", "Melbourne"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which river is the longest in the world?",
+                    options: ["Nile", "Amazon", "Mississippi"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which mountain range separates Europe and Asia?",
+                    options: ["Ural Mountains", "Alps", "Himalayas"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the largest desert in the world?",
+                    options: ["Antarctic Desert", "Sahara Desert", "Arabian Desert"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which country is known as the 'Land of the Rising Sun'?",
+                    options: ["Japan", "China", "Thailand"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the capital of Brazil?",
+                    options: ["Brasília", "Rio de Janeiro", "São Paulo"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which continent is the least populated?",
+                    options: ["Antarctica", "Australia", "South America"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which country is home to the Great Barrier Reef?",
+                    options: ["Australia", "Brazil", "Indonesia"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "The Amazon River flows mainly through which country?",
+                    options: ["Brazil", "Colombia", "Peru"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which African country has the largest population?",
+                    options: ["Nigeria", "Ethiopia", "Egypt"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the capital of Canada?",
+                    options: ["Ottawa", "Toronto", "Montreal"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which strait separates Asia and North America?",
+                    options: ["Bering Strait", "Strait of Gibraltar", "Strait of Malacca"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which is the highest waterfall in the world?",
+                    options: ["Angel Falls", "Niagara Falls", "Victoria Falls"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which country is known as the 'Land of Fire and Ice'?",
+                    options: ["Iceland", "New Zealand", "Chile"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the capital of Egypt?",
+                    options: ["Cairo", "Alexandria", "Giza"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which is the smallest continent by land area?",
+                    options: ["Australia", "Europe", "Antarctica"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "The Dead Sea is located between which two countries?",
+                    options: ["Jordan and Israel", "Egypt and Libya", "Turkey and Syria"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the largest lake in Africa?",
+                    options: ["Lake Victoria", "Lake Tanganyika", "Lake Malawi"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 8. Literature
+            "8": [
+                {
+                    question: "Who wrote 'Romeo and Juliet'?",
+                    options: ["William Shakespeare", "Charles Dickens", "Jane Austen"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which novel begins with the line 'It was the best of times, it was the worst of times'?",
+                    options: ["A Tale of Two Cities", "Great Expectations", "Oliver Twist"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who is the author of 'Pride and Prejudice'?",
+                    options: ["Jane Austen", "Emily Brontë", "Virginia Woolf"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the wizard school in the Harry Potter series?",
+                    options: ["Hogwarts", "Durmstrang", "Beauxbatons"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who wrote '1984'?",
+                    options: ["George Orwell", "Aldous Huxley", "Ray Bradbury"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which character says 'To be, or not to be: that is the question'?",
+                    options: ["Hamlet", "Macbeth", "Othello"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who is the author of 'The Great Gatsby'?",
+                    options: ["F. Scott Fitzgerald", "Ernest Hemingway", "Mark Twain"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In which city is 'Les Misérables' set?",
+                    options: ["Paris", "London", "Rome"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which novel features the character Atticus Finch?",
+                    options: ["To Kill a Mockingbird", "Of Mice and Men", "The Catcher in the Rye"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who wrote 'War and Peace'?",
+                    options: ["Leo Tolstoy", "Fyodor Dostoevsky", "Anton Chekhov"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which playwright wrote 'Death of a Salesman'?",
+                    options: ["Arthur Miller", "Tennessee Williams", "Eugene O'Neill"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the kingdom in 'Frozen'?",
+                    options: ["Arendelle", "Corona", "Avalor"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who wrote 'The Odyssey'?",
+                    options: ["Homer", "Virgil", "Sophocles"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these is not a play by William Shakespeare?",
+                    options: ["The Alchemist", "Hamlet", "Macbeth"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who wrote 'The Adventures of Huckleberry Finn'?",
+                    options: ["Mark Twain", "Ernest Hemingway", "F. Scott Fitzgerald"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which novel features a character named Holden Caulfield?",
+                    options: ["The Catcher in the Rye", "The Great Gatsby", "Lord of the Flies"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who is the author of 'One Hundred Years of Solitude'?",
+                    options: ["Gabriel García Márquez", "Jorge Luis Borges", "Pablo Neruda"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these is a play by Arthur Miller?",
+                    options: ["The Crucible", "A Streetcar Named Desire", "Waiting for Godot"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who wrote 'Things Fall Apart'?",
+                    options: ["Chinua Achebe", "Wole Soyinka", "Chimamanda Ngozi Adichie"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which novel begins with the line 'Call me Ishmael'?",
+                    options: ["Moby-Dick", "Robinson Crusoe", "Treasure Island"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 9. Economics
+            "9": [
+                {
+                    question: "What is the study of how individuals, businesses, and governments make decisions about allocating scarce resources?",
+                    options: ["Economics", "Sociology", "Finance"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the law of supply?",
+                    options: ["As price increases, quantity supplied increases", "As price increases, quantity demanded decreases", "As price increases, demand increases"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does GDP stand for?",
+                    options: ["Gross Domestic Product", "General Domestic Production", "Global Development Progress"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is inflation?",
+                    options: ["A general increase in prices and fall in the purchasing value of money", "A decrease in prices and rise in the purchasing value of money", "The total value of goods and services produced in a country"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which economic system is characterized by private ownership of property and means of production?",
+                    options: ["Capitalism", "Socialism", "Communism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a monopoly?",
+                    options: ["A market structure with a single seller", "A market with many small sellers", "A market with two dominant sellers"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the opportunity cost?",
+                    options: ["The value of the next best alternative foregone", "The direct cost of production", "The cost of operating a business"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does a recession generally mean?",
+                    options: ["A significant decline in economic activity lasting more than a few months", "An increase in prices of goods and services", "A period of high employment and economic prosperity"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is fiscal policy?",
+                    options: ["Government's use of taxation and spending to influence the economy", "Actions by the central bank to control money supply", "Trade agreements between countries"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is meant by 'elastic demand'?",
+                    options: ["Quantity demanded changes significantly with a small change in price", "Quantity demanded changes little with a change in price", "Demand remains constant regardless of price changes"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a bull market?",
+                    options: ["A market that is rising or expected to rise", "A market that is falling or expected to fall", "A market with no significant movement"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the main function of the World Bank?",
+                    options: ["To provide financial assistance to developing countries", "To regulate international trade", "To set global interest rates"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a trade deficit?",
+                    options: ["When a country imports more than it exports", "When a country exports more than it imports", "When a country has no international trade"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the 'invisible hand' concept in economics?",
+                    options: ["The unintended social benefits of individual actions", "Government regulation of markets", "Centralized economic planning"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a progressive tax system?",
+                    options: ["Tax rates increase as income increases", "Everyone pays the same tax rate", "Tax rates decrease as income increases"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is meant by 'stagflation'?",
+                    options: ["High inflation combined with high unemployment and stagnant demand", "Rapid economic growth with low inflation", "Low unemployment with decreasing prices"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does 'microeconomics' study?",
+                    options: ["Individual behaviors of households and firms", "The economy as a whole", "International trade patterns"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a bond?",
+                    options: ["A debt security where the issuer owes the holder money", "A share of ownership in a company", "A physical commodity like gold or silver"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the main purpose of the Federal Reserve in the United States?",
+                    options: ["To regulate monetary policy", "To collect taxes", "To regulate international trade"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a market economy?",
+                    options: ["An economy where decisions are made by individuals and businesses", "An economy where decisions are made by the government", "An economy with no private property"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 10. Psychology
+            "10": [
+                {
+                    question: "Who is considered the father of psychoanalysis?",
+                    options: ["Sigmund Freud", "Carl Jung", "B.F. Skinner"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a person's awareness of their own existence and surroundings?",
+                    options: ["Consciousness", "Perception", "Cognition"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name for the tendency to recall the first and last items in a series more easily than the middle items?",
+                    options: ["Serial position effect", "Recency bias", "Primacy effect"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which approach to psychology emphasizes the role of unconscious processes?",
+                    options: ["Psychoanalytic approach", "Behavioral approach", "Cognitive approach"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is cognitive dissonance?",
+                    options: ["Mental discomfort from holding contradictory beliefs", "The inability to form new memories", "A type of learning disability"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who developed the theory of classical conditioning?",
+                    options: ["Ivan Pavlov", "B.F. Skinner", "Jean Piaget"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a mental shortcut that helps make decisions quickly?",
+                    options: ["Heuristic", "Algorithm", "Syllogism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which part of the brain is primarily responsible for memory formation?",
+                    options: ["Hippocampus", "Cerebellum", "Hypothalamus"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the bystander effect?",
+                    options: ["Individuals are less likely to help when others are present", "The tendency to help others in emergency situations", "The fear of public speaking"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What term describes the changing brain structure due to experience?",
+                    options: ["Neuroplasticity", "Neurogenesis", "Neurotransmission"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of the following is not one of Freud's structures of personality?",
+                    options: ["Self", "Id", "Ego"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the branch of psychology concerned with the diagnosis and treatment of psychological disorders?",
+                    options: ["Clinical psychology", "Social psychology", "Developmental psychology"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name for the concept that describes people's tendency to attribute their own success to internal factors and failures to external factors?",
+                    options: ["Self-serving bias", "Fundamental attribution error", "Confirmation bias"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which theory of emotion states that physiological arousal and emotional experience occur simultaneously?",
+                    options: ["Cannon-Bard theory", "James-Lange theory", "Schachter-Singer theory"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the mental processes involved in acquiring knowledge?",
+                    options: ["Cognition", "Perception", "Sensation"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who developed the hierarchy of needs theory?",
+                    options: ["Abraham Maslow", "Carl Rogers", "Erik Erikson"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the process by which we make sense of incoming sensory information?",
+                    options: ["Perception", "Sensation", "Attention"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which psychological disorder is characterized by extreme mood swings?",
+                    options: ["Bipolar disorder", "Generalized anxiety disorder", "Schizophrenia"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the phenomenon where people conform to a group behavior even when it conflicts with their personal judgment?",
+                    options: ["Groupthink", "Social facilitation", "Diffusion of responsibility"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which type of memory has the largest capacity but shortest duration?",
+                    options: ["Sensory memory", "Short-term memory", "Long-term memory"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 11. Sociology
+            "11": [
+                {
+                    question: "What is sociology primarily concerned with studying?",
+                    options: ["Human society and social behavior", "Individual mental processes", "Economic systems"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the process by which people learn the norms, values, and behaviors expected in society?",
+                    options: ["Socialization", "Assimilation", "Accommodation"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a social institution?",
+                    options: ["A stable pattern of social relationships", "A government organization", "A religious building"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which term describes a group that someone uses as a standard for evaluating themselves?",
+                    options: ["Reference group", "Primary group", "Secondary group"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is social stratification?",
+                    options: ["The hierarchical arrangement of social classes", "The integration of different cultures", "The division of labor in society"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which sociological perspective focuses on the patterns of social relations that create and maintain society?",
+                    options: ["Structural functionalism", "Symbolic interactionism", "Conflict theory"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What concept refers to behavior that violates social norms?",
+                    options: ["Deviance", "Anomie", "Alienation"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who is considered the founder of sociology?",
+                    options: ["Auguste Comte", "Karl Marx", "Max Weber"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a group that people are born into or enter involuntarily?",
+                    options: ["Ascribed group", "Achieved group", "Reference group"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which term refers to the process by which minority groups adopt aspects of the dominant culture?",
+                    options: ["Assimilation", "Segregation", "Pluralism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the sociological term for a relatively stable pattern of social behavior?",
+                    options: ["Social norm", "Social role", "Social sanction"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which sociological perspective focuses on how people create and interpret social reality through their interactions?",
+                    options: ["Symbolic interactionism", "Functionalism", "Conflict theory"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the process by which a society becomes more industrial and urbanized?",
+                    options: ["Modernization", "Westernization", "Civilization"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which term describes a social position that a person occupies within society?",
+                    options: ["Status", "Role", "Function"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the process by which people judge others based on perceptions of their social group?",
+                    options: ["Stereotyping", "Discrimination", "Prejudice"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which sociological perspective emphasizes power relationships and inequality in society?",
+                    options: ["Conflict theory", "Functionalism", "Interactionism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a large number of people who are the object of attention of others?",
+                    options: ["Public", "Crowd", "Audience"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which sociologist introduced the concept of 'the sociological imagination'?",
+                    options: ["C. Wright Mills", "Émile Durkheim", "Herbert Spencer"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a negative attitude toward a group based on faulty generalizations?",
+                    options: ["Prejudice", "Discrimination", "Stereotyping"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which term describes the transfer of cultural elements from one society to another?",
+                    options: ["Cultural diffusion", "Cultural relativism", "Cultural universality"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 12. Art
+            "12": [
+                {
+                    question: "Who painted the Mona Lisa?",
+                    options: ["Leonardo da Vinci", "Michelangelo", "Raphael"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which art movement is Salvador Dalí associated with?",
+                    options: ["Surrealism", "Impressionism", "Cubism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who cut off part of his ear?",
+                    options: ["Vincent van Gogh", "Claude Monet", "Pablo Picasso"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which artist is known for drip painting?",
+                    options: ["Jackson Pollock", "Mark Rothko", "Andy Warhol"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the art of designing and creating buildings called?",
+                    options: ["Architecture", "Sculpture", "Illustration"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which artist painted 'The Starry Night'?",
+                    options: ["Vincent van Gogh", "Claude Monet", "Edgar Degas"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which art movement emphasized the depiction of contemporary everyday subjects?",
+                    options: ["Impressionism", "Renaissance", "Baroque"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which color is created by mixing blue and yellow?",
+                    options: ["Green", "Purple", "Orange"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which material is NOT typically used in ceramics?",
+                    options: ["Acrylic", "Clay", "Porcelain"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who painted 'The Persistence of Memory' with melting clocks?",
+                    options: ["Salvador Dalí", "René Magritte", "Pablo Picasso"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the art of beautiful handwriting called?",
+                    options: ["Calligraphy", "Typography", "Lithography"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which artist is known for soup can paintings?",
+                    options: ["Andy Warhol", "Roy Lichtenstein", "David Hockney"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which movement aimed to represent the subconscious mind?",
+                    options: ["Surrealism", "Cubism", "Expressionism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who sculpted 'The Thinker'?",
+                    options: ["Auguste Rodin", "Michelangelo", "Bernini"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these is a primary color?",
+                    options: ["Blue", "Green", "Orange"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the art technique that uses pieces of paper, photographs, and other materials glued to a surface?",
+                    options: ["Collage", "Etching", "Fresco"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which artist is known for his paintings of water lilies?",
+                    options: ["Claude Monet", "Vincent van Gogh", "Pierre-Auguste Renoir"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the artistic process of forming metal by hammering?",
+                    options: ["Repoussé", "Casting", "Welding"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who painted 'The Scream'?",
+                    options: ["Edvard Munch", "Salvador Dalí", "Pablo Picasso"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which architectural style features flying buttresses?",
+                    options: ["Gothic", "Baroque", "Neoclassical"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 13. Music
+            "13": [
+                {
+                    question: "Who is known as the 'King of Pop'?",
+                    options: ["Michael Jackson", "Elvis Presley", "Prince"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which instrument is known as the 'King of Instruments'?",
+                    options: ["Pipe Organ", "Piano", "Violin"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What are the four main voice types in opera, from highest to lowest?",
+                    options: ["Soprano, Alto, Tenor, Bass", "Treble, Alto, Baritone, Bass", "Soprano, Mezzo, Tenor, Bass"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who composed 'The Four Seasons'?",
+                    options: ["Antonio Vivaldi", "Johann Sebastian Bach", "Wolfgang Amadeus Mozart"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which musical term indicates to play softly?",
+                    options: ["Piano", "Forte", "Allegro"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "How many strings does a standard guitar have?",
+                    options: ["6", "4", "8"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who composed the 'Moonlight Sonata'?",
+                    options: ["Ludwig van Beethoven", "Wolfgang Amadeus Mozart", "Johann Sebastian Bach"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the national anthem of the United States?",
+                    options: ["The Star-Spangled Banner", "America the Beautiful", "My Country, 'Tis of Thee"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which band performed the song 'Bohemian Rhapsody'?",
+                    options: ["Queen", "The Beatles", "Led Zeppelin"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What type of instrument is a cello?",
+                    options: ["String", "Woodwind", "Percussion"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which singer was known as 'The First Lady of Song'?",
+                    options: ["Ella Fitzgerald", "Billie Holiday", "Nina Simone"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What genre of music originated in New Orleans in the late 19th and early 20th centuries?",
+                    options: ["Jazz", "Blues", "Rock and Roll"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "How many notes are in a standard major scale?",
+                    options: ["8", "7", "12"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which composer is known for his 'New World Symphony'?",
+                    options: ["Antonín Dvořák", "Gustav Mahler", "Richard Wagner"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a musical composition for a solo instrument, often with an orchestral accompaniment?",
+                    options: ["Concerto", "Symphony", "Sonata"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which music technology replaced cassette tapes in the 1990s?",
+                    options: ["CD (Compact Disc)", "MP3", "Vinyl records"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Who composed the opera 'The Magic Flute'?",
+                    options: ["Wolfgang Amadeus Mozart", "Giuseppe Verdi", "Richard Wagner"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which instrument is the largest in a standard string quartet?",
+                    options: ["Cello", "Viola", "Violin"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the musical term for 'very loud'?",
+                    options: ["Fortissimo", "Pianissimo", "Moderato"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which rock band consisted of John Lennon, Paul McCartney, George Harrison, and Ringo Starr?",
+                    options: ["The Beatles", "The Rolling Stones", "Led Zeppelin"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 14. Physical Education
+            "14": [
+                {
+                    question: "How many players are there on a standard basketball team on the court?",
+                    options: ["5", "6", "7"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a perfect score in bowling?",
+                    options: ["300", "100", "500"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What exercise primarily targets the quadriceps muscles?",
+                    options: ["Squats", "Pull-ups", "Bicep curls"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which sport uses a shuttlecock?",
+                    options: ["Badminton", "Table Tennis", "Squash"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the primary benefit of cardio exercise?",
+                    options: ["Improved heart health", "Increased muscle mass", "Greater flexibility"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In soccer, how many players from each team are on the field during play?",
+                    options: ["11", "9", "7"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the exercise that involves lying on your back and raising your legs and upper body?",
+                    options: ["Sit-ups", "Push-ups", "Pull-ups"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these sports does NOT use a ball?",
+                    options: ["Swimming", "Football", "Tennis"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the recommended minimum amount of moderate exercise for adults per week?",
+                    options: ["150 minutes", "60 minutes", "300 minutes"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which muscle group does a bench press primarily target?",
+                    options: ["Chest", "Legs", "Back"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name for the exercise position where you support your body with your arms and hold your body straight?",
+                    options: ["Plank", "Lunge", "Crunch"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In volleyball, how many points are needed to win a standard set?",
+                    options: ["25", "21", "15"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the primary purpose of warming up before exercise?",
+                    options: ["To prepare muscles for activity and prevent injury", "To burn calories", "To build muscle mass"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these is not a swimming stroke used in Olympic competition?",
+                    options: ["Sidestroke", "Butterfly", "Breaststroke"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the amount of oxygen your body can utilize during exercise?",
+                    options: ["VO2 max", "BMI", "RPE"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "How many innings are in a standard baseball game?",
+                    options: ["9", "7", "5"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these exercises primarily targets the hamstring muscles?",
+                    options: ["Deadlifts", "Push-ups", "Crunches"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for the spinning movement in figure skating?",
+                    options: ["Spin", "Axel", "Salchow"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "In football/soccer, what is the term for a direct free kick into the goal without being touched by another player?",
+                    options: ["Goal", "Free goal", "Direct shot"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which type of exercise helps improve joint flexibility?",
+                    options: ["Stretching", "Weight lifting", "Sprinting"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 15. Foreign Languages
+            "15": [
+                {
+                    question: "What is 'hello' in Spanish?",
+                    options: ["Hola", "Bonjour", "Ciao"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language has the most native speakers in the world?",
+                    options: ["Mandarin Chinese", "English", "Spanish"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does 'au revoir' mean in French?",
+                    options: ["Goodbye", "Hello", "Thank you"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language is primarily spoken in Brazil?",
+                    options: ["Portuguese", "Spanish", "French"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is 'thank you' in German?",
+                    options: ["Danke", "Merci", "Grazie"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What script is used to write the Japanese language?",
+                    options: ["Hiragana, Katakana, and Kanji", "Cyrillic", "Latin"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language is NOT in the Romance language family?",
+                    options: ["German", "Italian", "French"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the term for a word that sounds the same in different languages but has different meanings?",
+                    options: ["False friend", "Homonym", "Cognate"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does 'ciao' mean in Italian?",
+                    options: ["Hello/Goodbye", "Please", "Thank you"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language uses the Cyrillic alphabet?",
+                    options: ["Russian", "Arabic", "Greek"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is 'yes' in Japanese?",
+                    options: ["Hai", "Si", "Ja"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which of these languages is written from right to left?",
+                    options: ["Arabic", "Spanish", "German"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is 'good morning' in French?",
+                    options: ["Bonjour", "Bonsoir", "Bonne nuit"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language has the most official status in countries around the world?",
+                    options: ["English", "Spanish", "French"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the official language of Mexico?",
+                    options: ["Spanish", "Portuguese", "English"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What does 'nein' mean in German?",
+                    options: ["No", "Yes", "Maybe"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language family does Finnish belong to?",
+                    options: ["Uralic", "Indo-European", "Altaic"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is 'water' in Spanish?",
+                    options: ["Agua", "Eau", "Wasser"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which language is the oldest in Europe that's still spoken today?",
+                    options: ["Greek", "Latin", "French"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is 'goodbye' in Mandarin Chinese?",
+                    options: ["Zàijiàn", "Sayonara", "Annyeong"],
+                    correctAnswer: 0
+                }
+            ],
+            
+            // 16. Astronomy
+            "16": [
+                {
+                    question: "What is the largest planet in our solar system?",
+                    options: ["Jupiter", "Saturn", "Neptune"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which is the hottest planet in our solar system?",
+                    options: ["Venus", "Mercury", "Mars"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of our galaxy?",
+                    options: ["Milky Way", "Andromeda", "Triangulum"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What causes the phases of the Moon as seen from Earth?",
+                    options: ["The changing positions of the Moon, Earth, and Sun", "The Earth's shadow on the Moon", "The Moon's rotation"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which planet has the Great Red Spot?",
+                    options: ["Jupiter", "Mars", "Venus"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a star primarily composed of?",
+                    options: ["Hydrogen and helium", "Oxygen and carbon", "Iron and nickel"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the closest star to Earth?",
+                    options: ["The Sun", "Proxima Centauri", "Alpha Centauri"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which phenomenon occurs when the Moon passes between the Sun and Earth?",
+                    options: ["Solar eclipse", "Lunar eclipse", "Transit"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the force that keeps planets orbiting around the Sun?",
+                    options: ["Gravity", "Magnetism", "Electromagnetism"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which planet is known as the 'Red Planet'?",
+                    options: ["Mars", "Venus", "Jupiter"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the theory that suggests the universe began with a massive explosion?",
+                    options: ["Big Bang theory", "Steady State theory", "Oscillating Universe theory"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which celestial body is classified as a dwarf planet?",
+                    options: ["Pluto", "Neptune", "Europa"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the study of the universe beyond Earth's atmosphere called?",
+                    options: ["Astronomy", "Astrology", "Cosmology"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the name of the galaxy closest to the Milky Way?",
+                    options: ["Andromeda", "Triangulum", "Sombrero"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What causes day and night on Earth?",
+                    options: ["Earth's rotation on its axis", "Earth's revolution around the Sun", "The Moon's orbit around Earth"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What do we call a group of stars forming a recognizable pattern?",
+                    options: ["Constellation", "Galaxy", "Nebula"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is the process by which stars release energy?",
+                    options: ["Nuclear fusion", "Nuclear fission", "Combustion"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which planet has rings made primarily of ice particles?",
+                    options: ["Saturn", "Uranus", "Neptune"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What is a black hole?",
+                    options: ["A region of space with gravity so strong that nothing can escape", "A type of star", "An empty region in space"],
+                    correctAnswer: 0
+                },
+                {
+                    question: "What causes the seasons on Earth?",
+                    options: ["Earth's axial tilt", "Distance from the Sun", "Solar flares"],
+                    correctAnswer: 0
+                }
+            ]
+        };
+
         const subjects = [
-            { id: 1, name: "Mathematics", icon: "fa-calculator" },
-            { id: 2, name: "Physics", icon: "fa-atom" },
-            { id: 3, name: "Chemistry", icon: "fa-flask" },
-            { id: 4, name: "Biology", icon: "fa-dna" },
-            { id: 5, name: "Computer Science", icon: "fa-laptop-code" },
-            { id: 6, name: "History", icon: "fa-landmark" },
-            { id: 7, name: "Geography", icon: "fa-globe-americas" },
-            { id: 8, name: "Literature", icon: "fa-book-open" },
-            { id: 9, name: "Economics", icon: "fa-chart-line" },
-            { id: 10, name: "Psychology", icon: "fa-brain" },
-            { id: 11, name: "Sociology", icon: "fa-users" },
-            { id: 12, name: "Art", icon: "fa-palette" },
-            { id: 13, name: "Music", icon: "fa-music" },
-            { id: 14, name: "Physical Education", icon: "fa-running" },
-            { id: 15, name: "Foreign Languages", icon: "fa-language" },
-            { id: 16, name: "Astronomy", icon: "fa-star" }
+            { id: "1", name: "Mathematics", icon: "fa-calculator" },
+            { id: "2", name: "Physics", icon: "fa-atom" },
+            { id: "3", name: "Chemistry", icon: "fa-flask" },
+            { id: "4", name: "Biology", icon: "fa-dna" },
+            { id: "5", name: "Computer Science", icon: "fa-laptop-code" },
+            { id: "6", name: "History", icon: "fa-landmark" },
+            { id: "7", name: "Geography", icon: "fa-globe-americas" },
+            { id: "8", name: "Literature", icon: "fa-book-open" },
+            { id: "9", name: "Economics", icon: "fa-chart-line" },
+            { id: "10", name: "Psychology", icon: "fa-brain" },
+            { id: "11", name: "Sociology", icon: "fa-users" },
+            { id: "12", name: "Art", icon: "fa-palette" },
+            { id: "13", name: "Music", icon: "fa-music" },
+            { id: "14", name: "Physical Education", icon: "fa-running" },
+            { id: "15", name: "Foreign Languages", icon: "fa-language" },
+            { id: "16", name: "Astronomy", icon: "fa-star" }
         ];
 
-        // Generate sample questions for each subject (in a real app, these would come from a database)
-        const questions = {};
-        subjects.forEach(subject => {
-            questions[subject.id] = [];
-            for (let i = 1; i <= 20; i++) {
-                questions[subject.id].push({
-                    id: i,
-                    question: `Sample Question ${i} for ${subject.name}?`,
-                    options: [
-                        `Option A for question ${i}`,
-                        `Option B for question ${i}`,
-                        `Option C for question ${i}`
-                    ],
-                    correctAnswer: Math.floor(Math.random() * 3) // Random correct answer (0, 1, or 2)
-                });
+        // Data management
+        let userData = {
+            username: '',
+            adno: '',
+            scores: {},
+            totalScore: 0
+        };
+
+        // Current quiz state
+        let currentQuiz = {
+            subjectId: '',
+            questions: [],
+            currentQuestionIndex: 0,
+            score: 0,
+            answers: [],
+            timer: null
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            setupEventListeners();
+            
+            if (userData.username) {
+                showDashboard();
             }
         });
 
-        // User data store
-        let userData = {
-            name: "",
-            admissionNumber: "",
-            subjectScores: {},
-            currentSubject: null,
-            currentQuestionIndex: 0,
-            answers: [],
-            timer: null,
-            timeLeft: 30
-        };
+        // Event listeners setup
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                login();
+            });
+            
+            // Dashboard buttons
+            document.getElementById('start-quiz-btn').addEventListener('click', function() {
+                showPage('subjects-page');
+            });
+            
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // Subject page buttons
+            document.getElementById('back-to-dashboard').addEventListener('click', function() {
+                showPage('dashboard-page');
+            });
+            
+            // Results page buttons
+            document.getElementById('download-result-btn').addEventListener('click', downloadResult);
+            document.getElementById('try-another-btn').addEventListener('click', function() {
+                showPage('subjects-page');
+            });
+            document.getElementById('results-to-dashboard-btn').addEventListener('click', function() {
+                showPage('dashboard-page');
+            });
+        }
 
-        // DOM Elements
-        const loginSection = document.getElementById('login-section');
-        const dashboardSection = document.getElementById('dashboard-section');
-        const subjectSelectionSection = document.getElementById('subject-selection-section');
-        const quizSection = document.getElementById('quiz-section');
-        const resultsSection = document.getElementById('results-section');
+        // Login functionality
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const adno = document.getElementById('adno').value.trim();
+            
+            if (username && adno) {
+                userData.username = username;
+                userData.adno = adno;
+                userData.scores = userData.scores || {};
+                userData.totalScore = calculateTotalScore();
+                
+                saveUserData();
+                showDashboard();
+            }
+        }
 
-        // Initialize subjects in the grid
-        function initSubjects() {
-            const subjectGrid = document.getElementById('subject-grid');
-            subjectGrid.innerHTML = '';
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('quizMasterUserData');
+            userData = {
+                username: '',
+                adno: '',
+                scores: {},
+                totalScore: 0
+            };
+            showPage('login-page');
+        }
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('user-name').textContent = userData.username;
+            document.getElementById('user-adno').textContent = userData.adno;
+            
+            // Calculate and display total score
+            const totalScore = calculateTotalScore();
+            document.getElementById('total-points').textContent = totalScore;
+            
+            // Calculate completed subjects
+            const completedSubjects = Object.keys(userData.scores).length;
+            document.getElementById('completed-subjects').textContent = completedSubjects;
+            
+            // Create dashboard chart
+            createDashboardChart(totalScore);
+            
+            // Display recent activity
+            updateRecentActivity();
+            
+            // Generate subject cards
+            generateSubjectCards();
+            
+            showPage('dashboard-page');
+        }
+
+        // Generate subject cards
+        function generateSubjectCards() {
+            const container = document.getElementById('subjects-container');
+            container.innerHTML = '';
             
             subjects.forEach(subject => {
+                const score = userData.scores[subject.id] || 0;
+                const isCompleted = score > 0;
+                
                 const card = document.createElement('div');
-                card.className = 'subject-card hover:bg-blue-700';
+                card.className = 'subject-card transition-all duration-300';
                 card.innerHTML = `
-                    <div class="text-center">
-                        <div class="text-3xl mb-3"><i class="fas ${subject.icon}"></i></div>
-                        <h3 class="text-xl font-medium">${subject.name}</h3>
-                        <p class="text-blue-300 mt-2">${userData.subjectScores[subject.id] ? userData.subjectScores[subject.id] + '/20' : 'Not attempted'}</p>
+                    <div class="flex items-center mb-2">
+                        <i class="fas ${subject.icon} text-2xl mr-3"></i>
+                        <h3 class="font-bold text-lg">${subject.name}</h3>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm">${isCompleted ? `Score: ${score}/20` : 'Not attempted'}</span>
+                        <span class="px-2 py-1 text-xs rounded ${isCompleted ? 'bg-green-400 text-green-900' : 'bg-blue-400 text-blue-900'}">
+                            ${isCompleted ? 'Completed' : 'Start'}
+                        </span>
                     </div>
                 `;
-                card.addEventListener('click', () => startQuiz(subject.id));
-                subjectGrid.appendChild(card);
+                
+                card.addEventListener('click', function() {
+                    startQuiz(subject.id);
+                });
+                
+                container.appendChild(card);
             });
         }
 
-        // Initialize dashboard performance
-        function initDashboard() {
-            const userName = document.getElementById('user-name');
-            const userAdmission = document.getElementById('user-admission');
-            const totalPoints = document.getElementById('total-points');
-            const subjectPerformance = document.getElementById('subject-performance');
-            
-            userName.textContent = userData.name;
-            userAdmission.textContent = userData.admissionNumber;
-
-            // Calculate total score
-            let sum = 0;
-            Object.keys(userData.subjectScores).forEach(subjectId => {
-                sum += userData.subjectScores[subjectId];
-            });
-            
-            totalPoints.textContent = sum;
-            
-            // Update overall chart
-            updateOverallChart(sum, (subjects.length * 20) - sum);
-
-            // Update subject performance cards
-            subjectPerformance.innerHTML = '';
-            subjects.forEach(subject => {
-                if (userData.subjectScores[subject.id]) {
-                    const card = document.createElement('div');
-                    card.className = 'bg-blue-900 rounded-lg p-4';
-                    card.innerHTML = `
-                        <div class="flex items-center mb-2">
-                            <div class="text-xl mr-3"><i class="fas ${subject.icon}"></i></div>
-                            <h4 class="font-medium">${subject.name}</h4>
-                        </div>
-                        <p class="text-xl font-bold text-blue-300">${userData.subjectScores[subject.id]}/20</p>
-                    `;
-                    subjectPerformance.appendChild(card);
-                }
-            });
-        }
-
-        // Start quiz for a specific subject
+        // Start a quiz for a specific subject
         function startQuiz(subjectId) {
-            userData.currentSubject = subjectId;
-            userData.currentQuestionIndex = 0;
-            userData.answers = Array(20).fill(null);
+            const subject = subjects.find(s => s.id === subjectId);
+            if (!subject) return;
             
-            showSection(quizSection);
+            currentQuiz = {
+                subjectId: subjectId,
+                questions: [...subjectQuestions[subjectId]],
+                currentQuestionIndex: 0,
+                score: 0,
+                answers: [],
+                timer: null
+            };
+            
+            document.getElementById('quiz-subject-title').textContent = `${subject.name} Quiz`;
             loadQuestion();
-            startTimer();
+            showPage('quiz-page');
         }
 
-        // Load current question
+        // Load the current question
         function loadQuestion() {
-            const subject = subjects.find(s => s.id === userData.currentSubject);
-            const question = questions[userData.currentSubject][userData.currentQuestionIndex];
+            if (currentQuiz.currentQuestionIndex >= currentQuiz.questions.length) {
+                endQuiz();
+                return;
+            }
             
-            document.getElementById('quiz-subject').textContent = subject.name;
-            document.getElementById('question-number').textContent = `Question ${userData.currentQuestionIndex + 1}/20`;
+            const question = currentQuiz.questions[currentQuiz.currentQuestionIndex];
+            document.getElementById('current-question').textContent = currentQuiz.currentQuestionIndex + 1;
             document.getElementById('question-text').textContent = question.question;
             
+            // Reset timer
+            if (currentQuiz.timer) {
+                clearInterval(currentQuiz.timer);
+            }
+            
+            // Set up options
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             
             question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = `option ${userData.answers[userData.currentQuestionIndex] === index ? 'selected' : ''}`;
-                optionElement.textContent = option;
-                optionElement.addEventListener('click', () => selectOption(index));
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            // Update navigation buttons
-            document.getElementById('previous-btn').disabled = userData.currentQuestionIndex === 0;
-            document.getElementById('previous-btn').classList.toggle('opacity-50', userData.currentQuestionIndex === 0);
-            document.getElementById('previous-btn').classList.toggle('cursor-not-allowed', userData.currentQuestionIndex === 0);
-            
-            document.getElementById('next-btn').textContent = userData.currentQuestionIndex === 19 ? 'Finish' : 'Next';
-        }
-
-        // Select an option
-        function selectOption(optionIndex) {
-            userData.answers[userData.currentQuestionIndex] = optionIndex;
-            
-            const options = document.querySelectorAll('#options-container .option');
-            options.forEach((option, index) => {
-                option.classList.toggle('selected', index === optionIndex);
-            });
-        }
-
-        // Start the timer
-        function startTimer() {
-            clearInterval(userData.timer);
-            userData.timeLeft = 30;
-            document.getElementById('timer-counter').textContent = userData.timeLeft;
-            document.getElementById('timer-bar').style.width = '100%';
-            
-            userData.timer = setInterval(() => {
-                userData.timeLeft--;
-                document.getElementById('timer-counter').textContent = userData.timeLeft;
-                document.getElementById('timer-bar').style.width = `${(userData.timeLeft / 30) * 100}%`;
+                const optionBtn = document.createElement('button');
+                optionBtn.className = 'option-btn';
+                optionBtn.textContent = option;
+                optionBtn.dataset.index = index;
                 
-                if (userData.timeLeft <= 0) {
-                    clearInterval(userData.timer);
-                    moveToNextQuestion();
+                optionBtn.addEventListener('click', function() {
+                    selectOption(index);
+                });
+                
+                optionsContainer.appendChild(optionBtn);
+            });
+            
+            // Start timer
+            startTimer();
+            
+            // Update current score
+            document.getElementById('current-score').textContent = currentQuiz.score;
+            
+            // Restart animation for timer bar
+            const timerBar = document.getElementById('timer-bar');
+            timerBar.style.animation = 'none';
+            setTimeout(() => {
+                timerBar.style.animation = 'timerAnimation 15s linear forwards';
+            }, 10);
+        }
+
+        // Start timer for current question
+        function startTimer() {
+            let timeLeft = 15;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            currentQuiz.timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                
+                if (timeLeft <= 5) {
+                    document.getElementById('timer').classList.add('text-red-500');
+                } else {
+                    document.getElementById('timer').classList.remove('text-red-500');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(currentQuiz.timer);
+                    timeOut();
                 }
             }, 1000);
         }
 
-        // Move to next question or finish quiz
-        function moveToNextQuestion() {
-            if (userData.currentQuestionIndex === 19) {
-                finishQuiz();
-            } else {
-                userData.currentQuestionIndex++;
-                loadQuestion();
-                startTimer();
-            }
-        }
-
-        // Move to previous question
-        function moveToPreviousQuestion() {
-            if (userData.currentQuestionIndex > 0) {
-                userData.currentQuestionIndex--;
-                loadQuestion();
-                startTimer();
-            }
-        }
-
-        // Finish quiz and calculate results
-        function finishQuiz() {
-            clearInterval(userData.timer);
+        // Handle timeout for a question
+        function timeOut() {
+            const question = currentQuiz.questions[currentQuiz.currentQuestionIndex];
             
-            let score = 0;
-            userData.answers.forEach((answer, index) => {
-                if (answer === questions[userData.currentSubject][index].correctAnswer) {
-                    score++;
+            // Record answer as timeout
+            currentQuiz.answers.push({
+                question: question.question,
+                selectedOption: -1,
+                correctOption: question.correctAnswer,
+                isCorrect: false
+            });
+            
+            // Show correct answer
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach((option, index) => {
+                if (index === question.correctAnswer) {
+                    option.classList.add('option-correct');
+                }
+                option.disabled = true;
+            });
+            
+            // Wait a moment to show the correct answer
+            setTimeout(() => {
+                currentQuiz.currentQuestionIndex++;
+                loadQuestion();
+            }, 1500);
+        }
+
+        // Select an option for the current question
+        function selectOption(optionIndex) {
+            clearInterval(currentQuiz.timer);
+            
+            const question = currentQuiz.questions[currentQuiz.currentQuestionIndex];
+            const isCorrect = optionIndex === question.correctAnswer;
+            
+            // Record the answer
+            currentQuiz.answers.push({
+                question: question.question,
+                selectedOption: optionIndex,
+                correctOption: question.correctAnswer,
+                isCorrect: isCorrect
+            });
+            
+            // Update score if correct
+            if (isCorrect) {
+                currentQuiz.score++;
+                document.getElementById('current-score').textContent = currentQuiz.score;
+            }
+            
+            // Show feedback
+            const options = document.querySelectorAll('.option-btn');
+            options.forEach((option, index) => {
+                option.disabled = true;
+                
+                if (index === optionIndex && isCorrect) {
+                    option.classList.add('option-correct');
+                } else if (index === optionIndex && !isCorrect) {
+                    option.classList.add('option-incorrect');
+                } else if (index === question.correctAnswer) {
+                    option.classList.add('option-correct');
                 }
             });
             
-            userData.subjectScores[userData.currentSubject] = score;
-            
-            // Update result section
-            const subject = subjects.find(s => s.id === userData.currentSubject);
-            document.getElementById('result-subject').textContent = subject.name;
-            document.getElementById('result-score').textContent = `${score}/20`;
-            document.getElementById('result-percentage').textContent = `${Math.floor((score / 20) * 100)}%`;
-            document.getElementById('correct-answers').textContent = score;
-            document.getElementById('incorrect-answers').textContent = 20 - score;
-
-            // Random time between 5 and 15 minutes for demo purposes
-            const minutes = Math.floor(Math.random() * 10) + 5;
-            const seconds = Math.floor(Math.random() * 60);
-            document.getElementById('time-utilized').textContent = `${minutes} minutes ${seconds} seconds`;
-
-            // Update result chart
-            updateResultChart(score, 20 - score);
-            
-            showSection(resultsSection); // Show result section after completing the quiz
+            // Wait a moment before loading next question
+            setTimeout(() => {
+                currentQuiz.currentQuestionIndex++;
+                loadQuestion();
+            }, 1500);
         }
 
-        // Update overall performance chart
-        function updateOverallChart(score, remaining) {
-            const ctx = document.getElementById('overall-chart').getContext('2d');
-            const totalSubjects = subjects.length * 20; // Assuming 20 is the score per subject
-            new Chart(ctx, {
+        // End the current quiz
+        function endQuiz() {
+            // Save score
+            userData.scores[currentQuiz.subjectId] = currentQuiz.score;
+            userData.totalScore = calculateTotalScore();
+            saveUserData();
+            
+            // Show results
+            showResults();
+        }
+
+        // Show quiz results
+        function showResults() {
+            const subjectName = subjects.find(s => s.id === currentQuiz.subjectId).name;
+            document.getElementById('result-subject-name').textContent = subjectName;
+            document.getElementById('result-score').textContent = currentQuiz.score;
+            
+            const percentage = (currentQuiz.score / 20) * 100;
+            document.getElementById('result-percentage').textContent = `${percentage.toFixed(1)}% correct`;
+            
+            let message = '';
+            if (percentage >= 90) {
+                message = 'Excellent! You\'re a master of this subject!';
+            } else if (percentage >= 70) {
+                message = 'Great job! You have a solid understanding of this topic!';
+            } else if (percentage >= 50) {
+                message = 'Good effort! Keep studying to improve your knowledge.';
+            } else {
+                message = 'Keep practicing! You\'ll improve with more study.';
+            }
+            document.getElementById('result-message').textContent = message;
+            
+            // Create results chart
+            createResultsChart(currentQuiz.score);
+            
+            // Generate question review
+            generateQuestionReview();
+            
+            showPage('results-page');
+        }
+
+        // Generate question review for results page
+        function generateQuestionReview() {
+            const container = document.getElementById('question-review');
+            container.innerHTML = '';
+            
+            currentQuiz.answers.forEach((answer, index) => {
+                const questionEl = document.createElement('div');
+                questionEl.className = 'border-b border-gray-600 pb-3 mb-3';
+                
+                const statusClass = answer.isCorrect ? 'bg-green-500' : 'bg-red-500';
+                const statusText = answer.isCorrect ? 'Correct' : 'Incorrect';
+                
+                questionEl.innerHTML = `
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold">Question ${index + 1}</span>
+                        <span class="px-2 py-1 text-xs rounded ${statusClass}">${statusText}</span>
+                    </div>
+                    <p class="mb-2">${answer.question}</p>
+                    <div class="text-sm">
+                        ${answer.selectedOption === -1 ? 
+                            `<p class="text-yellow-500">Time expired</p>` : 
+                            `<p>Your answer: ${currentQuiz.questions[index].options[answer.selectedOption]}</p>`
+                        }
+                        <p class="text-green-400">Correct answer: ${currentQuiz.questions[index].options[answer.correctOption]}</p>
+                    </div>
+                `;
+                
+                container.appendChild(questionEl);
+            });
+        }
+
+        // Download quiz results
+        function downloadResult() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const subjectName = subjects.find(s => s.id === currentQuiz.subjectId).name;
+            const date = new Date().toLocaleDateString();
+            
+            doc.setFontSize(22);
+            doc.text('QuizMaster Pro - Quiz Results', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text(`Subject: ${subjectName}`, 20, 40);
+            doc.text(`Date: ${date}`, 20, 50);
+            doc.text(`Student: ${userData.username}`, 20, 60);
+            doc.text(`Admission No: ${userData.adno}`, 20, 70);
+            
+            doc.setFontSize(16);
+            doc.text(`Score: ${currentQuiz.score} out of 20 (${(currentQuiz.score / 20 * 100).toFixed(1)}%)`, 105, 90, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text('Question Review:', 20, 110);
+            
+            let yPos = 120;
+            currentQuiz.answers.forEach((answer, index) => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                
+                const questionText = `Q${index + 1}: ${answer.question}`;
+                const wrappedText = doc.splitTextToSize(questionText, 170);
+                doc.text(wrappedText, 20, yPos);
+                yPos += wrappedText.length * 7;
+                
+                if (answer.selectedOption === -1) {
+                    doc.setTextColor(255, 0, 0);
+                    doc.text(`Your answer: Time expired`, 25, yPos);
+                } else {
+                    doc.setTextColor(answer.isCorrect ? 0 : 255, answer.isCorrect ? 100 : 0, 0);
+                    doc.text(`Your answer: ${currentQuiz.questions[index].options[answer.selectedOption]}`, 25, yPos);
+                }
+                yPos += 7;
+                
+                doc.setTextColor(0, 100, 0);
+                doc.text(`Correct answer: ${currentQuiz.questions[index].options[answer.correctOption]}`, 25, yPos);
+                yPos += 15;
+                
+                doc.setTextColor(0, 0, 0);
+            });
+            
+            doc.save(`quiz-results-${subjectName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+        }
+
+        // Create dashboard chart
+        function createDashboardChart(totalScore) {
+            const ctx = document.getElementById('dashboard-chart');
+            
+            if (window.dashboardChart) {
+                window.dashboardChart.destroy();
+            }
+            
+            window.dashboardChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: ['Achieved', 'Remaining'],
+                    labels: ['Score', 'Remaining'],
                     datasets: [{
-                        data: [score, remaining],
-                        backgroundColor: ['#4ade80', '#64748b'],
+                        data: [totalScore, 320 - totalScore],
+                        backgroundColor: [
+                            '#4299e1',
+                            '#1a365d'
+                        ],
                         borderWidth: 0
                     }]
                 },
@@ -488,9 +2534,16 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: 'white'
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / 320) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
                             }
                         }
                     }
@@ -498,16 +2551,24 @@
             });
         }
 
-        // Update result chart
-        function updateResultChart(correct, incorrect) {
-            const ctx = document.getElementById('result-chart').getContext('2d');
-            new Chart(ctx, {
+        // Create results chart
+        function createResultsChart(score) {
+            const ctx = document.getElementById('results-chart');
+            
+            if (window.resultsChart) {
+                window.resultsChart.destroy();
+            }
+            
+            window.resultsChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Correct', 'Incorrect'],
                     datasets: [{
-                        data: [correct, incorrect],
-                        backgroundColor: ['#4ade80', '#f87171'],
+                        data: [score, 20 - score],
+                        backgroundColor: [
+                            '#38a169',
+                            '#e53e3e'
+                        ],
                         borderWidth: 0
                     }]
                 },
@@ -518,7 +2579,20 @@
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: 'white'
+                                color: '#fff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = Math.round((value / 20) * 100);
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
                             }
                         }
                     }
@@ -526,93 +2600,76 @@
             });
         }
 
-        // Download results
-        function downloadResults() {
-            const subject = subjects.find(s => s.id === userData.currentSubject);
-            const score = userData.subjectScores[userData.currentSubject];
-            const content = `Quiz Result\nSubject: ${subject.name}\nName: ${userData.name}\nAdmission Number: ${userData.admissionNumber}\nScore: ${score}/20\n`;
-
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${subject.name}_Quiz_Results.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        // Update recent activity on dashboard
+        function updateRecentActivity() {
+            const container = document.getElementById('recent-activity');
+            container.innerHTML = '';
+            
+            const recentSubjects = Object.keys(userData.scores)
+                .map(id => ({
+                    id,
+                    name: subjects.find(s => s.id === id).name,
+                    score: userData.scores[id]
+                }))
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 5);
+            
+            if (recentSubjects.length === 0) {
+                container.innerHTML = '<p class="text-gray-300 text-center">No activity yet. Start a quiz to begin!</p>';
+                return;
+            }
+            
+            recentSubjects.forEach(subject => {
+                const percentage = (subject.score / 20) * 100;
+                const activityEl = document.createElement('div');
+                activityEl.className = 'flex justify-between items-center bg-primary-light p-3 rounded';
+                activityEl.innerHTML = `
+                    <div>
+                        <span class="font-medium">${subject.name}</span>
+                        <div class="text-xs text-gray-300">Score: ${subject.score}/20</div>
+                    </div>
+                    <div class="w-20 h-20">
+                        <div class="w-full h-1 bg-gray-700 rounded-full">
+                            <div class="h-full bg-accent rounded-full" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="text-xs mt-1 text-right">${percentage}%</div>
+                    </div>
+                `;
+                container.appendChild(activityEl);
+            });
         }
 
-        // Helper function to show a specific section and hide others
-        function showSection(section) {
-            loginSection.classList.add('hide');
-            dashboardSection.classList.add('hide');
-            subjectSelectionSection.classList.add('hide');
-            quizSection.classList.add('hide');
-            resultsSection.classList.add('hide');
-            
-            section.classList.remove('hide');
+        // Calculate total score across all subjects
+        function calculateTotalScore() {
+            return Object.values(userData.scores || {}).reduce((sum, score) => sum + score, 0);
         }
 
-        // Event Listeners
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            userData.name = document.getElementById('name').value;
-            userData.admissionNumber = document.getElementById('adNumber').value;
+        // Load user data from localStorage
+        function loadUserData() {
+            const savedData = localStorage.getItem('quizMasterUserData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+            }
+        }
+
+        // Save user data to localStorage
+        function saveUserData() {
+            localStorage.setItem('quizMasterUserData', JSON.stringify(userData));
+        }
+
+        // Show a specific page and hide others
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active-page');
+            });
             
-            initDashboard();
-            showSection(dashboardSection);
-        });
-
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            userData = {
-                name: "",
-                admissionNumber: "",
-                subjectScores: {},
-                currentSubject: null,
-                currentQuestionIndex: 0,
-                answers: [],
-                timer: null,
-                timeLeft: 30
-            };
-            document.getElementById('login-form').reset();
-            showSection(loginSection);
-        });
-
-        document.getElementById('start-quiz-btn').addEventListener('click', function() {
-            initSubjects();
-            showSection(subjectSelectionSection);
-        });
-
-        document.getElementById('back-to-dashboard').addEventListener('click', function() {
-            initDashboard();
-            showSection(dashboardSection);
-        });
-
-        document.getElementById('next-btn').addEventListener('click', function() {
-            clearInterval(userData.timer);
-            moveToNextQuestion();
-        });
-
-        document.getElementById('previous-btn').addEventListener('click', function() {
-            clearInterval(userData.timer);
-            moveToPreviousQuestion();
-        });
-
-        document.getElementById('try-another-subject').addEventListener('click', function() {
-            initSubjects();
-            showSection(subjectSelectionSection);
-        });
-
-        document.getElementById('back-to-dashboard-from-results').addEventListener('click', function() {
-            initDashboard();
-            showSection(dashboardSection);
-        });
-
-        document.getElementById('download-results-btn').addEventListener('click', downloadResults);
-
-        // Initialize app by showing login section
-        showSection(loginSection);
+            document.getElementById(pageId).classList.add('active-page');
+            
+            // Special case for dashboard refresh
+            if (pageId === 'dashboard-page') {
+                showDashboard();
+            }
+        }
     </script>
 </body>
 </html>
