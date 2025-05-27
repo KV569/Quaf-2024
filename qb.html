@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Insight Journal </title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            overflow-x: hidden;
+        }
+        
+        .journal-header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('https://static.vecteezy.com/system/resources/previews/014/664/051/non_2x/islamic-ornament-persian-motiff-3d-ramadan-islamic-round-pattern-elements-geometric-circular-ornamental-arabic-symbol-gold-background-vector.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .article-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 0 0 0.5rem 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 50;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .search-highlight {
+            background-color: #fef3c7;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #d4af37, #f7dc6f);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #b7950b, #d4af37);
+            transform: translateY(-2px);
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:after,
+        .nav-link.active:after {
+            width: 100%;
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .article-card {
+                margin-bottom: 1rem;
+            }
+            
+            .hero-text {
+                font-size: 2.5rem;
+            }
+            
+            .navbar-fixed {
+                padding: 0.5rem 1rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-text {
+                font-size: 2rem;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white !important;
+            }
+            
+            .navbar-fixed {
+                position: relative !important;
+            }
+            
+            .modal {
+                display: none !important;
+            }
+        }
+
+        /* Advanced search styling */
+        .advanced-search {
+            position: relative;
+        }
+
+        .advanced-search-input {
+            width: 100%;
+            padding-right: 40px;
+        }
+
+        .advanced-search-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            cursor: pointer;
+        }
+
+        /* Category pills styling */
+        .category-pill {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-pill:hover {
+            background-color: #d4af37;
+            color: white;
+        }
+
+        .category-pill.active {
+            background-color: #d4af37;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification System -->
+    <div id="notification" class="notification bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="notificationText">Action completed successfully!</span>
+            <button onclick="hideNotification()" class="ml-4 text-white hover:text-gray-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-900 bg-opacity-95 backdrop-filter backdrop-blur-lg shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 lg:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="text-xl lg:text-2xl font-bold text-white title-font">
+                        <i class="fas fa-mosque text-yellow-400 mr-2"></i>
+                        Islamic Insight
+                    </div>
+                </div>
+                
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="search-container">
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Search by title, author, or topic..." 
+                                   class="search-input pl-10 pr-4 py-2 rounded-lg text-white placeholder-gray-300 w-64 focus:outline-none"
+                                   oninput="performSearch()">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300"></i>
+                            
+                            <!-- Search Results Dropdown -->
+                            <div id="searchResults" class="search-results">
+                                <!-- Results will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openModal('loginModal')" class="text-white hover:text-yellow-400 transition-colors">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+                
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 shadow-lg">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="text-xl font-bold text-white title-font">
+                        <i class="fas fa-mosque text-yellow-400 mr-2"></i>
+                        Islamic Insight
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                    <div class="pt-4 border-t border-gray-700">
+                        <div class="advanced-search relative">
+                            <input type="text" id="mobileSearchInput" placeholder="Search articles..." 
+                                  class="advanced-search-input w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-yellow-400"
+                                  oninput="performSearch('mobile')">
+                            <button class="advanced-search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <!-- Mobile Search Results -->
+                        <div id="mobileSearchResults" class="search-results bg-gray-800 border border-gray-700 mt-1">
+                            <!-- Results will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <section id="home" class="journal-header py-12 lg:py-20 text-white relative">
+            <div class="container mx-auto px-4 lg:px-6 text-center relative z-10">
+                <h1 class="hero-text title-font text-3xl md:text-5xl lg:text-7xl font-bold mb-6 fade-in">
+                    Islamic Insight Journal
+                </h1>
+                <p class="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto fade-in">
+                    Exploring the depths of Islamic scholarship, philosophy, and contemporary thought through rigorous academic discourse
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center items-center fade-in">
+                    <button onclick="scrollToSection('articles')" class="btn-primary px-6 lg:px-8 py-3 rounded-lg font-semibold text-gray-800 hover:text-gray-900">
+                        <i class="fas fa-book-open mr-2"></i>
+                        Latest Issue
+                    </button>
+                    <button onclick="openModal('subscribeModal')" class="border-2 border-white text-white px-6 lg:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-800 transition-all">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Search Section -->
+        <section class="py-8 bg-gray-50">
+            <div class="container mx-auto px-4 lg:px-6">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 title-font">Find Articles</h2>
+                    
+                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="flex-grow">
+                            <div class="relative">
+                                <input type="text" id="advancedSearchInput" 
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                       placeholder="Search by title, author..."
+                                       oninput="performAdvancedSearch()">
+                                <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-48">
+                            <select id="categoryFilter" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                    onchange="performAdvancedSearch()">
+                                <option value="">All Categories</option>
+                                <option value="Updates">Updates</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="English">English</option>
+                                <option value="Urdu">Urdu</option>
+                                <option value="Malayalam">Malayalam</option>
+                                <option value="Hindi">Hindi</option>
+                                
+                            </select>
+                        </div>
+                        
+                        <div class="md:w-48">
+                            <select id="sortFilter" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                    onchange="performAdvancedSearch()">
+                                <option value="date">Sort by Date</option>
+                                <option value="title">Sort by Title</option>
+                                <option value="author">Sort by Author</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    <!-- Search Metrics -->
+                    <div id="searchMetrics" class="mt-4 text-sm text-gray-500 hidden">
+                        <span id="resultsCount">0</span> results found
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       
+
+        <!-- Articles Grid -->
+        <section id="articles" class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4 lg:px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                    <h2 class="title-font text-3xl lg:text-4xl font-bold text-gray-800 mb-4 md:mb-0">Featured Articles</h2>
+                </div>
+                
+                <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- Articles will be populated by JavaScript -->
+                </div>
+                
+                <div id="noResults" class="hidden text-center py-12">
+                    <i class="fas fa-search text-6xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No articles found</h3>
+                    <p class="text-gray-500">Try adjusting your search or filter criteria</p>
+                </div>
+            </div>
+        </section>
+
+       
+
+        
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-16">
+            <div class="container mx-auto px-4 lg:px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="title-font text-2xl font-bold mb-4">
+                            <i class="fas fa-mosque text-yellow-400 mr-2"></i>
+                            Islamic Insight
+                        </h3>
+                        <p class="text-gray-300 mb-4">A premier academic journal dedicated to Islamic scholarship, philosophy, and contemporary Islamic thought.</p>
+                       
+                    </div>
+                    
+                   
+                    
+                    
+                    
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4">Newsletter</h4>
+                        <p class="text-gray-300 mb-4">Stay updated with our latest publications and scholarly insights.</p>
+                        <div class="flex">
+                            <input type="email" id="newsletterEmail" placeholder="Your email" class="flex-1 px-3 py-2 bg-gray-700 text-white rounded-l-lg border-0 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                            <button onclick="subscribeNewsletter()" class="btn-primary px-4 py-2 rounded-r-lg">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                    <p class="text-gray-300">&copy; 2024 Islamic Insight Journal. All rights reserved. | ISSN: 2786-1234</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Login</h3>
+                    <button onclick="closeModal('loginModal')" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg font-semibold text-gray-800">
+                        Login
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <a href="#" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscribe Modal -->
+    <div id="subscribeModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Subscribe to Journal</h3>
+                    <button onclick="closeModal('subscribeModal')" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form onsubmit="handleSubscription(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Institution</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg font-semibold text-gray-800">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Reading Modal -->
+    <div id="articleModal" class="modal hidden fixed inset-0 z-50">
+        <div class="bg-white w-full h-full overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b shadow-sm z-10">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <button onclick="closeModal('articleModal')" class="flex items-center text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to Articles
+                    </button>
+                    <div class="flex space-x-4">
+                        <button onclick="shareArticle()" class="text-gray-600 hover:text-blue-600">
+                            <i class="fas fa-share-alt text-xl"></i>
+                        </button>
+                        <button onclick="downloadArticle()" class="text-gray-600 hover:text-green-600">
+                            <i class="fas fa-download text-xl"></i>
+                        </button>
+                        <button onclick="bookmarkArticle()" class="text-gray-600 hover:text-red-600">
+                            <i class="fas fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="container mx-auto px-4 py-8 max-w-4xl">
+                <div id="fullArticleContent">
+                    <!-- Article content will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Article data
+        const articles = [
+            {
+                id: 1,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 2,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 3,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 4,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 5,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 6,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 7,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 8,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 9,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 10,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 11,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 12,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "https://quaf.netlify.app/pic/pic/1008.jpg",
+                image: "https://quaf.netlify.app/blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+        ];
+
+        let currentArticles = articles;
+        let mobileMenuOpen = false;
+
+        // Utility Functions
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            const bgClass = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+            
+            notification.className = `notification ${bgClass} text-white px-6 py-3 rounded-lg shadow-lg show`;
+            notification.querySelector('i').className = `fas ${iconClass} mr-2`;
+            notificationText.textContent = message;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function hideNotification() {
+            document.getElementById('notification').classList.remove('show');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenuOpen = !mobileMenuOpen;
+            
+            if (mobileMenuOpen) {
+                mobileMenu.classList.add('active');
+            } else {
+                mobileMenu.classList.remove('active');
+            }
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Search and Filter Functions
+        function performSearch(type = 'desktop') {
+            const searchTerm = type === 'mobile' ? 
+                document.getElementById('mobileSearchInput').value.toLowerCase() : 
+                document.getElementById('searchInput').value.toLowerCase();
+                
+            const resultsContainer = type === 'mobile' ?
+                document.getElementById('mobileSearchResults') :
+                document.getElementById('searchResults');
+                
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+            
+            if (searchTerm.length < 2) {
+                resultsContainer.classList.remove('active');
+                return;
+            }
+            
+            // Filter articles based on search term
+            const matchedArticles = articles.filter(article => 
+                article.title.toLowerCase().includes(searchTerm) ||
+                article.author.toLowerCase().includes(searchTerm) ||
+                article.category.toLowerCase().includes(searchTerm) ||
+                article.excerpt.toLowerCase().includes(searchTerm)
+            );
+            
+            // Display results
+            if (matchedArticles.length === 0) {
+                resultsContainer.innerHTML = `<div class="p-4 text-center text-gray-500">No results found</div>`;
+            } else {
+                matchedArticles.forEach(article => {
+                    // Highlight the matching term
+                    let titleWithHighlight = article.title;
+                    let authorWithHighlight = article.author;
+                    
+                    if (article.title.toLowerCase().includes(searchTerm)) {
+                        const regex = new RegExp(searchTerm, 'gi');
+                        titleWithHighlight = article.title.replace(regex, match => `<span class="search-highlight">${match}</span>`);
+                    }
+                    
+                    if (article.author.toLowerCase().includes(searchTerm)) {
+                        const regex = new RegExp(searchTerm, 'gi');
+                        authorWithHighlight = article.author.replace(regex, match => `<span class="search-highlight">${match}</span>`);
+                    }
+                    
+                    const resultItem = `
+                        <div class="search-result-item" onclick="openArticle(${article.id}); closeSearchResults('${type}')">
+                            <div class="font-medium">${titleWithHighlight}</div>
+                            <div class="flex justify-between mt-1">
+                                <span class="text-sm text-gray-500">By ${authorWithHighlight}</span>
+                                <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">${article.category}</span>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.innerHTML += resultItem;
+                });
+            }
+            
+            resultsContainer.classList.add('active');
+        }
+        
+        function closeSearchResults(type = 'desktop') {
+            const resultsContainer = type === 'mobile' ?
+                document.getElementById('mobileSearchResults') :
+                document.getElementById('searchResults');
+                
+            resultsContainer.classList.remove('active');
+        }
+        
+        // Advanced search functionality
+        function performAdvancedSearch() {
+            const searchTerm = document.getElementById('advancedSearchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+            
+            // Filter articles based on search criteria
+            let filteredArticles = articles.filter(article => {
+                // If there's a search term, filter by it
+                if (searchTerm) {
+                    if (!(
+                        article.title.toLowerCase().includes(searchTerm) ||
+                        article.excerpt.toLowerCase().includes(searchTerm) ||
+                        article.author.toLowerCase().includes(searchTerm) ||
+                        article.category.toLowerCase().includes(searchTerm)
+                    )) {
+                        return false;
+                    }
+                }
+                
+                // If there's a category filter, filter by it
+                if (categoryFilter && article.category !== categoryFilter) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Sort articles
+            if (sortFilter === 'title') {
+                filteredArticles.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (sortFilter === 'author') {
+                filteredArticles.sort((a, b) => a.author.localeCompare(b.author));
+            } else {
+                filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+            
+            // Update the search metrics
+            const searchMetrics = document.getElementById('searchMetrics');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            if (searchTerm || categoryFilter) {
+                searchMetrics.classList.remove('hidden');
+                resultsCount.textContent = filteredArticles.length;
+            } else {
+                searchMetrics.classList.add('hidden');
+            }
+            
+            // Display the filtered articles
+            currentArticles = filteredArticles;
+            displayArticles(currentArticles);
+        }
+
+        // Handle category pill clicks
+        function initCategoryPills() {
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.addEventListener('click', function() {
+                    // Remove active class from all pills
+                    document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to clicked pill
+                    this.classList.add('active');
+                    
+                    // Update the category filter and perform search
+                    const category = this.getAttribute('data-category');
+                    document.getElementById('categoryFilter').value = category;
+                    performAdvancedSearch();
+                });
+            });
+        }
+
+        function displayArticles(articlesToShow = articles) {
+            const grid = document.getElementById('articlesGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (articlesToShow.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            grid.innerHTML = '';
+            
+            articlesToShow.forEach(article => {
+                const articleCard = `
+                    <div class="article-card rounded-xl shadow-lg overflow-hidden">
+                        <div class="relative">
+                            <img src="${article.image}" alt="${article.title}" class="w-full h-48 object-cover">
+                            <div class="absolute top-4 left-4 bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                ${article.category}
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="title-font text-xl font-bold text-gray-800 mb-3 cursor-pointer hover:text-blue-600 transition-colors" onclick="openArticle(${article.id})">
+                                ${article.title}
+                            </h3>
+                            <p class="text-gray-600 mb-4">${article.excerpt}</p>
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <img src="${article.authorImage}" alt="${article.author}" class="author-avatar mr-3">
+                                    <div>
+                                        <p class="font-semibold text-sm text-gray-800">${article.author}</p>
+                                        <p class="text-xs text-gray-500">${article.date}</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-500">${article.readTime}</span>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button onclick="openArticle(${article.id})" class="flex-1 btn-primary py-2 rounded-lg font-semibold text-gray-800 hover:text-gray-900">
+                                    <i class="fas fa-book-open mr-2"></i>
+                                    Read More
+                                </button>
+                                <button onclick="shareArticle(${article.id})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                                <button onclick="downloadArticle(${article.id})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += articleCard;
+            });
+        }
+
+        // Article Functions
+        function openArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (article) {
+                document.getElementById('fullArticleContent').innerHTML = article.content;
+                openModal('articleModal');
+            }
+        }
+
+        function shareArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (article && navigator.share) {
+                navigator.share({
+                    title: article.title,
+                    text: article.excerpt,
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                // Fallback: copy to clipboard
+                const url = `${window.location.href}#article-${articleId}`;
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('Article link copied to clipboard!');
+                }).catch(() => {
+                    showNotification('Unable to copy link', 'error');
+                });
+            }
+        }
+
+        function downloadArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (article) {
+                // Create a simple PDF-like content
+                const content = `
+                    <html>
+                    <head>
+                        <title>${article.title}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2cm; }
+                            h1 { color: #1a365d; border-bottom: 2px solid #d4af37; }
+                            .author { color: #666; margin-bottom: 2em; }
+                            .content { text-align: justify; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>${article.title}</h1>
+                        <div class="author">By ${article.author} - ${article.date}</div>
+                        <div class="content">${article.content}</div>
+                    </body>
+                    </html>
+                `;
+                
+                const blob = new Blob([content], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${article.title.replace(/[^a-zA-Z0-9]/g, '_')}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification('Article downloaded successfully!');
+            }
+        }
+
+        function bookmarkArticle() {
+            showNotification('Article bookmarked!');
+        }
+
+        // Form Handlers
+        function handleLogin(event) {
+            event.preventDefault();
+            showNotification('Login successful!');
+            closeModal('loginModal');
+        }
+
+        function handleSubscription(event) {
+            event.preventDefault();
+            showNotification('Subscription successful! Welcome to Islamic Insight Journal.');
+            closeModal('subscribeModal');
+        }
+
+        function handleContactForm(event) {
+            event.preventDefault();
+            showNotification('Message sent successfully! We will respond shortly.');
+        }
+
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletterEmail').value;
+            if (email) {
+                showNotification('Newsletter subscription successful!');
+                document.getElementById('newsletterEmail').value = '';
+            } else {
+                showNotification('Please enter a valid email address', 'error');
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            displayArticles();
+            initCategoryPills();
+            
+            // Close search results when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.search-container')) {
+                    closeSearchResults();
+                }
+                if (!event.target.closest('.advanced-search')) {
+                    closeSearchResults('mobile');
+                }
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (mobileMenuOpen && !event.target.closest('#mobileMenu') && !event.target.closest('button[onclick="toggleMobileMenu()"]')) {
+                    toggleMobileMenu();
+                }
+            });
+            
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        closeModal(modal.id);
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Add fade-in animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
