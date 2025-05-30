@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAF-SPIN</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a1128, #1c3166, #132556);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .main-container {
+            background: radial-gradient(circle at center, rgba(28, 49, 102, 0.5) 0%, rgba(10, 17, 40, 0.7) 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        .title-gradient {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0px 2px 10px rgba(79, 172, 254, 0.3);
+        }
+        
+        .spin-btn {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .spin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6), 0 0 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .spin-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .reset-btn {
+            background: linear-gradient(135deg, #a770ef, #cf8bf3);
+            border: none;
+            box-shadow: 0 4px 15px rgba(167, 112, 239, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(167, 112, 239, 0.6), 0 0 15px rgba(167, 112, 239, 0.4);
+        }
+        
+        .wheel-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .wheel-outer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 65px;
+            height: 65px;
+            z-index: 10;
+        }
+        
+        .wheel-pointer {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 0 8px rgba(79, 172, 254, 0.8));
+            z-index: 10;
+        }
+        
+        .wheel-circle {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #fff;
+            border-radius: 50%;
+            left: 50%;
+            transform: translate(-50%, 20px);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        
+        .wheel-base {
+            box-shadow: 
+                0 0 30px rgba(79, 172, 254, 0.4),
+                inset 0 0 30px rgba(10, 17, 40, 0.3);
+            border-radius: 50%;
+            transition: transform 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wheel-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 60px rgba(79, 172, 254, 0.3),
+                inset 0 0 100px rgba(79, 172, 254, 0.1);
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .wheel-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(10, 17, 40, 0.8);
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        
+        .wheel-logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .student-card {
+            background: linear-gradient(135deg, rgba(20, 30, 70, 0.7), rgba(30, 50, 100, 0.7));
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            transform: scale(0);
+            opacity: 0;
+        }
+        
+        .card-img {
+            border-radius: 12px;
+            object-fit: cover;
+            width: 100%;
+            height: 220px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(79, 172, 254, 0.3);
+        }
+        
+        .history-container {
+            background: linear-gradient(135deg, rgba(20, 30, 70, 0.5), rgba(30, 50, 100, 0.5));
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .history-item {
+            background: rgba(20, 30, 70, 0.5);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(79, 172, 254, 0.1);
+        }
+        
+        .history-item:hover {
+            background: rgba(30, 50, 100, 0.5);
+            transform: translateY(-2px);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.2);
+        }
+        
+        .history-img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(79, 172, 254, 0.5);
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        }
+        
+        .glow-effect {
+            animation: glow 2s infinite;
+        }
+        
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 15px rgba(79, 172, 254, 0.5),
+                            0 0 30px rgba(79, 172, 254, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(79, 172, 254, 0.7),
+                            0 0 40px rgba(79, 172, 254, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(79, 172, 254, 0.5),
+                            0 0 30px rgba(79, 172, 254, 0.3);
+            }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: rgba(79, 172, 254, 0.5);
+            border-radius: 50%;
+        }
+        
+        /* For PDF optimization */
+        @media print {
+            body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+            
+            .main-container {
+                background: white;
+                color: black;
+            }
+            
+            .title-gradient {
+                color: #4facfe;
+            }
+            
+            .student-card, .history-container {
+                break-inside: avoid;
+                background: #f0f8ff;
+                border: 1px solid #4facfe;
+            }
+            
+            .history-item {
+                background: #f5f9ff;
+                border: 1px solid #cce5ff;
+            }
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="particles" id="particles"></div>
+    <div class="container mx-auto p-2 sm:p-4 main-container rounded-3xl my-4 max-w-6xl">
+        <h1 class="text-3xl md:text-5xl font-bold text-center mb-8 py-4 title-gradient font-['Montserrat']">
+            QUAF SPIN WHEEL
+        </h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Left column - wheel -->
+            <div class="flex flex-col items-center justify-center">
+                <div class="wheel-container mb-10 mt-4">
+                    <div class="wheel-outer">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel-circle"></div>
+                    </div>
+                    <div class="relative">
+                        <canvas id="wheel" width="400" height="400" class="wheel-base"></canvas>
+                        <div class="wheel-glow"></div>
+                        <div class="wheel-logo">
+                            <img src="https://quaf.vercel.app/logo.png" alt="Quaf Logo">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-6">
+                    <button id="spinBtn" class="spin-btn text-white font-bold py-3 px-8 rounded-full text-lg flex items-center">
+                        <i class="fas fa-sync-alt mr-2"></i> SPIN
+                    </button>
+                    <button id="resetBtn" class="reset-btn text-white font-bold py-3 px-8 rounded-full text-lg flex items-center">
+                        <i class="fas fa-redo-alt mr-2"></i> RESET
+                    </button>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <div id="remaining" class="text-lg text-blue-200 font-medium py-2 px-6 rounded-full inline-block bg-opacity-20 bg-blue-900">
+                        All students available for selection
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right column - results -->
+            <div class="flex flex-col gap-6">
+                <!-- Selected student card -->
+                <div id="selectedStudent" class="student-card">
+                    <h2 class="text-2xl font-bold text-center mb-6 flex justify-center items-center">
+                        <i class="fas fa-trophy mr-3 text-yellow-300"></i>
+                        <span>Selected Student</span>
+                    </h2>
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-full mb-6">
+                            <div class="card-placeholder relative overflow-hidden rounded-xl">
+                                <img id="studentImage" src="" alt="Student" class="card-img">
+                                <div id="imageOverlay" class="absolute inset-0 bg-gradient-to-b from-transparent to-blue-900 opacity-20"></div>
+                            </div>
+                            <div id="cardBadge" class="badge absolute top-3 right-3 text-white text-sm font-bold px-4 py-2 rounded-full flex items-center">
+                                <i class="fas fa-id-card mr-2"></i>
+                                <span id="studentAdNo"></span>
+                            </div>
+                        </div>
+                        <div id="studentNameContainer" class="w-full text-center py-3 px-6 rounded-xl bg-blue-900 bg-opacity-50">
+                            <h3 id="studentName" class="text-xl font-bold text-white"></h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- History section -->
+                <div class="history-container p-5">
+                    <h2 class="text-xl font-bold mb-5 flex items-center">
+                        <i class="fas fa-history mr-3 text-blue-300"></i>
+                        <span>Selection History</span>
+                    </h2>
+                    <div id="historyList" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+                        <!-- History items will be added here -->
+                        <p id="noHistoryMsg" class="text-blue-200 text-center py-5">No selections yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Student data
+        const students = [
+            { name: "MUHAMMED YASEEN K", adNo: 986 },
+            { name: "MUHAMMED LASIN KC", adNo: 987 },
+            { name: "MOHAMMED HADI V", adNo: 988 },
+            { name: "MUHAMMED HAYYAN VP", adNo: 989 },
+            { name: "MOHAMMED AFRAH N", adNo: 990 },
+            { name: "MUHAMMED ZIYAD C", adNo: 991 },
+            { name: "MUHAMMED SHAHAL", adNo: 992 },
+            { name: "AQIB MUHAMMED KT", adNo: 993 },
+            { name: "FARSHAD MR", adNo: 994 },
+            { name: "MUHAMMED RABEEH PP", adNo: 995 },
+            { name: "MUHAMMED SHAFEEQUE T", adNo: 996 },
+            { name: "MUHAMMED QASIM MP", adNo: 997 },
+            { name: "MUHAMMED HASHIM V", adNo: 998 },
+            { name: "MUHAMMED RASAL PP", adNo: 999 },
+            { name: "ALI RAFI EP", adNo: 1000 },
+            { name: "MUHAMMED SINAN CK", adNo: 1001 },
+            { name: "HAMDAN CC", adNo: 1002 },
+            { name: "MUHAMMED ALI M", adNo: 1003 },
+            { name: "MUHAMMED SHAFAN A", adNo: 1004 },
+            { name: "MUHAMMED ANSHAD VP", adNo: 1005 },
+            { name: "MUHAMMED NASWIH IK", adNo: 1006 },
+            { name: "HISHAM RAHMATHULLAH O", adNo: 1008 },
+            { name: "SAHL SHAN O", adNo: 1009 },
+            { name: "SADHAQATHULLA C", adNo: 1010 },
+            { name: "MUHAMMED SAHL", adNo: 1011 },
+            { name: "MUHAMMED HASHIM KH", adNo: 1012 },
+            { name: "SAIDALAVI SHAMIL MC", adNo: 1013 },
+            { name: "MISHAB PT", adNo: 1014 },
+            { name: "MUHAMMED RASIN KP", adNo: 1015 },
+            { name: "MUHAMMED ASLAM", adNo: 1016 },
+            { name: "MUHAMMED MUSTHAFA SM", adNo: 1017 },
+            { name: "MUHAMMED SHAFIN", adNo: 1018 },
+            { name: "MUHAMMED RAMEES VP", adNo: 1019 },
+            { name: "ABDAUL HADI", adNo: 1020 },
+            { name: "AMAN ASKAR CT", adNo: 1021 },
+            { name: "MUHAMMED FAHEEM NP", adNo: 960 }
+        ];
+        
+        // Global variables
+        let availableStudents = [...students];
+        let selectedStudents = [];
+        let isSpinning = false;
+        let spinAngle = 0;
+        let colorPalette = [
+            {main: "#4facfe", alt: "#00f2fe"}, // Blue gradient
+            {main: "#a770ef", alt: "#cf8bf3"}, // Purple gradient
+            {main: "#00cdac", alt: "#02aab0"}, // Teal gradient
+            {main: "#ff758c", alt: "#ff7eb3"}, // Pink gradient
+            {main: "#f6d365", alt: "#fda085"}  // Yellow-Orange gradient
+        ];
+        
+        // Canvas setup
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const wheel = {
+            radius: canvas.width / 2,
+            centerX: canvas.width / 2,
+            centerY: canvas.height / 2
+        };
+        
+        // Initialize wheel
+        function drawWheel() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (availableStudents.length === 0) {
+                // Draw empty wheel
+                ctx.beginPath();
+                ctx.arc(wheel.centerX, wheel.centerY, wheel.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#0a1128';
+                ctx.fill();
+                
+                // Add subtle gradient
+                const gradient = ctx.createRadialGradient(
+                    wheel.centerX, wheel.centerY, 0,
+                    wheel.centerX, wheel.centerY, wheel.radius
+                );
+                gradient.addColorStop(0, 'rgba(79, 172, 254, 0.3)');
+                gradient.addColorStop(1, 'rgba(10, 17, 40, 0.8)');
+                
+                ctx.beginPath();
+                ctx.arc(wheel.centerX, wheel.centerY, wheel.radius, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 20px Poppins';
+                ctx.fillText('All Students Selected', wheel.centerX, wheel.centerY - 15);
+                ctx.font = '16px Poppins';
+                ctx.fillText('Click RESET to start over', wheel.centerX, wheel.centerY + 15);
+                
+                // Draw decorative circle
+                ctx.beginPath();
+                ctx.arc(wheel.centerX, wheel.centerY, wheel.radius * 0.8, 0, Math.PI * 2);
+                ctx.strokeStyle = 'rgba(79, 172, 254, 0.3)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                return;
+            }
+            
+            const sliceAngle = 2 * Math.PI / availableStudents.length;
+            
+            // Draw slices
+            for (let i = 0; i < availableStudents.length; i++) {
+                const startAngle = spinAngle + i * sliceAngle;
+                const endAngle = startAngle + sliceAngle;
+                
+                // Get color from palette
+                const colorIndex = i % colorPalette.length;
+                const colorSet = colorPalette[colorIndex];
+                
+                // Create gradient
+                const gradient = ctx.createRadialGradient(
+                    wheel.centerX, wheel.centerY, 0,
+                    wheel.centerX, wheel.centerY, wheel.radius
+                );
+                gradient.addColorStop(0, colorSet.alt);
+                gradient.addColorStop(1, colorSet.main);
+                
+                // Draw slice
+                ctx.beginPath();
+                ctx.moveTo(wheel.centerX, wheel.centerY);
+                ctx.arc(wheel.centerX, wheel.centerY, wheel.radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                // Add shine effect to slice edge
+                ctx.beginPath();
+                ctx.moveTo(wheel.centerX, wheel.centerY);
+                ctx.arc(wheel.centerX, wheel.centerY, wheel.radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Create dividing line
+                ctx.beginPath();
+                ctx.moveTo(wheel.centerX, wheel.centerY);
+                ctx.lineTo(
+                    wheel.centerX + Math.cos(startAngle) * wheel.radius,
+                    wheel.centerY + Math.sin(startAngle) * wheel.radius
+                );
+                ctx.strokeStyle = 'rgba(10, 17, 40, 0.5)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                
+                // Draw text
+                ctx.save();
+                ctx.translate(wheel.centerX, wheel.centerY);
+                ctx.rotate(startAngle + sliceAngle / 2);
+                
+                const textRadius = wheel.radius * 0.75;
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                
+                // Draw admission number
+                ctx.font = 'bold 16px Poppins';
+                ctx.fillStyle = '#fff';
+                ctx.strokeStyle = 'rgba(10, 17, 40, 0.7)';
+                ctx.lineWidth = 3;
+                ctx.strokeText(availableStudents[i].adNo, textRadius - 10, 0);
+                ctx.fillText(availableStudents[i].adNo, textRadius - 10, 0);
+                
+                ctx.restore();
+            }
+            
+            // Draw outer circle
+            ctx.beginPath();
+            ctx.arc(wheel.centerX, wheel.centerY, wheel.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            // Draw inner circle for logo background
+            ctx.beginPath();
+            ctx.arc(wheel.centerX, wheel.centerY, wheel.radius * 0.2, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(10, 17, 40, 0.8)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(79, 172, 254, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+        
+        // Spin the wheel
+        function spinWheel() {
+            if (isSpinning || availableStudents.length === 0) return;
+            
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+            
+            // Hide the previous selection with animation
+            gsap.to('#selectedStudent', { 
+                scale: 0, 
+                opacity: 0, 
+                duration: 0.5,
+                ease: "back.in(1.7)"
+            });
+            
+            // Play spinning sound effect
+            playSpinSound();
+            
+            // Pulse animation for the wheel
+            gsap.to('.wheel-base', {
+                boxShadow: '0 0 50px rgba(79, 172, 254, 0.7), inset 0 0 30px rgba(79, 172, 254, 0.5)',
+                duration: 0.5,
+                yoyo: true,
+                repeat: 3
+            });
+            
+            // Add fast-blinking to pointer
+            const pointer = document.querySelector('.wheel-pointer');
+            pointer.style.animation = 'blink 0.2s infinite';
+            setTimeout(() => {
+                pointer.style.animation = '';
+            }, 5000);
+            
+            // Calculate random spin
+            const spins = 5 + Math.random() * 5; // 5-10 full rotations
+            const randomIndex = Math.floor(Math.random() * availableStudents.length);
+            const sliceAngle = 2 * Math.PI / availableStudents.length;
+            const targetAngle = spinAngle - (2 * Math.PI * spins) - (randomIndex * sliceAngle) - (sliceAngle / 2);
+            
+            // Animate the wheel
+            gsap.to({ angle: spinAngle }, {
+                angle: targetAngle,
+                duration: 5,
+                ease: "power2.inOut",
+                onUpdate: function() {
+                    spinAngle = this.targets()[0].angle;
+                    drawWheel();
+                },
+                onComplete: function() {
+                    spinAngle = targetAngle % (2 * Math.PI);
+                    if (spinAngle > 0) spinAngle -= 2 * Math.PI;
+                    
+                    // Get selected student
+                    const selectedStudent = availableStudents[randomIndex];
+                    
+                    // Remove from available and add to selected
+                    availableStudents = availableStudents.filter(student => student.adNo !== selectedStudent.adNo);
+                    selectedStudents.push(selectedStudent);
+                    
+                    // Show selected student with enhanced animation
+                    showSelectedStudentEnhanced(selectedStudent);
+                    
+                    // Update history
+                    updateHistory(selectedStudent);
+                    
+                    // Update remaining count
+                    updateRemainingCount();
+                    
+                    // Play winning sound
+                    playWinSound();
+                    
+                    // Trigger enhanced confetti
+                    triggerConfetti();
+                    
+                    // Re-enable spin button
+                    setTimeout(() => {
+                        isSpinning = false;
+                        document.getElementById('spinBtn').disabled = availableStudents.length === 0;
+                        if (availableStudents.length === 0) {
+                            // If all students selected, add special effect
+                            document.querySelector('.wheel-container').classList.add('glow-effect');
+                        }
+                    }, 1000);
+                    
+                    // Redraw wheel to reflect the student removal
+                    drawWheel();
+                }
+            });
+        }
+        
+        // Show selected student with enhanced animations
+        function showSelectedStudentEnhanced(student) {
+            const studentImage = document.getElementById('studentImage');
+            const studentName = document.getElementById('studentName');
+            const studentAdNo = document.getElementById('studentAdNo');
+            const selectedStudent = document.getElementById('selectedStudent');
+            
+            // Set data
+            studentImage.src = `https://quaf.netlify.app/pic/pic/${student.adNo}.jpg`;
+            studentImage.onerror = function() {
+                this.src = "https://quaf.netlify.app/pic/pic/960.png"; // Default image
+            };
+            studentName.textContent = student.name;
+            studentAdNo.textContent = student.adNo;
+            
+            // Prepare for animation
+            selectedStudent.style.transform = "scale(0)";
+            selectedStudent.style.opacity = "0";
+            
+            // Start multi-stage animation
+            setTimeout(() => {
+                // Show card with bounce effect
+                gsap.to(selectedStudent, { 
+                    scale: 1, 
+                    opacity: 1, 
+                    duration: 0.8, 
+                    ease: "elastic.out(1, 0.5)"
+                });
+                
+                // Add glow effect to the card
+                selectedStudent.classList.add('glow-effect');
+                
+                // Animate student name with typing effect
+                const nameContainer = document.getElementById('studentNameContainer');
+                gsap.fromTo(nameContainer, 
+                    { width: "0%" },
+                    { 
+                        width: "100%", 
+                        duration: 0.8, 
+                        delay: 0.3, 
+                        ease: "power2.out" 
+                    }
+                );
+                
+                // Animate badge
+                gsap.fromTo('#cardBadge', 
+                    { scale: 0, opacity: 0 },
+                    { 
+                        scale: 1, 
+                        opacity: 1, 
+                        duration: 0.5, 
+                        delay: 0.9, 
+                        ease: "back.out(1.7)" 
+                    }
+                );
+                
+                // Remove glow effect after animation
+                setTimeout(() => {
+                    selectedStudent.classList.remove('glow-effect');
+                }, 3000);
+            }, 300);
+        }
+        
+        // Enhanced confetti effect
+        function triggerConfetti() {
+            // First burst
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            
+            // Second burst after delay
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0.1, y: 0.5 }
+                });
+            }, 250);
+            
+            // Third burst from other side
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 0.9, y: 0.5 }
+                });
+            }, 400);
+        }
+        
+        // Update history section with enhanced animations
+        function updateHistory(student) {
+            const historyList = document.getElementById('historyList');
+            const noHistoryMsg = document.getElementById('noHistoryMsg');
+            
+            // Hide no-history message if this is the first selection
+            if (selectedStudents.length === 1) {
+                gsap.to(noHistoryMsg, { height: 0, opacity: 0, display: 'none', duration: 0.3 });
+            }
+            
+            // Create history item with more details
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item p-3 flex items-center justify-between';
+            
+            // Create timestamp for history entry
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            historyItem.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <img src="https://quaf.netlify.app/pic/pic/${student.adNo}.jpg" alt="${student.name}" class="history-img">
+                    <div>
+                        <p class="font-medium">${student.name}</p>
+                        <div class="flex items-center">
+                            <span class="mr-2 text-xs bg-blue-900 bg-opacity-50 px-2 py-1 rounded-full">#${student.adNo}</span>
+                            <span class="text-xs text-blue-300"><i class="far fa-clock mr-1"></i>${timeString}</span>
+                        </div>
+                    </div>
+                </div>
+                <span class="text-sm badge px-3 py-1 rounded-full font-bold">#${selectedStudents.length}</span>
+            `;
+            
+            // Add onerror handler for the image
+            const img = historyItem.querySelector('img');
+            img.onerror = function() {
+                this.src = "https://quaf.netlify.app/pic/pic/960.png"; // Default image
+            };
+            
+            // Add to list with animation
+            historyItem.style.opacity = '0';
+            historyItem.style.transform = 'translateY(20px)';
+            historyList.prepend(historyItem);
+            
+            // Animate entry with staggered timing
+            setTimeout(() => {
+                gsap.to(historyItem, { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 0.6, 
+                    ease: "power2.out" 
+                });
+            }, 800);
+        }
+        
+        // Update remaining count with enhanced display
+        function updateRemainingCount() {
+            const remaining = document.getElementById('remaining');
+            
+            // Update text content with style changes
+            if (availableStudents.length === 0) {
+                gsap.to(remaining, {
+                    backgroundColor: "rgba(245, 158, 11, 0.3)",
+                    color: "#fbbf24",
+                    scale: 1.05,
+                    duration: 0.5,
+                    ease: "power1.out"
+                });
+                remaining.innerHTML = '<i class="fas fa-check-circle mr-2"></i> All students have been selected';
+            } else {
+                remaining.innerHTML = `<i class="fas fa-users mr-2"></i> ${availableStudents.length} students remaining`;
+                
+                // Briefly flash the counter to draw attention
+                gsap.fromTo(
+                    remaining,
+                    { scale: 1.1, backgroundColor: "rgba(79, 172, 254, 0.3)" },
+                    { scale: 1, backgroundColor: "rgba(30, 58, 138, 0.2)", duration: 0.5 }
+                );
+            }
+        }
+        
+        // Reset function with enhanced animations
+        function resetWheel() {
+            // Reset data
+            availableStudents = [...students];
+            selectedStudents = [];
+            
+            // Animate reset button
+            gsap.to("#resetBtn", {
+                scale: 1.2, 
+                duration: 0.2,
+                yoyo: true,
+                repeat: 1
+            });
+            
+            // Reset UI with animations
+            document.getElementById('spinBtn').disabled = false;
+            
+            // Clear history with fade out
+            const historyList = document.getElementById('historyList');
+            gsap.to(historyList.children, {
+                opacity: 0,
+                y: -10,
+                stagger: 0.05,
+                duration: 0.3,
+                onComplete: () => {
+                    historyList.innerHTML = '<p id="noHistoryMsg" class="text-blue-200 text-center py-5">No selections yet</p>';
+                }
+            });
+            
+            // Hide student card
+            gsap.to('#selectedStudent', { 
+                scale: 0, 
+                opacity: 0, 
+                duration: 0.5,
+                ease: "back.in(1.7)"
+            });
+            
+            // Update remaining text
+            updateRemainingCount();
+            
+            // Reset wheel with special animation
+            document.querySelector('.wheel-container').classList.remove('glow-effect');
+            
+            // Animate wheel reset
+            gsap.to('.wheel-base', {
+                boxShadow: '0 0 50px rgba(79, 172, 254, 0.7), inset 0 0 30px rgba(79, 172, 254, 0.5)',
+                duration: 0.3
+            });
+            
+            gsap.fromTo('.wheel-base', 
+                { rotation: 0 }, 
+                { 
+                    rotation: 360, 
+                    duration: 1.5, 
+                    ease: "elastic.out(1, 0.5)",
+                    onComplete: () => {
+                        // Reset wheel angle
+                        spinAngle = 0;
+                        // Return wheel shadow to normal
+                        gsap.to('.wheel-base', {
+                            boxShadow: '0 0 30px rgba(79, 172, 254, 0.4), inset 0 0 30px rgba(10, 17, 40, 0.3)',
+                            duration: 0.3
+                        });
+                        // Redraw wheel
+                        drawWheel();
+                    }
+                }
+            );
+        }
+        
+        // Sound effects
+        function playSpinSound() {
+            // Create audio element for spin sound
+            const spinSound = new Audio();
+            spinSound.src = "data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFzb25pY1N0dWRpb3MuY29tAFRDT04AAAAxAAADZW5naW5lZXIAR2xpdGNoIFNvdW5kIEVmZmVjdCwgU3Bpbm5pbmcgU291bmQAVElUMgAAAB0AAAN0aXRsZQBHbGl0Y2ggU3BpbiBTb3VuZAADAP9UQUxCAAAAGgAAA2FsYnVtAEVmZmVjdHMgRnJlZSBNYXN0ZXIAVENPTQAAAC0AAAN0aXRsZQBHbGl0Y2ggU291bmQgRWZmZWN0LCBTcGlubmluZyBTb3VuZABUWUVSAAAAAQAAA3llYXIAAABUREVOAAAAAQAAA3RyYWNrAAAAVENPTQAAAAEAAA9jb21tZW50AAAAAFRQRTEAAAAuAAADY29tcG9zZXIAU291bmRzIGJ5IEJpZ1NvdW5kQmFuay5jb20gTGFiZWwAVFNTRQAAAAwAAAN0YWcAQXVkaW8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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8gADiFY1fUyOjscL8FRZ2t50XO9aqUOtl2QaQQBQblXa3OZpcOAQBAAC7HMAAAr3ve973ve973E+myEMbFgR0oAlyEswOCXgGjb1GRbQJ1IAAXssyzrK7vpaPXR/VKqDGgAgDDart2LLkoaQaAAAAAIKCKij///////6gE5h/////GAZegJIc//4BkAGAAAAhAHSGAdAqQRg///1YJgMAAogAAOhAAgWC3ve973ve9zvZpJzKDg4uTSEOZTE//uyZAuABGg/z+MJGwgPh/nsYSNhEbj/P4wkbCA+n+fxhI2EDCII5T62HvWNHAIfKsut2yHKhRQAOIAAAAC7HcAAAte973ve973vcZjObfvxOQY4e86MA4EcLHMDR79Vvd2ScLADw01pZdRz/rWr+pn//ZQYuDhQGQ123LdnFRBgAAAAABBgiop//////6hQ5gH////8wZaAEkP//zgALAAAAQFPBAAACt73ve973ve5nMm4cWrRSC6d6MWHpASwGnrrT2fuK6DIQLZXqsstlZfLUv//KXRAJCgc163ZiYUMgQJAAAIBUFAAACt73ve97//ugZAkABG4/z2MGGwgQaAn8YMMBEaj/P4wYbCAwoGehpI0Ee973vcUQwNPWRAcw4vs7ZV5IxgD6AR4h2jp2TSYnFj4K8rXZ3lby7VXZO/+pQBzCAABAFuvW2EKyAFgIAAAoAGoAAALe973ve973vc4phQT9GYhHs6tDukoQwA8xLgsQzrslbdY+IAB7llrLLP//RX//pqANdAAAKA242222BAkKBgAAAoDGAAAAi973ve973ve9LqDLn4l5NSnQipAogOEGA+HPuZrYerOhgQurLOs///6z//ozAAUlb3va5rnP+MFAoKAAGBfgAAAW973ve973//u2ZAgABG8/z2MJGwgQh/nsZMNhEdj/P4wkbCA9n+fxkwy0c573O0zyVs08dSZYacdoygDlJgkWMQC13tUZnGXBg49XWWV2f/+f/+UBkoDuva1rFFlASAAAIoHAYAAARt73ve97zve9SAaLk81j7gJhMBBACYFHjwzk0/UN6ydg0Z1qszv//+s//0oACit73tezUA0QCAAAUBMAUAAAEu973ve973ve9jGbIpRupR9wEkl8DAJIALM1BP5MO+SGMF6v/9f/6gADYtu62ECGCggFAAAKAiAAAAJd73ve973ve97GsZwmOXXg4EBQgQDMnXeBDYyAcFfNf/6AAALuuu//uyZA0ABHQ/z2MJGwgOp/n8YSNhEdj/P4wkbCA5n+fxhI2E222BgUEBAAAMA3AAAApd73ve973ve9zuxjGTsLZBCYXDnRsyQczTDA4V//9QAAk33W2YGQWEAAEAAcAAAAEu973ve973ve9zjGMrSvsxhDIkIYkwgGYAQQdhe/////gABCbrvvvEsAFBAdAAAJAAAARu973ve973ve973sbQPWCRanQDrggkEYLxO4xF3P//1AACFubbXCgiIGFAIAAAoAAAAk3ve973ve973ve9jL1i/GBCQCRSWEQQDABAJwCFU///+AAD/+7JEDQAEaj/P4wYbCBBICexhI2ETqP89jBhsIDoQJ7GTDYQddt921wAQMFAQAABQAAAArb3ve973ve973ve5xZz82GgVHjwaGgcKxUBEgBfLf//UAADd99uYmBFBwEAAgAAgAAAC3ve973ve973ve977eLjogIDolDQICAJBAQPBYH////oAAHXXbYiyWQAMFAQIAAgAAABW3ve973ve973ve9zM4a0icBxghEgkEgiGgILDb////8oAC7bbbbECQBgEAAAAAA==";
+            spinSound.volume = 0.15;
+            spinSound.play().catch(e => console.log("Audio play error:", e));
+        }
+        
+        function playWinSound() {
+            // Create audio element for win sound
+            const winSound = new Audio();
+            winSound.src = "data:audio/mp3;base64,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";
+            winSound.volume = 0.3;
+            winSound.play().catch(e => console.log("Audio play error:", e));
+        }
+        
+        // Create floating particles background effect
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 15 + 10;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = Math.random() * 0.6 + 0.2;
+                
+                // Apply animation
+                particle.style.animation = `float ${duration}s linear infinite`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // Add floating animation to CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0.2;
+                }
+                50% {
+                    transform: translateY(-100px) rotate(180deg);
+                    opacity: 0.6;
+                }
+                100% {
+                    transform: translateY(-200px) rotate(360deg);
+                    opacity: 0.2;
+                }
+            }
+            
+            @keyframes blink {
+                0% { opacity: 1; }
+                50% { opacity: 0.3; }
+                100% { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Event listeners
+        document.getElementById('spinBtn').addEventListener('click', spinWheel);
+        document.getElementById('resetBtn').addEventListener('click', resetWheel);
+        
+        // Initialize particles and wheel
+        createParticles();
+        drawWheel();
+        updateRemainingCount();
+        
+        // Responsive resizing
+        function handleResize() {
+            const container = document.querySelector('.wheel-container');
+            const containerWidth = container.clientWidth;
+            
+            if (containerWidth < 400) {
+                canvas.width = containerWidth;
+                canvas.height = containerWidth;
+                wheel.radius = containerWidth / 2;
+                wheel.centerX = containerWidth / 2;
+                wheel.centerY = containerWidth / 2;
+                
+                // Also resize the logo
+                const logo = document.querySelector('.wheel-logo');
+                const logoSize = containerWidth * 0.2;
+                logo.style.width = logoSize + 'px';
+                logo.style.height = logoSize + 'px';
+                
+                // Update the wheel
+                drawWheel();
+            }
+        }
+        
+        // Add shine effect to initial load
+        gsap.to('.wheel-base', {
+            boxShadow: '0 0 50px rgba(79, 172, 254, 0.7), inset 0 0 30px rgba(79, 172, 254, 0.5)',
+            duration: 1.5,
+            yoyo: true,
+            repeat: 1,
+            onComplete: function() {
+                gsap.to('.wheel-base', {
+                    boxShadow: '0 0 30px rgba(79, 172, 254, 0.4), inset 0 0 30px rgba(10, 17, 40, 0.3)',
+                    duration: 0.5
+                });
+            }
+        });
+        
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Initial check
+    </script>
+</body>
+</html>

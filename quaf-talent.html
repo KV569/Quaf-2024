@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAF-TALENT</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Poppins:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #4ecdc4;
+            --accent1: #ffe66d;
+            --accent2: #6a0dad;
+            --accent3: #1a535c;
+            --dark: #2b2d42;
+            --light: #f7fff7;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--accent2));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--secondary);
+            border-radius: 5px;
+        }
+        
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 8s infinite ease-in-out;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(15px);
+            }
+        }
+        
+        .countdown-container {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+        }
+        
+        .countdown-box {
+            background: var(--light);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .countdown-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .welcome-card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .welcome-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: #3dbdb3;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(78, 205, 196, 0.4);
+        }
+        
+        .animated-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent2), var(--secondary), var(--accent1));
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: gradient 5s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confetti-fall 3s ease-in infinite;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .footer {
+            background: var(--dark);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem !important;
+            }
+            .countdown-container {
+                flex-direction: column;
+            }
+            .countdown-box {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        .delay-5 { animation-delay: 1s; }
+        
+        /* Preloader Styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a4a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease-out;
+        }
+        
+        .logo-container {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .quaf-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            margin: 0;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .quaf-text {
+            background: linear-gradient(90deg, #ff6b6b, #ffb347, #60a3bc, #82ccdd, #6ab04c, #ff7675);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientMove 4s ease infinite, bounce 1s ease-in-out infinite alternate;
+        }
+        
+        .talent-text {
+            display: block;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: 10px;
+            margin-top: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+        
+        .loader-container {
+            width: 250px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .loader-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #ff6b6b, #ffb347, #60a3bc, #82ccdd, #6ab04c, #ff7675);
+            border-radius: 20px;
+            animation: loading 2.5s ease-in-out forwards;
+            background-size: 300% 100%;
+            animation-iteration-count: 1;
+        }
+        
+        .loading-text {
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            text-align: center;
+            letter-spacing: 3px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: white;
+            opacity: 0;
+            filter: blur(1px);
+        }
+
+        .spotlight {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            animation: spotlight 3s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0% { width: 0; }
+            50% { width: 70%; background-position: 100% 0; }
+            100% { width: 100%; background-position: 0 0; }
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes spotlight {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        @keyframes sparkleAnimation {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        @media (max-width: 640px) {
+            .quaf-logo { font-size: 2.5rem; }
+            .talent-text { font-size: 1.2rem; letter-spacing: 5px; }
+            .loader-container { width: 200px; }
+        }
+        
+        /* Hide content until preloader is done */
+        body {
+            overflow: hidden;
+        }
+        
+        .content {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        /* The tagline */
+        .tagline {
+            font-family: 'Montserrat', sans-serif;
+            color: #f8f8f8;
+            font-size: 1rem;
+            margin-top: 10px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.8s;
+        }
+    </style>
+</head>
+<body>
+	<!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="spotlight"></div>
+        <div class="logo-container">
+            <h1 class="quaf-logo">
+                <span class="quaf-text">QUAF</span>
+                <span class="talent-text">TALENT</span>
+            </h1>
+            <p class="tagline">The Grand Talent Competition</p>
+        </div>
+        
+        <div class="loader-container">
+            <div class="loader-bar"></div>
+        </div>
+        <div class="loading-text">LOADING...</div>
+    </div>
+
+    <!-- Main Content (Empty placeholder - this will be replaced by the actual content) -->
+    <div class="content" id="content">
+        <!-- The existing website content will go here -->
+    <!-- Navigation -->
+    <nav class="bg-white py-4 px-6 shadow-md fixed top-0 w-full z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-2xl font-bold text-gray-800">
+                <span style="color: blue;">QUAF</span><span style="color: red;"></span><span style="color: green;"></span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="index.html" class="font-medium hover:text-purple-600 transition-colors">Home</a>
+                        <a href="library.html" class="font-medium hover:text-purple-600 transition-colors">Library</a>
+                        <a href="celebration.html" class="font-medium hover:text-purple-600 transition-colors">Celebrate</a>
+                        <a href="committee.html" class="font-medium hover:text-purple-600 transition-colors">Committee</a>
+                        <a href="students.html" class="font-medium hover:text-purple-600 transition-colors">Results</a>
+                        <a href="data.html" class="font-medium hover:text-purple-600 transition-colors">Data</a>
+                        <a href="id.html" class="font-medium hover:text-purple-600 transition-colors">ID Card</a>
+		        <a href="form.html" class="font-medium hover:text-purple-600 transition-colors">Form</a>
+		        <a href="spin.html" class="font-medium hover:text-purple-600 transition-colors">Spin</a>
+            </div>
+            <div class="md:hidden">
+                <button class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section min-h-screen flex items-center pt-16 pb-20 px-4">
+        <!-- Bubbles Background -->
+        <div class="bubble" style="width: 100px; height: 100px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="bubble" style="width: 150px; height: 150px; top: 60%; left: 80%; animation-delay: 2s;"></div>
+        <div class="bubble" style="width: 80px; height: 80px; top: 40%; left: 30%; animation-delay: 1s;"></div>
+        <div class="bubble" style="width: 200px; height: 200px; top: 70%; left: 5%; animation-delay: 3s;"></div>
+        <div class="bubble" style="width: 120px; height: 120px; top: 10%; left: 70%; animation-delay: 2.5s;"></div>
+        
+        <!-- Hero Content -->
+        <div class="container mx-auto text-center relative z-10">
+            <h1 class="hero-title text-6xl md:text-7xl lg:text-8xl mb-8 text-white fade-in">
+                <span class="block"></span>
+                <span class="text-accent1 block mt-4" style="color: var(--accent1);">QUAF-TALENT</span>
+            </h1>
+            
+            <h2 class="text-3xl md:text-4xl text-white mb-10 fade-in delay-1">
+                Celebrating Our <span class="animated-text font-bold">1st Anniversary</span>
+            </h2>
+            
+            <p class="text-xl md:text-2xl text-white max-w-3xl mx-auto mb-12 opacity-90 fade-in delay-2">
+                Join us as we mark this momentous milestone in our journey. Together, we've grown, learned, and achieved excellence.
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6 fade-in delay-3">
+                <a href="https://quaf.vercel.app" class="btn-primary py-3 px-8 rounded-full text-lg font-bold inline-block">
+                    <i class="fas fa-book mr-2"></i> Talent Show
+                </a>
+                <a href="#countdown" class="btn-secondary py-3 px-8 rounded-full text-lg font-bold inline-block">
+                    <i class="fas fa-clock mr-2"></i> View Countdown
+                </a>
+            </div>
+        </div>
+        </div>
+    </section>
+
+  
+    <!-- Countdown Section -->
+    <section id="countdown" class="py-20 px-4" style="background-color: var(--accent3);">
+        <div class="container mx-auto text-center">
+            <h2 class="section-title text-4xl md:text-5xl text-white mb-16 fade-in">Countdown to the Big Day</h2>
+            
+            <div class="fade-in delay-1">
+                <div class="countdown-container p-8 md:p-12 mx-auto max-w-4xl">
+                    <h3 class="text-3xl text-white mb-10">May 1, 2026</h3>
+                    
+                    <div class="flex justify-center flex-wrap gap-6">
+                        <div class="countdown-box w-32 h-32 flex flex-col justify-center items-center">
+                            <span id="days" class="text-4xl font-bold" style="color: var(--primary);">-</span>
+                            <span class="text-lg mt-2">Days</span>
+                        </div>
+                        <div class="countdown-box w-32 h-32 flex flex-col justify-center items-center">
+                            <span id="hours" class="text-4xl font-bold" style="color: var(--secondary);">-</span>
+                            <span class="text-lg mt-2">Hours</span>
+                        </div>
+                        <div class="countdown-box w-32 h-32 flex flex-col justify-center items-center">
+                            <span id="minutes" class="text-4xl font-bold" style="color: var(--accent2);">-</span>
+                            <span class="text-lg mt-2">Minutes</span>
+                        </div>
+                        <div class="countdown-box w-32 h-32 flex flex-col justify-center items-center">
+                            <span id="seconds" class="text-4xl font-bold" style="color: var(--accent1);">-</span>
+                            <span class="text-lg mt-2">Seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 fade-in delay-2">
+                <p class="text-white text-xl max-w-2xl mx-auto mb-8">
+                    Our 2nd Anniversary in May 1 2026, Stay tuned...
+                </p>
+                <button class="btn-primary py-3 px-8 rounded-full text-lg font-bold">
+                    <i class="far fa-calendar-alt mr-2"></i> Add to Calendar
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer py-12 px-4 text-white">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="text-3xl font-bold mb-6">
+                        <span style="color: blue;">QUAF</span><span style="color: var(--secondary);"></span><span style="color: var(--accent1);"></span>
+                    </div>
+                    <p class="text-gray-300">
+                        Qualitative Union For Academic Focus
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Programs</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Events</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-xl font-bold mb-6">Connect With Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2025-26 Quaf. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- JavaScript -->
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date("May 1, 2026 00:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                const navHeight = document.querySelector('nav').offsetHeight;
+                
+                window.scrollTo({
+                    top: target.offsetTop - navHeight,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Intersection Observer for fade animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+        
+        // Confetti animation
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#6a0dad', '#1a535c'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.animationDuration = Math.random() * 3 + 3 + 's';
+                container.appendChild(confetti);
+            }
+        }
+        
+        // Create confetti when page loads
+        window.addEventListener('load', createConfetti);
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.fa-bars');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                const mobileMenu = document.createElement('div');
+                mobileMenu.className = 'fixed inset-0 bg-white z-50 flex flex-col items-center justify-center';
+                mobileMenu.innerHTML = `
+                    <button class="absolute top-4 right-6 text-3xl">&times;</button>
+                    <div class="flex flex-col space-y-6 text-xl">
+                        <a href="index.html" class="font-medium hover:text-purple-600 transition-colors">Home</a>
+                        <a href="library.html" class="font-medium hover:text-purple-600 transition-colors">Library</a>
+                        <a href="celebration.html" class="font-medium hover:text-purple-600 transition-colors">Celebrate</a>
+                        <a href="committee.html" class="font-medium hover:text-purple-600 transition-colors">Committee</a>
+                        <a href="students.html" class="font-medium hover:text-purple-600 transition-colors">Results</a>
+                        <a href="data.html" class="font-medium hover:text-purple-600 transition-colors">Data</a>
+                        <a href="id.html" class="font-medium hover:text-purple-600 transition-colors">ID Card</a>
+			<a href="form.html" class="font-medium hover:text-purple-600 transition-colors">Form</a>
+                    </div>
+                `;
+                document.body.appendChild(mobileMenu);
+                
+                // Close menu functionality
+                const closeButton = mobileMenu.querySelector('button');
+                closeButton.addEventListener('click', () => {
+                    document.body.removeChild(mobileMenu);
+                });
+                
+                // Close menu when clicking a link
+                const links = mobileMenu.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                        document.body.removeChild(mobileMenu);
+                    });
+                });
+            });
+        }
+        
+        // Create sparkles for the preloader
+        const preloader = document.getElementById('preloader');
+        const content = document.getElementById('content');
+        
+        // Create dynamic sparkles
+        function createSparkles() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.classList.add('sparkle');
+                    
+                    // Random position
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    
+                    sparkle.style.left = `${x}px`;
+                    sparkle.style.top = `${y}px`;
+                    
+                    // Random delay and duration
+                    const delay = Math.random() * 3;
+                    const duration = 0.5 + Math.random() * 1;
+                    
+                    sparkle.style.animation = `sparkleAnimation ${duration}s ease-in-out ${delay}s`;
+                    
+                    preloader.appendChild(sparkle);
+                    
+                    // Remove sparkle after animation
+                    setTimeout(() => {
+                        preloader.removeChild(sparkle);
+                    }, (delay + duration) * 1000);
+                }, i * 150);
+            }
+        }
+        
+        // Call sparkle creation
+        createSparkles();
+        setInterval(createSparkles, 3000);
+        
+        // Hide preloader after loading
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                content.style.opacity = '1';
+                
+                // After fade out, hide preloader completely and allow scrolling
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    
+                    // Move all original content into the content div
+                    const originalContent = Array.from(document.body.children).filter(child => 
+                        child !== preloader && child !== content && child.tagName !== 'SCRIPT');
+                    
+                    originalContent.forEach(element => {
+                        content.appendChild(element);
+                    });
+                }, 1000);
+            }, 3000); // Show preloader for 3 seconds
+        });
+        
+        // If load event already fired, handle manually
+        if (document.readyState === 'complete') {
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                content.style.opacity = '1';
+                
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    
+                    // Move all original content into the content div
+                    const originalContent = Array.from(document.body.children).filter(child => 
+                        child !== preloader && child !== content && child.tagName !== 'SCRIPT');
+                    
+                    originalContent.forEach(element => {
+                        content.appendChild(element);
+                    });
+                }, 1000);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
