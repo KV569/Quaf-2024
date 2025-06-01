@@ -3,72 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="form.css">
+    <title>Student Details Collection Form - Islamic Design</title>
+    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>Details-collection</title>
-</head>
-<body>
     
-    <div class="container">
+    <style>
+        body {
+            font-family: 'Noto Sans Arabic', 'Amiri', sans-serif;
+            background: linear-gradient(135deg, #0f4c3a 0%, #2d5aa0 50%, #0f4c3a 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
         
-        <div style="text-align:center">
-          <h2>CONTACT-FORM</h2>
-          <p>Details Collection Of Students 2025-26</p>
+        .islamic-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(255,215,0,0.1) 2%, transparent 3%),
+                radial-gradient(circle at 75% 75%, rgba(255,215,0,0.1) 2%, transparent 3%),
+                radial-gradient(circle at 75% 25%, rgba(255,255,255,0.05) 1%, transparent 2%),
+                radial-gradient(circle at 25% 75%, rgba(255,255,255,0.05) 1%, transparent 2%);
+            background-size: 40px 40px;
+        }
+        
+        .geometric-border {
+            border: 3px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                       linear-gradient(45deg, #d4af37, #ffd700, #d4af37) border-box;
+            border-radius: 15px;
+        }
+        
+        .form-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input-field:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.4);
+        }
+        
+        .header-decoration {
+            background: linear-gradient(135deg, #0f4c3a, #2d5aa0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .star-pattern {
+            position: relative;
+        }
+        
+        .star-pattern::before {
+            content: "✦";
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 1.2em;
+        }
+        
+        .star-pattern::after {
+            content: "✦";
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 1.2em;
+        }
+        
+        .islamic-ornament {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            width: 80px;
+            height: 3px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .islamic-ornament::before,
+        .islamic-ornament::after {
+            content: "";
+            position: absolute;
+            top: -8px;
+            width: 15px;
+            height: 15px;
+            background: #d4af37;
+            border-radius: 50%;
+        }
+        
+        .islamic-ornament::before {
+            left: -10px;
+        }
+        
+        .islamic-ornament::after {
+            right: -10px;
+        }
+
+        /* Success Modal Styles */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .success-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #d4af37);
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #16a085;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #d4af37;
+        }
+
+        .arabic-blessing {
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            color: #2d5aa0;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .confirmation-details {
+            background: rgba(212, 175, 55, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #d4af37;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-50px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .decorative-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #d4af37, transparent);
+            margin: 15px auto;
+        }
+        
+        @media print {
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .form-container {
+                box-shadow: none !important;
+                background: white !important;
+            }
+
+            .success-modal {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="islamic-pattern">
+    <!-- Success Modal -->
+    <div id="successModal" class="success-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-star text-yellow-500 mr-2"></i>
+                Form Submitted Successfully!
+                <i class="fas fa-star text-yellow-500 ml-2"></i>
+            </h2>
+            
+            <div class="decorative-line"></div>
+            
+            <div class="arabic-blessing">
+                بارك الله فيك وجزاك الله خيراً
+                <br>
+                <span class="text-sm text-gray-600">(May Allah bless you and reward you with good)</span>
+            </div>
+            
+            <div class="confirmation-details">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                    <i class="fas fa-clipboard-check text-green-600 mr-2"></i>
+                    Confirmation Details
+                </h3>
+                <div class="text-left space-y-2">
+                    <p><i class="fas fa-calendar-alt text-blue-500 mr-2"></i><strong>Submitted:</strong> <span id="submissionTime"></span></p>
+                    <p><i class="fas fa-graduation-cap text-purple-500 mr-2"></i><strong>Academic Year:</strong> 2025-26</p>
+                    <p><i class="fas fa-shield-alt text-green-500 mr-2"></i><strong>Status:</strong> Successfully Recorded</p>
+                    <p><i class="fas fa-database text-indigo-500 mr-2"></i><strong>Reference:</strong> #STU-<span id="referenceNumber"></span></p>
+                </div>
+            </div>
+            
+            <div class="text-gray-600 text-sm mb-4">
+                <i class="fas fa-info-circle mr-2"></i>
+                Your details have been securely saved in our database. 
+                You will receive a confirmation email shortly.
+            </div>
+            
+            <div class="flex justify-center items-center space-x-4 mb-4">
+                <i class="fas fa-mosque text-blue-600"></i>
+                <i class="fas fa-star text-yellow-500"></i>
+                <i class="fas fa-crescent-moon text-green-600"></i>
+                <i class="fas fa-star text-yellow-500"></i>
+                <i class="fas fa-book text-purple-600"></i>
+            </div>
+            
+            <button onclick="closeModal()" class="bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-3 rounded-full font-semibold hover:from-blue-700 hover:to-green-700 transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-check mr-2"></i>
+                Continue
+            </button>
         </div>
-        <div class="row">
-          
-          <div class="column">
-            <form id="submit-form" action="">
-              <label for="fname">Name</label>
-              <input type="text" id="fname" name="name" placeholder="Your name.." required="">
-              
-              <label for="lname">Ad:no</label>
-              <input type="number" id="lname" name="ad:no" placeholder="admission no..." required="">
-              
-              <label for="gmail">Gmail</label>
-              <input type="email" id="gmail" name="gmail" placeholder="gmail address..." required="">
-              
-              <label for="class">Class</label>
-              <select id="class" name="class" required="">
-              	<option value="">select you're class</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                 <option value="6">6</option>
-                 <option value="7">7</option>
-                 <option value="8">8</option>
-                 <option value="9">9</option>
-                 <option value="10">10</option>
-               </select>
-                
-              <label for="subject">Comments</label>
-              <textarea id="subject" name="message" placeholder="Write you're comments..." style="height:70px"></textarea>
-              <input type="submit" value="Submit">  	
+    </div>
+
+    <div class="container mx-auto px-4 max-w-4xl">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <div class="inline-block mb-4">
+                <i class="fas fa-mosque text-6xl text-yellow-500 mb-4"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold header-decoration mb-4 star-pattern relative">
+                CONTACT FORM
+            </h1>
+            <div class="islamic-ornament mb-4"></div>
+            <p class="text-xl text-gray-700 font-semibold">
+                <i class="fas fa-graduation-cap text-blue-600 mr-2"></i>
+                Details Collection Of Students 2025-26
+            </p>
+            <div class="flex justify-center items-center space-x-4 mt-4">
+                <i class="fas fa-star text-yellow-500"></i>
+                <i class="fas fa-crescent-moon text-blue-600"></i>
+                <i class="fas fa-star text-yellow-500"></i>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-container geometric-border rounded-2xl p-8 md:p-12">
+            <form id="submit-form" action="" class="space-y-6">
+                <!-- Name Field -->
+                <div class="relative">
+                    <label for="fname" class="block text-lg font-semibold text-gray-800 mb-3">
+                        <i class="fas fa-user text-blue-600 mr-2"></i>
+                        Student Name
+                    </label>
+                    <input type="text" 
+                           id="fname" 
+                           name="name" 
+                           placeholder="Enter your full name..." 
+                           required
+                           class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none">
+                </div>
+
+                <!-- Admission Number Field -->
+                <div class="relative">
+                    <label for="lname" class="block text-lg font-semibold text-gray-800 mb-3">
+                        <i class="fas fa-id-card text-green-600 mr-2"></i>
+                        Admission Number
+                    </label>
+                    <input type="number" 
+                           id="lname" 
+                           name="ad:no" 
+                           placeholder="Enter admission number..." 
+                           required
+                           class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none">
+                </div>
+
+                <!-- Email Field -->
+                <div class="relative">
+                    <label for="gmail" class="block text-lg font-semibold text-gray-800 mb-3">
+                        <i class="fas fa-envelope text-red-500 mr-2"></i>
+                        Email Address
+                    </label>
+                    <input type="email" 
+                           id="gmail" 
+                           name="gmail" 
+                           placeholder="Enter your email address..." 
+                           required
+                           class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none">
+                </div>
+
+                <!-- Class Field -->
+                <div class="relative">
+                    <label for="class" class="block text-lg font-semibold text-gray-800 mb-3">
+                        <i class="fas fa-chalkboard-teacher text-purple-600 mr-2"></i>
+                        Class
+                    </label>
+                    <select id="class" 
+                            name="class" 
+                            required
+                            class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none cursor-pointer">
+                        <option value="">Select your class</option>
+                        <option value="1">Class 1</option>
+                        <option value="2">Class 2</option>
+                        <option value="3">Class 3</option>
+                        <option value="4">Class 4</option>
+                        <option value="5">Class 5</option>
+                        <option value="6">Class 6</option>
+                        <option value="7">Class 7</option>
+                        <option value="8">Class 8</option>
+                        <option value="9">Class 9</option>
+                        <option value="10">Class 10</option>
+                    </select>
+                </div>
+
+                <!-- Comments Field -->
+                <div class="relative">
+                    <label for="subject" class="block text-lg font-semibold text-gray-800 mb-3">
+                        <i class="fas fa-comment-alt text-indigo-600 mr-2"></i>
+                        Comments
+                    </label>
+                    <textarea id="subject" 
+                              name="message" 
+                              placeholder="Write your comments here..." 
+                              rows="5"
+                              class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none resize-none"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center pt-6">
+                    <button type="submit" 
+                            class="submit-btn text-white text-xl font-bold py-4 px-12 rounded-full border-none cursor-pointer inline-flex items-center justify-center space-x-3">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Submit Form</span>
+                        <i class="fas fa-check-circle"></i>
+                    </button>
+                </div>
             </form>
-          </div>
         </div>
-      </div>
-      </div>
-      <script>
-        $("#submit-form").submit((e)=>{
-            e.preventDefault()
+
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <div class="flex justify-center items-center space-x-4 text-white">
+                <i class="fas fa-star text-yellow-400"></i>
+                <span class="text-lg font-semibold">Academic Year 2025-26</span>
+                <i class="fas fa-star text-yellow-400"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateReferenceNumber() {
+            const date = new Date();
+            const year = date.getFullYear().toString().substr(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+            return year + month + random;
+        }
+
+        function getCurrentDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            return now.toLocaleDateString('en-US', options);
+        }
+
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            const submissionTime = document.getElementById('submissionTime');
+            const referenceNumber = document.getElementById('referenceNumber');
+            
+            submissionTime.textContent = getCurrentDateTime();
+            referenceNumber.textContent = generateReferenceNumber();
+            
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        $("#submit-form").submit((e) => {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = $('button[type="submit"]');
+            const originalText = submitBtn.html();
+            submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Submitting...');
+            submitBtn.prop('disabled', true);
+            
             $.ajax({
-                url:"https://script.google.com/macros/s/AKfycbypAnPlHnM2aUBIvA7BGrdZ-a7us_ZA6c4vy7J_kYhxyDZW65LFNHXu7Rx2ILECruWL/exec",
-                data:$("#submit-form").serialize(),
-                method:"post",
-                success:function (response){
-                    alert("Form submitted successfully")
-                    window.location.reload()
-                    //window.location.href="https://google.com"
+                url: "https://script.google.com/macros/s/AKfycbypAnPlHnM2aUBIvA7BGrdZ-a7us_ZA6c4vy7J_kYhxyDZW65LFNHXu7Rx2ILECruWL/exec",
+                data: $("#submit-form").serialize(),
+                method: "post",
+                success: function (response) {
+                    showSuccessModal();
+                    submitBtn.html(originalText);
+                    submitBtn.prop('disabled', false);
                 },
-                error:function (err){
-                    alert("Something Error")
-    
+                error: function (err) {
+                    alert("Something went wrong. Please try again.");
+                    submitBtn.html(originalText);
+                    submitBtn.prop('disabled', false);
                 }
-            })
-        })
+            });
+        });
+
+        // Add smooth focus transitions
+        $('.input-field').focus(function() {
+            $(this).closest('div').addClass('transform scale-105');
+        }).blur(function() {
+            $(this).closest('div').removeClass('transform scale-105');
+        });
     </script>
 </body>
 </html>
