@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAF PROGRAM RESULTS</title>
+    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Arabic:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Roboto', 'Noto Sans Arabic', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .logo-img {
+            height: 100px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .page-container {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 40px 20px;
+        }
+        
+        .form-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            overflow: hidden;
+        }
+        
+        .form-header {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+            border: 2px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .input-field:focus {
+            border-color: #203864;
+            box-shadow: 0 0 0 3px rgba(32, 56, 100, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(32, 56, 100, 0.2);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(32, 56, 100, 0.3);
+        }
+        
+        .accent-border {
+            border-left: 4px solid #0f4c3a;
+            padding-left: 15px;
+        }
+
+        /* Success Modal Styles */
+        .success-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .success-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #16a085;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #203864;
+        }
+
+        .arabic-blessing {
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            color: #2d5aa0;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .confirmation-details {
+            background: rgba(15, 76, 58, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #0f4c3a;
+        }
+
+        .decorative-line {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #0f4c3a, #203864);
+            margin: 15px auto;
+        }
+        
+        .nav-link {
+            position: relative;
+            color: white;
+            transition: all 0.3s ease;
+            padding: 15px 20px;
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 5px;
+            left: 50%;
+            background: white;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-link:hover:after {
+            width: 80%;
+        }
+        
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link.active:after {
+            width: 80%;
+        }
+        
+        .academic-badge {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-footer {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Results Section Styles */
+        .results-container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .results-header {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .leaderboard {
+            padding: 20px;
+        }
+        
+        .student-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .student-row:hover {
+            background: rgba(15, 76, 58, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .student-rank {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #203864;
+            min-width: 40px;
+        }
+        
+        .student-name {
+            flex-grow: 1;
+            margin-left: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .student-points {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0f4c3a;
+            background: rgba(15, 76, 58, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .rank-1 {
+            border-left-color: #ffd700;
+            background: linear-gradient(135deg, #fff9e6, #f8f9fa);
+        }
+        
+        .rank-2 {
+            border-left-color: #c0c0c0;
+            background: linear-gradient(135deg, #f5f5f5, #f8f9fa);
+        }
+        
+        .rank-3 {
+            border-left-color: #cd7f32;
+            background: linear-gradient(135deg, #faf5f0, #f8f9fa);
+        }
+        
+        .medal-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .gold-medal {
+            color: #ffd700;
+        }
+        
+        .silver-medal {
+            color: #c0c0c0;
+        }
+        
+        .bronze-medal {
+            color: #cd7f32;
+        }
+        
+        /* Page Section Visibility */
+        .page-section {
+            display: none;
+        }
+        
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f5f7fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .search-input {
+            padding: 10px 15px;
+            border-radius: 25px;
+            border: 2px solid #e2e8f0;
+            width: 100%;
+            max-width: 400px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            padding-left: 40px;
+        }
+        
+        .search-input:focus {
+            border-color: #0f4c3a;
+            box-shadow: 0 0 0 3px rgba(15, 76, 58, 0.1);
+            outline: none;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+        
+        .search-wrapper {
+            position: relative;
+            flex-grow: 1;
+            max-width: 400px;
+        }
+
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e0e0e0;
+            border-top: 2px solid #0f4c3a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(90deg, #0f4c3a 0%, #203864 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .last-updated {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(-50px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: #0f4c3a;
+                padding: 10px 0;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+            }
+            
+            .nav-menu.show {
+                display: block;
+            }
+            
+            .nav-menu .nav-link {
+                display: block;
+                padding: 12px 20px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .nav-toggle {
+                display: block !important;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-wrapper {
+                max-width: 100%;
+            }
+            
+            .student-row {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .student-name {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <h1 class="text-xl font-bold text-white">QUAF</h1>
+                    <span class="academic-badge ml-3">2025-26</span>
+                </div>
+                
+                <button class="nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="nav-menu flex space-x-2">
+                    <a class="nav-link active" onclick="showSection('home')">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a class="nav-link" onclick="showSection('results')">
+                        <i class="fas fa-trophy mr-2"></i>Results
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="success-modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-star text-yellow-500 mr-2"></i>
+                Form Submitted Successfully!
+                <i class="fas fa-star text-yellow-500 ml-2"></i>
+            </h2>
+            
+            <div class="decorative-line"></div>
+            
+            <div class="arabic-blessing">
+                بارك الله فيك وجزاك الله خيراً
+                <br>
+                <span class="text-sm text-gray-600">(May Allah bless you and reward you with good)</span>
+            </div>
+            
+            <div class="confirmation-details">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                    <i class="fas fa-clipboard-check text-green-600 mr-2"></i>
+                    Confirmation Details
+                </h3>
+                <div class="text-left space-y-2">
+                    <p><i class="fas fa-calendar-alt text-blue-500 mr-2"></i><strong>Submitted:</strong> <span id="submissionTime"></span></p>
+                    <p><i class="fas fa-graduation-cap text-purple-500 mr-2"></i><strong>Academic Year:</strong> 2025-26</p>
+                    <p><i class="fas fa-shield-alt text-green-500 mr-2"></i><strong>Status:</strong> Successfully Recorded</p>
+                    <p><i class="fas fa-database text-indigo-500 mr-2"></i><strong>Reference:</strong> #STU-<span id="referenceNumber"></span></p>
+                </div>
+            </div>
+            
+            <div class="text-gray-600 text-sm mb-4">
+                <i class="fas fa-info-circle mr-2"></i>
+                Your details have been securely saved in our database. 
+                You will receive a confirmation email shortly.
+            </div>
+            
+            <div class="flex justify-center items-center space-x-4 mb-4">
+                <i class="fas fa-mosque text-blue-600"></i>
+                <i class="fas fa-star text-yellow-500"></i>
+                <i class="fas fa-crescent-moon text-green-600"></i>
+                <i class="fas fa-star text-yellow-500"></i>
+                <i class="fas fa-book text-purple-600"></i>
+            </div>
+            
+            <button onclick="closeModal()" class="bg-gradient-to-r from-blue-600 to-green-600 text-white px-8 py-3 rounded-full font-semibold hover:from-blue-700 hover:to-green-700 transition-all duration-300 transform hover:scale-105">
+                <i class="fas fa-check mr-2"></i>
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- Home Page Content -->
+    <div id="home-section" class="page-section active">
+        <div class="page-container">
+            <div class="container mx-auto max-w-4xl">
+                <!-- Header Section -->
+                <div class="text-center mb-8">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-4">QUAF PROGRAM RESULTS 2023-24</h1>
+                    
+                </div>
+
+                <!-- Form Section -->
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="text-2xl font-semibold text-white">Result Submission Form</h2>
+                    </div>
+                    
+                    <form id="submit-form" action="" class="p-8 space-y-6">
+                        <!-- Program Field -->
+                        <div class="relative">
+                            <label for="program" class="block text-lg font-semibold text-gray-800 mb-3 accent-border">
+                               Program
+                            </label>
+                            <input type="text" 
+                                id="program" 
+                                name="program" 
+                                placeholder="Enter program name..." 
+                                required
+                                class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none">
+                        </div>
+                            
+                         <!-- Student Name Field -->
+                        <div class="relative">
+                            <label for="name" class="block text-lg font-semibold text-gray-800 mb-3 accent-border">
+                                Student Name
+                            </label>
+                            <select id="name" 
+                                    name="name" 
+                                    required
+                                    class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none cursor-pointer">
+                                <option value="">Select Student</option>
+                                <option value="MUHAMMED FAHEEM NP">MUHAMMED FAHEEM NP</option>
+                                <option value="MUHAMMED YASEEN K">MUHAMMED YASEEN K</option>
+                                <option value="MUHAMMED LASIN KC">MUHAMMED LASIN KC</option>
+                                <option value="MOHAMMED HADI V">MOHAMMED HADI V</option>
+                                <option value="MUHAMMED HAYYAN VP">MUHAMMED HAYYAN VP</option>
+                                <option value="MUHAMMED ZIYAD C">MUHAMMED ZIYAD C</option>
+                                <option value="MUHAMMED SHAHAL">MUHAMMED SHAHAL</option>
+                                <option value="AQIB MUHAMMED KT">AQIB MUHAMMED KT</option>
+                                <option value="MUHAMMED RABEEH PP">MUHAMMED RABEEH PP</option>
+                                <option value="MUHAMMED SHAFEEQUE T">MUHAMMED SHAFEEQUE T</option>
+                                <option value="MUHAMMED QASIM MP">MUHAMMED QASIM MP</option>
+                                <option value="MUHAMMED HASHIM V">MUHAMMED HASHIM V</option>
+                                <option value="ALI RAFI EP">ALI RAFI EP</option>
+                                <option value="MUHAMMED SINAN CK">MUHAMMED SINAN CK</option>
+                                <option value="HAMDAN CC">HAMDAN CC</option>
+                                <option value="MUHAMMED ALI M">MUHAMMED ALI M</option>
+                                <option value="MUHAMMED SHAFAN A">MUHAMMED SHAFAN A</option>
+                                <option value="MUHAMMED ANSHAD VP">MUHAMMED ANSHAD VP</option>
+                                <option value="HISHAM RAHMATHULLAH O">HISHAM RAHMATHULLAH O</option>
+                                <option value="SAHL SHAN O">SAHL SHAN O</option>
+                                <option value="SADHAQATHULLA C">SADHAQATHULLA C</option>
+                                <option value="MUHAMMED SAHL">MUHAMMED SAHL</option>
+                                <option value="MUHAMMED HASHIM KH">MUHAMMED HASHIM KH</option>
+                                <option value="MISHAB PT">MISHAB PT</option>
+                                <option value="MUHAMMED RASIN KP">MUHAMMED RASIN KP</option>
+                                <option value="MUHAMMED ASLAM">MUHAMMED ASLAM</option>
+                                <option value="MUHAMMED MUSTHAFA SM">MUHAMMED MUSTHAFA SM</option>
+                                <option value="MUHAMMED SHAFIN">MUHAMMED SHAFIN</option>
+                                <option value="MUHAMMED RAMEES VP">MUHAMMED RAMEES VP</option>
+                                <option value="ABDAUL HADI">ABDAUL HADI</option>
+                            </select>
+                        </div>    
+                        
+                        <!-- first Prize Field -->
+                        <div class="relative">
+                            <label for="first" class="block text-lg font-semibold text-gray-800 mb-3 accent-border">
+                                First
+                            </label>
+                            <select id="first" 
+                                    name="first" 
+                                    required
+                                    class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none cursor-pointer">
+                                <option value="0">Select Position</option>
+                                <option value="3">First Prize</option>
+                                
+                            </select>
+                        </div>    
+                        
+                        <!--second Prize Field -->
+                        <div class="relative">
+                            <label for="second" class="block text-lg font-semibold text-gray-800 mb-3 accent-border">
+                                Second
+                            </label>
+                            <select id="second" 
+                                    name="second" 
+                                    required
+                                    class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none cursor-pointer">
+                                <option value="0">Select Position</option>
+                                <option value="2">Second Prize</option>
+                                
+                            </select>
+                        </div>    
+                        
+                        <!-- third Prize Field -->
+                        <div class="relative">
+                            <label for="third" class="block text-lg font-semibold text-gray-800 mb-3 accent-border">
+                                Third
+                            </label>
+                            <select id="third" 
+                                    name="third" 
+                                    required
+                                    class="input-field w-full px-4 py-4 text-lg rounded-lg focus:outline-none cursor-pointer">
+                                <option value="0">Select Position</option>
+                                <option value="1">Third Prize</option>
+                                
+                            </select>
+                        </div>    
+
+                        <!-- Submit Button -->
+                        <div class="text-center pt-6">
+                            <button type="submit" 
+                                    class="submit-btn text-white text-lg font-bold py-4 px-12 rounded-md border-none cursor-pointer inline-flex items-center justify-center">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                <span>Submit Result</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                
+
+                <!-- Results Container -->
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            Current Standings
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">Auto-updating leaderboard based on program results</p>
+                    </div>
+                    
+                    <!-- Search Container -->
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" 
+                                   id="studentSearch" 
+                                   class="search-input" 
+                                   placeholder="Search students by name..."
+                                   onkeyup="filterStudents()">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="totalStudents">30</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchStudentData()">
+                                <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="lastUpdated"></div>
+                    </div>
+                    
+                    <!-- Leaderboard -->
+                    <div class="leaderboard" id="leaderboard">
+                        <!-- Students will be populated here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="page-footer">
+        <div class="container mx-auto">
+            <div class="flex justify-center items-center space-x-4">
+                <span class="text-lg font-semibold">QUAF PROGRAM RESULTS 2025-26</span>
+            </div>
+            <div class="text-sm mt-2 opacity-80">
+                Auto-updating results system
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let studentsData = [];
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1319039496&single=true&output=csv';
+
+        // Fetch student data from Google Sheets CSV
+        async function fetchStudentData() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            const leaderboard = document.getElementById('leaderboard');
+            
+            // Show loading state
+            refreshIcon.classList.add('fa-spin');
+            leaderboard.innerHTML = `
+                <div class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    Fetching latest results...
+                </div>
+            `;
+            
+            try {
+                // Use a proxy service to handle CORS for CSV requests
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                const response = await fetch(proxyUrl + csvUrl);
+                
+                if (!response.ok) {
+                    // Fallback: try direct request
+                    const directResponse = await fetch(csvUrl);
+                    if (!directResponse.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+                    const csvText = await directResponse.text();
+                    parseCSVData(csvText);
+                } else {
+                    const csvText = await response.text();
+                    parseCSVData(csvText);
+                }
+            } catch (error) {
+                console.log('CORS error, using JSONPlaceholder proxy alternative...');
+                
+                // Alternative approach: Use a simple fetch with error handling
+                try {
+                    const response = await fetch(csvUrl, {
+                        mode: 'no-cors'
+                    });
+                    // For no-cors, we can't read the response, so use fallback data
+                    useLocalFallbackData();
+                } catch (secondError) {
+                    console.log('Using local fallback data...');
+                    useLocalFallbackData();
+                }
+            }
+            
+            // Stop loading animation
+            refreshIcon.classList.remove('fa-spin');
+            updateLastUpdatedTime();
+        }
+
+        // Parse CSV data and update students array
+        function parseCSVData(csvText) {
+            const lines = csvText.trim().split('\n');
+            const data = [];
+            
+            // Skip header line and process data
+            for (let i = 1; i < lines.length; i++) {
+                const columns = lines[i].split(',');
+                if (columns.length >= 4) {
+                    const name = columns[2].trim();
+                    const points = parseInt(columns[3]) || 0;
+                    
+                    if (name && name !== 'name') {
+                        data.push({
+                            name: name,
+                            points: points
+                        });
+                    }
+                }
+            }
+            
+            if (data.length > 0) {
+                studentsData = data;
+                console.log('Successfully loaded', data.length, 'students from CSV');
+            } else {
+                console.log('No valid data found in CSV, using fallback');
+                useLocalFallbackData();
+            }
+            
+            generateLeaderboard();
+        }
+
+        // Fallback data when CSV fetch fails
+        function useLocalFallbackData() {
+            studentsData = [
+                {name: "MUHAMMED FAHEEM NP", points: 0},
+                {name: "MUHAMMED YASEEN K", points: 0},
+                {name: "MUHAMMED LASIN KC", points: 0},
+                {name: "MOHAMMED HADI V", points: 0},
+                {name: "MUHAMMED HAYYAN VP", points: 0},
+                {name: "MUHAMMED ZIYAD C", points: 0},
+                {name: "MUHAMMED SHAHAL", points: 0},
+                {name: "AQIB MUHAMMED KT", points: 0},
+                {name: "MUHAMMED RABEEH PP", points: 0},
+                {name: "MUHAMMED SHAFEEQUE T", points: 0},
+                {name: "MUHAMMED QASIM MP", points: 0},
+                {name: "MUHAMMED HASHIM V", points: 0},
+                {name: "ALI RAFI EP", points: 0},
+                {name: "MUHAMMED SINAN CK", points: 0},
+                {name: "HAMDAN CC", points: 0},
+                {name: "MUHAMMED ALI M", points: 0},
+                {name: "MUHAMMED SHAFAN A", points: 0},
+                {name: "MUHAMMED ANSHAD VP", points: 0},
+                {name: "HISHAM RAHMATHULLAH O", points: 0},
+                {name: "SAHL SHAN O", points: 0},
+                {name: "SADHAQATHULLA C", points: 0},
+                {name: "MUHAMMED SAHL", points: 0},
+                {name: "MUHAMMED HASHIM KH", points: 0},
+                {name: "MISHAB PT", points: 0},
+                {name: "MUHAMMED RASIN KP", points: 0},
+                {name: "MUHAMMED ASLAM", points: 0},
+                {name: "MUHAMMED MUSTHAFA SM", points: 0},
+                {name: "MUHAMMED SHAFIN", points: 0},
+                {name: "MUHAMMED RAMEES VP", points: 0},
+                {name: "ABDAUL HADI", points: 0}
+            ];
+            generateLeaderboard();
+        }
+
+        // Update last updated time
+        function updateLastUpdatedTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('lastUpdated').textContent = `Last updated: ${timeString}`;
+        }
+
+        // Sort students by points (highest first)
+        function sortStudentsByPoints() {
+            return [...studentsData].sort((a, b) => b.points - a.points);
+        }
+
+        // Generate leaderboard HTML
+        function generateLeaderboard(students = null) {
+            const sortedStudents = students || sortStudentsByPoints();
+            const leaderboard = document.getElementById('leaderboard');
+            
+            if (sortedStudents.length === 0) {
+                leaderboard.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-exclamation-circle text-4xl mb-4"></i>
+                        <p>No student data available</p>
+                        <button class="refresh-btn mt-4" onclick="fetchStudentData()">
+                            <i class="fas fa-refresh mr-2"></i>
+                            Try Again
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            sortedStudents.forEach((student, index) => {
+                const rank = index + 1;
+                let rankClass = '';
+                let medalIcon = '';
+                
+                if (rank === 1) {
+                    rankClass = 'rank-1';
+                    medalIcon = '<i class="fas fa-medal gold-medal medal-icon"></i>';
+                } else if (rank === 2) {
+                    rankClass = 'rank-2';
+                    medalIcon = '<i class="fas fa-medal silver-medal medal-icon"></i>';
+                } else if (rank === 3) {
+                    rankClass = 'rank-3';
+                    medalIcon = '<i class="fas fa-medal bronze-medal medal-icon"></i>';
+                }
+                
+                html += `
+                    <div class="student-row ${rankClass}">
+                        <div class="student-rank">
+                            ${medalIcon}#${rank}
+                        </div>
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-points">${student.points} pts</div>
+                    </div>
+                `;
+            });
+            
+            leaderboard.innerHTML = html;
+        }
+
+        // Filter students based on search
+        function filterStudents() {
+            const searchTerm = document.getElementById('studentSearch').value.toLowerCase();
+            const filteredStudents = studentsData.filter(student => 
+                student.name.toLowerCase().includes(searchTerm)
+            );
+            
+            const sortedFiltered = filteredStudents.sort((a, b) => b.points - a.points);
+            generateLeaderboard(sortedFiltered);
+            document.getElementById('totalStudents').textContent = filteredStudents.length;
+        }
+
+        // Show/hide sections
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Add active class to clicked nav link
+            event.target.closest('.nav-link').classList.add('active');
+            
+            // If showing results section, fetch latest data
+            if (sectionName === 'results') {
+                fetchStudentData();
+            }
+        }
+
+        // Mobile navigation toggle
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('show');
+        });
+
+        // Modal functions
+        function generateReferenceNumber() {
+            const date = new Date();
+            const year = date.getFullYear().toString().substr(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const random = Math.floor(Math.random() * 9999).toString().padStart(4, '0');
+            return year + month + random;
+        }
+
+        function getCurrentDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit'
+            };
+            return now.toLocaleDateString('en-US', options);
+        }
+
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            const submissionTime = document.getElementById('submissionTime');
+            const referenceNumber = document.getElementById('referenceNumber');
+            
+            submissionTime.textContent = getCurrentDateTime();
+            referenceNumber.textContent = generateReferenceNumber();
+            
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Form submission
+        $("#submit-form").submit((e) => {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = $('button[type="submit"]');
+            const originalText = submitBtn.html();
+            submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Submitting...');
+            submitBtn.prop('disabled', true);
+            
+            $.ajax({
+                url: "https://script.google.com/macros/s/AKfycbypAnPlHnM2aUBIvA7BGrdZ-a7us_ZA6c4vy7J_kYhxyDZW65LFNHXu7Rx2ILECruWL/exec",
+                data: $("#submit-form").serialize(),
+                method: "post",
+                success: function (response) {
+                    showSuccessModal();
+                    submitBtn.html(originalText);
+                    submitBtn.prop('disabled', false);
+                },
+                error: function (err) {
+                    alert("Something went wrong. Please try again.");
+                    submitBtn.html(originalText);
+                    submitBtn.prop('disabled', false);
+                }
+            });
+        });
+
+        // Add smooth focus transitions
+        $('.input-field').focus(function() {
+            $(this).closest('div').addClass('transform scale-105');
+        }).blur(function() {
+            $(this).closest('div').removeClass('transform scale-105');
+        });
+
+        // Auto-refresh every 5 minutes
+        setInterval(fetchStudentData, 300000);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchStudentData();
+            updateLastUpdatedTime();
+        });
+    </script>
+</body>
+</html>
