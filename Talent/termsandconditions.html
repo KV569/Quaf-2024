@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUAF TALENT</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png">
+    <meta name="google-site-verification" content="P9BCmQCGDsbkZutfQgEIkZYmWTdu7SRtPFz4VC4HBJw" />
+    <meta name="google-site-verification" content="KPHEGiFo3K26kppXcaw64wXYqyQaL1MgUPZNPSqMzLc" />
+    <meta name="google-site-verification" content="wvAIB-6LQb0OCJBADyP_a2KfgiL58PKb6V77cc1Zpn0" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .notice-text {
+            color: #dc2626;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .btn-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-enabled {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        .btn-enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .checkbox-custom {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .checkbox-custom:checked {
+            background-color: #10b981;
+            border-color: #10b981;
+        }
+        .checkbox-custom:checked::after {
+            content: '\2713';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .list-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .list-item:hover {
+            border-left-color: #10b981;
+            background-color: #f0fdf4;
+        }
+                 /* Preloader styles */
+  #preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease-out;
+  }
+  
+  #preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .preloader-video-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .preloader-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    max-height: 100vh;
+    max-width: 100vw;
+  }
+  
+  .video-skip-button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: none;
+  }
+  
+  .video-skip-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  #main-content {
+    opacity: 0;
+    display: none;
+    transition: opacity 1s ease-in;
+  }
+  
+  #main-content.visible {
+    opacity: 1;
+    display: block;
+  }
+  
+  @media (max-width: 768px) {
+    .preloader-video {
+      object-fit: contain;
+    }
+    
+    .video-skip-button {
+      bottom: 15px;
+      right: 15px;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+	<!-- Video Preloader -->
+  <div id="preloader">
+    <div class="preloader-video-container">
+      <video class="preloader-video" id="preloader-video" playsinline controls>
+        <source src="" type="video/mp4" id="video-source">
+        Your browser does not support the video tag.
+      </video>
+      <button class="video-skip-button" id="skip-button">Skip Intro</button>
+    </div>
+  </div>
+  
+  <div id="main-content">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-3xl card-shadow overflow-hidden">
+            <!-- Header Section -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-3">
+                    <i class=""></i>QUAF TALENT
+                </h1>
+                <h2 class="text-xl md:text-2xl font-medium opacity-90">Grand Academic Competition</h2>
+            </div>
+
+            <!-- Notice Section -->
+            <div class="p-8">
+                <h3 class="text-3xl md:text-4xl font-bold text-center mb-8 notice-text">
+                    <i class="fas fa-exclamation-triangle mr-3"></i>NOTICE
+                </h3>
+
+                <!-- Competition Details -->
+                <div class="space-y-4 mb-8">
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">1</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong>16 Subjects</strong> were studied in 1st year: 
+                                <span class="text-blue-600 font-medium">(Qur'an, Hadith, Fiqh, Thareeq, Nahv, Swarf, Tasawwuf, Arabic, Urdu, Malayalam, English, Hindi, Mathematics, Social science, IT, Science)</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">2</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                Each Subject includes <strong class="text-purple-600">20 questions</strong> with <strong class="text-purple-600">3 answer options</strong>. Each correct answer carries <strong class="text-green-600">1 point</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">3</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                Maximum of <strong class="text-red-500">15 seconds</strong> is allowed to answer each question.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">4</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                Total <strong class="text-blue-600">320 questions</strong> to be completed in <strong class="text-red-500">80 Minutes</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">5</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong class="text-orange-600">Attempt all questions carefully</strong> in limited time.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">6</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong class="text-indigo-600">Recover and remind</strong> the previous learnings.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="list-item p-4 rounded-lg">
+                        <div class="flex items-start">
+                            <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-4 mt-1 flex-shrink-0">7</span>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong class="text-yellow-600">Be the champion of talent</strong> 
+                                <span class="text-sm text-gray-500">(terms and conditions apply)</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agreement Section -->
+                <div class="bg-gray-50 rounded-xl p-6 border-2 border-dashed border-gray-300">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <input type="checkbox" id="agreeCheckbox" class="checkbox-custom">
+                        <label for="agreeCheckbox" class="text-gray-700 font-medium cursor-pointer select-none">
+                            I agree to all the terms and conditions mentioned above
+                        </label>
+                    </div>
+
+                    <button 
+                        id="continueBtn" 
+                        class="w-full py-4 px-8 rounded-xl text-white font-bold text-lg btn-disabled transition-all duration-300 flex items-center justify-center space-x-3"
+                        disabled
+                    >
+                        <i class="fas fa-play-circle"></i>
+                        <span>Agree and Continue</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Competition Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600">16</div>
+                        <div class="text-sm text-gray-600">Subjects</div>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600">320</div>
+                        <div class="text-sm text-gray-600">Questions</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600">80</div>
+                        <div class="text-sm text-gray-600">Minutes</div>
+                    </div>
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <div class="text-2xl font-bold text-red-600">15</div>
+                        <div class="text-sm text-gray-600">Sec/Question</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+    <script>
+        // Function to detect if device is mobile
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        }
+
+        // Preloader and video control
+        document.addEventListener('DOMContentLoaded', function() {
+            const preloader = document.getElementById('preloader');
+            const mainContent = document.getElementById('main-content');
+            const preloaderVideo = document.getElementById('preloader-video');
+            const videoSource = document.getElementById('video-source');
+            const skipButton = document.getElementById('skip-button');
+            
+            // Set appropriate video source based on device type
+            if (isMobileDevice()) {
+                videoSource.src = 'https://quaf.netlify.app/videos/intro1.mp4';
+            } else {
+                videoSource.src = 'https://quaf.netlify.app/videos/intro2.mp4';
+            }
+            
+            // Reload the video after changing source
+            preloaderVideo.load();
+            
+            // Auto play the video
+            preloaderVideo.play().catch(err => {
+                console.log('Auto-play prevented: ', err);
+                // Show controls if autoplay is blocked
+                preloaderVideo.controls = true;
+            });
+            
+            // Skip button appears after 5 seconds
+            setTimeout(function() {
+                skipButton.style.display = 'block';
+            }, 5000);
+            
+            // Skip button functionality
+            skipButton.addEventListener('click', function() {
+                hidePreloader();
+            });
+            
+            // Only show website when video ends
+            preloaderVideo.addEventListener('ended', hidePreloader);
+            
+            function hidePreloader() {
+                preloader.classList.add('fade-out');
+                setTimeout(function() {
+                    preloader.style.display = 'none';
+                    mainContent.classList.add('visible');
+                }, 800); // Longer fade for smoother transition
+            }
+        });
+  
+        const checkbox = document.getElementById('agreeCheckbox');
+        const continueBtn = document.getElementById('continueBtn');
+        
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                continueBtn.disabled = false;
+                continueBtn.classList.remove('btn-disabled');
+                continueBtn.classList.add('btn-enabled');
+            } else {
+                continueBtn.disabled = true;
+                continueBtn.classList.add('btn-disabled');
+                continueBtn.classList.remove('btn-enabled');
+            }
+        });
+        
+        continueBtn.addEventListener('click', function() {
+            if (!this.disabled) {
+                window.location.href = 'quaftalent2025grandacademiccompetition-bethechampionoftalent320questionswith3answeroptions80minutestotaltimetocompleteit.html';
+            }
+        });
+
+        // Add some interactive animations
+        document.querySelectorAll('.list-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(10px)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body>
+</html>
