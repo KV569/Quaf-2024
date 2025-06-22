@@ -427,6 +427,63 @@
             margin-top: 5px;
         }
 
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #0f4c3a;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .dropdown-content.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .dropdown-item {
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+        }
+
+        .dropdown-item.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown.show .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -440,6 +497,17 @@
             to { 
                 opacity: 1; 
                 transform: translateY(0) scale(1); 
+            }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-10px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
             }
         }
 
@@ -474,6 +542,18 @@
                 display: block;
                 padding: 12px 20px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .nav-menu .dropdown {
+                display: block;
+            }
+            
+            .nav-menu .dropdown-content {
+                position: static;
+                display: block;
+                box-shadow: none;
+                background: rgba(0, 0, 0, 0.2);
+                margin-left: 20px;
             }
             
             .nav-toggle {
@@ -519,9 +599,30 @@
                     <a class="nav-link active" onclick="showSection('home')">
                         <i class="fas fa-home mr-2"></i>Home
                     </a>
-                    <a class="nav-link" onclick="showSection('results')">
-                        <i class="fas fa-trophy mr-2"></i>Results
+                    <a class="nav-link" onclick="showSection('total-results')">
+                        <i class="fas fa-trophy mr-2"></i>Total Results
                     </a>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" onclick="toggleDropdown(event)">
+                            <i class="fas fa-layer-group mr-2"></i>Wing Base
+                            <i class="fas fa-chevron-down dropdown-arrow ml-1"></i>
+                        </a>
+                        <div class="dropdown-content">
+                            <a class="dropdown-item" onclick="showWingSection('quaf')">QUAF</a>
+                            <a class="dropdown-item" onclick="showWingSection('qb')">QB (Publication)</a>
+                            <a class="dropdown-item" onclick="showWingSection('arb')">ARB Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('urd')">URD Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('eng')">ENG Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('mlm')">MLM Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('it')">IT Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('sigma')">SIGMA</a>
+                            <a class="dropdown-item" onclick="showWingSection('art')">ART Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('oration')">ORATION Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('gk')">GK Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('library')">LIBRARY Wing</a>
+                            <a class="dropdown-item" onclick="showWingSection('himaya')">HIMAYA</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -617,7 +718,7 @@
                         <!-- wings Name Field -->
                         <div class="relative">
                             <label for="wing" class="block text-lg font-semibold text-gray-800 mb-3 accent-border">
-                                Student Name
+                                Wing
                             </label>
                             <select id="wing" 
                                     name="wing" 
@@ -637,9 +738,6 @@
                                 <option value="GK">GK WING</option>
                                 <option value="library">LIBRARY WING</option>
                                 <option value="himaya">HIMAYA</option>
-                               
-                                
-                               
                             </select>
                         </div>    
                             
@@ -747,20 +845,17 @@
         </div>
     </div>
 
-    <!-- Results Section -->
-    <div id="results-section" class="page-section">
+    <!-- Total Results Section -->
+    <div id="total-results-section" class="page-section">
         <div class="page-container">
             <div class="container mx-auto max-w-6xl">
-                
-
-                <!-- Results Container -->
                 <div class="results-container">
                     <div class="results-header">
                         <h2 class="text-2xl font-semibold">
                             <i class="fas fa-medal mr-2"></i>
-                            Current Standings
+                            Total Results - All Wings Combined
                         </h2>
-                        <p class="text-sm mt-2 opacity-90">Auto-updating leaderboard based on program results</p>
+                        <p class="text-sm mt-2 opacity-90">Auto-updating leaderboard based on all program results</p>
                     </div>
                     
                     <!-- Search Container -->
@@ -768,28 +863,471 @@
                         <div class="search-wrapper">
                             <i class="fas fa-search search-icon"></i>
                             <input type="text" 
-                                   id="studentSearch" 
+                                   id="totalStudentSearch" 
                                    class="search-input" 
                                    placeholder="Search students by name..."
-                                   onkeyup="filterStudents()">
+                                   onkeyup="filterTotalStudents()">
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="text-sm text-gray-600">
                                 <i class="fas fa-users mr-2"></i>
-                                <span id="totalStudents">30</span> Students
+                                <span id="totalStudentsCount">30</span> Students
                             </div>
-                            <button class="refresh-btn" onclick="fetchStudentData()">
-                                <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                            <button class="refresh-btn" onclick="fetchTotalStudentData()">
+                                <i class="fas fa-sync-alt" id="totalRefreshIcon"></i>
                                 Refresh
                             </button>
                         </div>
-                        <div class="last-updated text-xs text-gray-500" id="lastUpdated"></div>
+                        <div class="last-updated text-xs text-gray-500" id="totalLastUpdated"></div>
                     </div>
                     
                     <!-- Leaderboard -->
-                    <div class="leaderboard" id="leaderboard">
+                    <div class="leaderboard" id="totalLeaderboard">
                         <!-- Students will be populated here by JavaScript -->
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wing Sections -->
+    <div id="quaf-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            QUAF Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">QUAF wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="quafStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('quaf')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="quafStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('quaf')">
+                                <i class="fas fa-sync-alt" id="quafRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="quafLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="quafLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="qb-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            QB (Publication) Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">QB Publication wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="qbStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('qb')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="qbStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('qb')">
+                                <i class="fas fa-sync-alt" id="qbRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="qbLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="qbLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="arb-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            ARB Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">ARB wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="arbStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('arb')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="arbStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('arb')">
+                                <i class="fas fa-sync-alt" id="arbRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="arbLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="arbLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="urd-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            URD Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">URD wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="urdStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('urd')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="urdStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('urd')">
+                                <i class="fas fa-sync-alt" id="urdRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="urdLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="urdLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="eng-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            ENG Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">ENG wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="engStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('eng')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="engStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('eng')">
+                                <i class="fas fa-sync-alt" id="engRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="engLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="engLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mlm-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            MLM Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">MLM wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="mlmStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('mlm')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="mlmStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('mlm')">
+                                <i class="fas fa-sync-alt" id="mlmRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="mlmLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="mlmLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="it-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            IT Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">IT wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="itStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('it')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="itStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('it')">
+                                <i class="fas fa-sync-alt" id="itRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="itLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="itLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sigma-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            SIGMA Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">SIGMA wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="sigmaStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('sigma')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="sigmaStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('sigma')">
+                                <i class="fas fa-sync-alt" id="sigmaRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="sigmaLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="sigmaLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="art-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            ART Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">ART wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="artStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('art')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="artStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('art')">
+                                <i class="fas fa-sync-alt" id="artRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="artLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="artLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="oration-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            ORATION Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">ORATION wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="orationStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('oration')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="orationStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('oration')">
+                                <i class="fas fa-sync-alt" id="orationRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="orationLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="orationLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="gk-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            GK Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">GK wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="gkStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('gk')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="gkStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('gk')">
+                                <i class="fas fa-sync-alt" id="gkRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="gkLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="gkLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="library-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            LIBRARY Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">LIBRARY wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="libraryStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('library')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="libraryStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('library')">
+                                <i class="fas fa-sync-alt" id="libraryRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="libraryLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="libraryLeaderboard"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="himaya-section" class="page-section">
+        <div class="page-container">
+            <div class="container mx-auto max-w-6xl">
+                <div class="results-container">
+                    <div class="results-header">
+                        <h2 class="text-2xl font-semibold">
+                            <i class="fas fa-medal mr-2"></i>
+                            HIMAYA Wing Results
+                        </h2>
+                        <p class="text-sm mt-2 opacity-90">HIMAYA wing program results</p>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="himayaStudentSearch" class="search-input" placeholder="Search students by name..." onkeyup="filterWingStudents('himaya')">
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-users mr-2"></i>
+                                <span id="himayaStudentsCount">0</span> Students
+                            </div>
+                            <button class="refresh-btn" onclick="fetchWingData('himaya')">
+                                <i class="fas fa-sync-alt" id="himayaRefreshIcon"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="last-updated text-xs text-gray-500" id="himayaLastUpdated"></div>
+                    </div>
+                    <div class="leaderboard" id="himayaLeaderboard"></div>
                 </div>
             </div>
         </div>
@@ -809,13 +1347,92 @@
 
     <script>
         // Global variables
-        let studentsData = [];
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1698490442&single=true&output=csv';
+        let totalStudentsData = [];
+        let wingStudentsData = {};
+        
+        // CSV URLs for each wing
+        const wingCsvUrls = {
+            total: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1698490442&single=true&output=csv',
+            quaf: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1319039496&single=true&output=csv',
+            qb: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1466160644&single=true&output=csv',
+            arb: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1509619319&single=true&output=csv',
+            urd: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=284837468&single=true&output=csv',
+            eng: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=68971992&single=true&output=csv',
+            mlm: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1295078692&single=true&output=csv',
+            it: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=642281085&single=true&output=csv',
+            sigma: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=936096580&single=true&output=csv',
+            art: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=609118784&single=true&output=csv',
+            oration: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=844439444&single=true&output=csv',
+            gk: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=1120051367&single=true&output=csv',
+            library: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=543742062&single=true&output=csv',
+            himaya: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRsquWze32h1rj7daDLhskbyfZrfLIztb6sD1rqzymZEPN2_7EqBxBO8vlcqWWnQ4PNTT-4qZRAvC2y/pub?gid=174936545&single=true&output=csv'
+        };
+
+        // Dropdown functionality
+        function toggleDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdown = event.target.closest('.dropdown');
+            const dropdownContent = dropdown.querySelector('.dropdown-content');
+            
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown-content').forEach(content => {
+                if (content !== dropdownContent) {
+                    content.classList.remove('show');
+                    content.closest('.dropdown').classList.remove('show');
+                }
+            });
+            
+            // Toggle current dropdown
+            dropdown.classList.toggle('show');
+            dropdownContent.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                    dropdown.querySelector('.dropdown-content').classList.remove('show');
+                });
+            }
+        });
+
+        // Show wing section
+        function showWingSection(wing) {
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected wing section
+            document.getElementById(wing + '-section').classList.add('active');
+            
+            // Add active class to dropdown item
+            document.querySelector(`[onclick="showWingSection('${wing}')"]`).classList.add('active');
+            
+            // Fetch wing data
+            fetchWingData(wing);
+            
+            // Close dropdown
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('show');
+                dropdown.querySelector('.dropdown-content').classList.remove('show');
+            });
+        }
 
         // Fetch student data from Google Sheets CSV
-        async function fetchStudentData() {
-            const refreshIcon = document.getElementById('refreshIcon');
-            const leaderboard = document.getElementById('leaderboard');
+        async function fetchTotalStudentData() {
+            const refreshIcon = document.getElementById('totalRefreshIcon');
+            const leaderboard = document.getElementById('totalLeaderboard');
             
             // Show loading state
             refreshIcon.classList.add('fa-spin');
@@ -827,45 +1444,56 @@
             `;
             
             try {
-                // Use a proxy service to handle CORS for CSV requests
-                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-                const response = await fetch(proxyUrl + csvUrl);
-                
+                const response = await fetch(wingCsvUrls.total);
                 if (!response.ok) {
-                    // Fallback: try direct request
-                    const directResponse = await fetch(csvUrl);
-                    if (!directResponse.ok) {
-                        throw new Error('Failed to fetch data');
-                    }
-                    const csvText = await directResponse.text();
-                    parseCSVData(csvText);
-                } else {
-                    const csvText = await response.text();
-                    parseCSVData(csvText);
+                    throw new Error('Failed to fetch data');
                 }
+                const csvText = await response.text();
+                parseTotalCSVData(csvText);
             } catch (error) {
-                console.log('CORS error, using JSONPlaceholder proxy alternative...');
-                
-                // Alternative approach: Use a simple fetch with error handling
-                try {
-                    const response = await fetch(csvUrl, {
-                        mode: 'no-cors'
-                    });
-                    // For no-cors, we can't read the response, so use fallback data
-                    useLocalFallbackData();
-                } catch (secondError) {
-                    console.log('Using local fallback data...');
-                    useLocalFallbackData();
-                }
+                console.log('Error fetching data, using fallback...');
+                useTotalFallbackData();
             }
             
             // Stop loading animation
             refreshIcon.classList.remove('fa-spin');
-            updateLastUpdatedTime();
+            updateTotalLastUpdatedTime();
+        }
+
+        // Fetch wing-specific data
+        async function fetchWingData(wing) {
+            const refreshIcon = document.getElementById(wing + 'RefreshIcon');
+            const leaderboard = document.getElementById(wing + 'Leaderboard');
+            
+            // Show loading state
+            refreshIcon.classList.add('fa-spin');
+            leaderboard.innerHTML = `
+                <div class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    Fetching ${wing.toUpperCase()} wing results...
+                </div>
+            `;
+            
+            try {
+                const csvUrl = wingCsvUrls[wing];
+                const response = await fetch(csvUrl);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const csvText = await response.text();
+                parseWingCSVData(csvText, wing);
+            } catch (error) {
+                console.log(`Error fetching ${wing} wing data, using fallback...`);
+                useWingFallbackData(wing);
+            }
+            
+            // Stop loading animation
+            refreshIcon.classList.remove('fa-spin');
+            updateWingLastUpdatedTime(wing);
         }
 
         // Parse CSV data and update students array
-        function parseCSVData(csvText) {
+        function parseTotalCSVData(csvText) {
             const lines = csvText.trim().split('\n');
             const data = [];
             
@@ -886,19 +1514,51 @@
             }
             
             if (data.length > 0) {
-                studentsData = data;
+                totalStudentsData = data;
                 console.log('Successfully loaded', data.length, 'students from CSV');
             } else {
                 console.log('No valid data found in CSV, using fallback');
-                useLocalFallbackData();
+                useTotalFallbackData();
             }
             
-            generateLeaderboard();
+            generateTotalLeaderboard();
+        }
+
+        // Parse wing CSV data
+        function parseWingCSVData(csvText, wing) {
+            const lines = csvText.trim().split('\n');
+            const data = [];
+            
+            // Skip header line and process data
+            for (let i = 1; i < lines.length; i++) {
+                const columns = lines[i].split(',');
+                if (columns.length >= 4) {
+                    const name = columns[2].trim();
+                    const points = parseInt(columns[3]) || 0;
+                    
+                    if (name && name !== 'name') {
+                        data.push({
+                            name: name,
+                            points: points
+                        });
+                    }
+                }
+            }
+            
+            if (data.length > 0) {
+                wingStudentsData[wing] = data;
+                console.log(`Successfully loaded ${data.length} students for ${wing} wing`);
+            } else {
+                console.log(`No valid data found for ${wing} wing, using fallback`);
+                useWingFallbackData(wing);
+            }
+            
+            generateWingLeaderboard(wing);
         }
 
         // Fallback data when CSV fetch fails
-        function useLocalFallbackData() {
-            studentsData = [
+        function useTotalFallbackData() {
+            totalStudentsData = [
                 {name: "MUHAMMED FAHEEM NP", points: 0},
                 {name: "MUHAMMED YASEEN K", points: 0},
                 {name: "MUHAMMED LASIN KC", points: 0},
@@ -930,36 +1590,54 @@
                 {name: "MUHAMMED RAMEES VP", points: 0},
                 {name: "ABDAUL HADI", points: 0}
             ];
-            generateLeaderboard();
+            generateTotalLeaderboard();
+        }
+
+        // Wing fallback data
+        function useWingFallbackData(wing) {
+            wingStudentsData[wing] = [
+                {name: "No data available", points: 0}
+            ];
+            generateWingLeaderboard(wing);
         }
 
         // Update last updated time
-        function updateLastUpdatedTime() {
+        function updateTotalLastUpdatedTime() {
             const now = new Date();
             const timeString = now.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
             });
-            document.getElementById('lastUpdated').textContent = `Last updated: ${timeString}`;
+            document.getElementById('totalLastUpdated').textContent = `Last updated: ${timeString}`;
+        }
+
+        function updateWingLastUpdatedTime(wing) {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById(wing + 'LastUpdated').textContent = `Last updated: ${timeString}`;
         }
 
         // Sort students by points (highest first)
-        function sortStudentsByPoints() {
-            return [...studentsData].sort((a, b) => b.points - a.points);
+        function sortStudentsByPoints(students) {
+            return [...students].sort((a, b) => b.points - a.points);
         }
 
-        // Generate leaderboard HTML
-        function generateLeaderboard(students = null) {
-            const sortedStudents = students || sortStudentsByPoints();
-            const leaderboard = document.getElementById('leaderboard');
+        // Generate total leaderboard HTML
+        function generateTotalLeaderboard(students = null) {
+            const sortedStudents = students || sortStudentsByPoints(totalStudentsData);
+            const leaderboard = document.getElementById('totalLeaderboard');
             
             if (sortedStudents.length === 0) {
                 leaderboard.innerHTML = `
                     <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-exclamation-circle text-4xl mb-4"></i>
                         <p>No student data available</p>
-                        <button class="refresh-btn mt-4" onclick="fetchStudentData()">
+                        <button class="refresh-btn mt-4" onclick="fetchTotalStudentData()">
                             <i class="fas fa-refresh mr-2"></i>
                             Try Again
                         </button>
@@ -968,6 +1646,35 @@
                 return;
             }
             
+            generateLeaderboardHTML(sortedStudents, leaderboard);
+        }
+
+        // Generate wing leaderboard HTML
+        function generateWingLeaderboard(wing, students = null) {
+            const wingData = wingStudentsData[wing] || [];
+            const sortedStudents = students || sortStudentsByPoints(wingData);
+            const leaderboard = document.getElementById(wing + 'Leaderboard');
+            
+            if (sortedStudents.length === 0) {
+                leaderboard.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-exclamation-circle text-4xl mb-4"></i>
+                        <p>No data available for ${wing.toUpperCase()} wing</p>
+                        <button class="refresh-btn mt-4" onclick="fetchWingData('${wing}')">
+                            <i class="fas fa-refresh mr-2"></i>
+                            Try Again
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            generateLeaderboardHTML(sortedStudents, leaderboard);
+            document.getElementById(wing + 'StudentsCount').textContent = sortedStudents.length;
+        }
+
+        // Generate leaderboard HTML
+        function generateLeaderboardHTML(sortedStudents, leaderboard) {
             let html = '';
             sortedStudents.forEach((student, index) => {
                 const rank = index + 1;
@@ -1000,15 +1707,28 @@
         }
 
         // Filter students based on search
-        function filterStudents() {
-            const searchTerm = document.getElementById('studentSearch').value.toLowerCase();
-            const filteredStudents = studentsData.filter(student => 
+        function filterTotalStudents() {
+            const searchTerm = document.getElementById('totalStudentSearch').value.toLowerCase();
+            const filteredStudents = totalStudentsData.filter(student => 
                 student.name.toLowerCase().includes(searchTerm)
             );
             
-            const sortedFiltered = filteredStudents.sort((a, b) => b.points - a.points);
-            generateLeaderboard(sortedFiltered);
-            document.getElementById('totalStudents').textContent = filteredStudents.length;
+            const sortedFiltered = sortStudentsByPoints(filteredStudents);
+            generateTotalLeaderboard(sortedFiltered);
+            document.getElementById('totalStudentsCount').textContent = filteredStudents.length;
+        }
+
+        // Filter wing students based on search
+        function filterWingStudents(wing) {
+            const searchTerm = document.getElementById(wing + 'StudentSearch').value.toLowerCase();
+            const wingData = wingStudentsData[wing] || [];
+            const filteredStudents = wingData.filter(student => 
+                student.name.toLowerCase().includes(searchTerm)
+            );
+            
+            const sortedFiltered = sortStudentsByPoints(filteredStudents);
+            generateWingLeaderboard(wing, sortedFiltered);
+            document.getElementById(wing + 'StudentsCount').textContent = filteredStudents.length;
         }
 
         // Show/hide sections
@@ -1022,6 +1742,9 @@
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.remove('active');
+            });
             
             // Show selected section
             document.getElementById(sectionName + '-section').classList.add('active');
@@ -1029,10 +1752,16 @@
             // Add active class to clicked nav link
             event.target.closest('.nav-link').classList.add('active');
             
-            // If showing results section, fetch latest data
-            if (sectionName === 'results') {
-                fetchStudentData();
+            // If showing total results section, fetch latest data
+            if (sectionName === 'total-results') {
+                fetchTotalStudentData();
             }
+            
+            // Close dropdown
+            document.querySelectorAll('.dropdown').forEach(dropdown => {
+                dropdown.classList.remove('show');
+                dropdown.querySelector('.dropdown-content').classList.remove('show');
+            });
         }
 
         // Mobile navigation toggle
@@ -1129,12 +1858,12 @@
         });
 
         // Auto-refresh every 5 minutes
-        setInterval(fetchStudentData, 300000);
+        setInterval(fetchTotalStudentData, 300000);
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            fetchStudentData();
-            updateLastUpdatedTime();
+            fetchTotalStudentData();
+            updateTotalLastUpdatedTime();
         });
     </script>
 </body>
