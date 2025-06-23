@@ -225,7 +225,7 @@
             <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
             <h2 class="text-3xl font-bold mb-4">FULL SCREEN REQUIRED</h2>
             <p class="text-lg mb-6">You must watch the introduction video in full screen mode.</p>
-            
+            <p class="text-sm text-gray-300 mb-8">This is to ensure competition integrity and prevent malpractices.</p>
             <button id="return-fullscreen" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-all">
                 <i class="fas fa-expand mr-2"></i>Return to Full Screen
             </button>
@@ -236,10 +236,9 @@
     <div id="malpractice-blocked" class="malpractice-blocked">
         <div class="text-center">
             <i class="fas fa-ban text-8xl text-red-500 mb-6"></i>
-            <h1 class="text-4xl font-bold mb-4">MALPRACTICE DETECTED</h1>
-            <p class="text-xl mb-4">You have been blocked from the competition</p>
-            <p class="text-lg text-gray-300 mb-8">Reason: Attempting to exit full screen during video playback</p>
-            <p class="text-sm text-gray-500">Please contact the administrator if you believe this is an error.</p>
+            <h1 class="text-4xl font-bold mb-4">ALERT</h1>
+            <p class="text-xl mb-4">You have been blocked from the site</p>
+            
         </div>
     </div>
 
@@ -403,6 +402,8 @@
         let fullScreenViolations = 0;
         let isVideoCompleted = false;
         let isFullScreenEnforced = false;
+        let currentVideoIndex = 0;
+        let videoSources = [];
 
         // Preloader and video control
         document.addEventListener('DOMContentLoaded', function() {
@@ -415,24 +416,35 @@
             const malpracticeBlocked = document.getElementById('malpractice-blocked');
             const returnFullScreenBtn = document.getElementById('return-fullscreen');
             
-            // Set appropriate video source based on device type
+            // Set appropriate video sources based on device type
             if (isMobileDevice()) {
-                videoSource.src = 'https://quaf.netlify.app/videos/intro1.mp4';
+                videoSources = [
+                    'https://quaf.netlify.app/videos/intro1.mp4',
+                    'https://quaf.netlify.app/videos/counting1.mp4'
+                ];
             } else {
-                videoSource.src = 'https://quaf.netlify.app/videos/intro2.mp4';
+                videoSources = [
+                    'https://quaf.netlify.app/videos/intro2.mp4',
+                    'https://quaf.netlify.app/videos/counting.mp4'
+                ];
             }
             
-            // Reload the video after changing source
-            preloaderVideo.load();
+            // Load first video
+            loadCurrentVideo();
             
-            // Auto play and enforce full screen
-            preloaderVideo.play().then(() => {
-                isVideoPlaying = true;
-                enterFullScreen();
-            }).catch(err => {
-                console.log('Auto-play prevented: ', err);
-                preloaderVideo.controls = true;
-            });
+            function loadCurrentVideo() {
+                videoSource.src = videoSources[currentVideoIndex];
+                preloaderVideo.load();
+                
+                // Auto play and enforce full screen
+                preloaderVideo.play().then(() => {
+                    isVideoPlaying = true;
+                    enterFullScreen();
+                }).catch(err => {
+                    console.log('Auto-play prevented: ', err);
+                    preloaderVideo.controls = true;
+                });
+            }
 
             // Full screen enforcement functions
             function enterFullScreen() {
@@ -552,7 +564,8 @@
             // Skip button functionality
             skipButton.addEventListener('click', function() {
                 if (isInFullScreen()) {
-                    hidePreloader();
+                    // Skip to next video or hide preloader if all videos completed
+                    playNextVideo();
                 } else {
                     showFullScreenWarning();
                 }
@@ -560,10 +573,26 @@
             
             // Video ended event
             preloaderVideo.addEventListener('ended', function() {
-                isVideoCompleted = true;
-                isVideoPlaying = false;
-                hidePreloader();
+                playNextVideo();
             });
+            
+            function playNextVideo() {
+                currentVideoIndex++;
+                if (currentVideoIndex < videoSources.length) {
+                    // Load and play next video
+                    skipButton.style.display = 'none';
+                    loadCurrentVideo();
+                    // Show skip button again after 5 seconds for next video
+                    setTimeout(function() {
+                        if (isVideoPlaying && !isVideoCompleted) {
+                            skipButton.style.display = 'block';
+                        }
+                    }, 5000);
+                } else {
+                    // All videos completed
+                    hidePreloader();
+                }
+            }
             
             function hidePreloader() {
                 isVideoCompleted = true;
