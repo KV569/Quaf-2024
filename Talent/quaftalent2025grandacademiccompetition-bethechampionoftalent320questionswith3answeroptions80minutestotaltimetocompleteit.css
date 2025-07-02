@@ -1,0 +1,274 @@
+:root {
+    --primary-dark: #0a1929;
+    --primary: #1a365d;
+    --primary-light: #2c5282;
+    --accent: #4299e1;
+    --accent-light: #63b3ed;
+    --text-light: #e2e8f0;
+    --success: #38a169;
+    --warning: #dd6b20;
+    --danger: #e53e3e;
+}
+
+body {
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.page {
+    display: none;
+    animation: fadeIn 0.4s;
+}
+
+.active-page {
+    display: block;
+}
+
+.card {
+    background-color: var(--primary);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: translateY(-4px);
+}
+
+.input-field {
+    background-color: var(--primary-light);
+    border: 2px solid var(--accent);
+    border-radius: 0.5rem;
+    color: white;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.input-field:focus {
+    border-color: var(--accent-light);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+.btn {
+    align-items: center;
+    background-color: var(--accent);
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+    display: inline-flex;
+    font-weight: 600;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--accent-light);
+}
+
+.btn-success {
+    background-color: var(--success);
+}
+
+.btn-warning {
+    background-color: var(--warning);
+}
+
+.btn-danger {
+    background-color: var(--danger);
+}
+
+.subject-card {
+    background-color: var(--primary-light);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.subject-card:hover {
+    background-color: var(--accent);
+    transform: translateY(-5px);
+}
+
+.option-btn {
+    background-color: var(--primary-light);
+    border: 2px solid var(--accent);
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+    position: relative;
+    text-align: left;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.option-btn:hover {
+    background-color: rgba(66, 153, 225, 0.2);
+}
+
+.option-selected {
+    background-color: var(--accent);
+    border-color: white;
+    font-weight: bold;
+}
+
+.option-correct {
+    background-color: var(--success);
+    border-color: white;
+}
+
+.option-incorrect {
+    background-color: var(--danger);
+    border-color: white;
+}
+
+.timer-bar {
+    background-color: var(--accent);
+    height: 8px;
+    width: 100%;
+    animation: timerAnimation 15s linear forwards;
+}
+
+@keyframes timerAnimation {
+    from {
+        width: 100%;
+        background-color: var(--accent);
+    }
+    to {
+        width: 0%;
+        background-color: var(--danger);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.chart-container {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    margin: 0 auto;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.circle-bg {
+    fill: none;
+    stroke: var(--primary-light);
+}
+
+.circle {
+    fill: none;
+    stroke: var(--accent);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(66, 153, 225, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(66, 153, 225, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(66, 153, 225, 0);
+    }
+}
+
+/* Anti-cheat alert styles */
+.cheat-alert {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: alertPulse 1s infinite;
+}
+
+.cheat-alert.active {
+    display: flex;
+}
+
+@keyframes alertPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.cheat-icon {
+    font-size: 8rem;
+    color: #fef2f2;
+    margin-bottom: 2rem;
+    animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.warning-symbol {
+    font-size: 6rem;
+    color: #fbbf24;
+    margin-bottom: 1rem;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.cheat-message {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 1rem;
+}
+
+.cheat-submessage {
+    font-size: 1.5rem;
+    color: #fef2f2;
+    text-align: center;
+    margin-bottom: 2rem;
+}
