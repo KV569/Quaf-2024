@@ -1,0 +1,3 @@
+npm init -y
+npm install express mongoose bcryptjs jsonwebtoken cors morgan dotenv multer cloudinary multer-storage-cloudinary validator helmet express-rate-limit express-mongo-sanitize xss-clean hpp
+npm install nodemon --save-dev

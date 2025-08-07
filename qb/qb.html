@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="google-site-verification" content="AHwVSIh1_4VMeiijAlVer81GC3RciUV-qT6TPv4XVD4" />
+	
+     <link rel="shortcut icon" href="logo.png">
+    <title>Quaf publications</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="google-site-verification" content="AHwVSIh1_4VMeiijAlVer81GC3RciUV-qT6TPv4XVD4"/>	
+    <link rel="shortcut icon" href="logo.png">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            overflow-x: hidden;
+        }
+        
+        .journal-header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('https://static.vecteezy.com/system/resources/previews/014/664/051/non_2x/islamic-ornament-persian-motiff-3d-ramadan-islamic-round-pattern-elements-geometric-circular-ornamental-arabic-symbol-gold-background-vector.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .article-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .search-container {
+            position: relative;
+        }
+        
+        .search-input {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 0 0 0.5rem 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 50;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .search-highlight {
+            background-color: #fef3c7;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #d4af37, #f7dc6f);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(45deg, #b7950b, #d4af37);
+            transform: translateY(-2px);
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:after,
+        .nav-link.active:after {
+            width: 100%;
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 768px) {
+            .article-card {
+                margin-bottom: 1rem;
+            }
+            
+            .hero-text {
+                font-size: 2.5rem;
+            }
+            
+            .navbar-fixed {
+                padding: 0.5rem 1rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .hero-text {
+                font-size: 2rem;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+        }
+        
+        @media print {
+            body {
+                background: white !important;
+            }
+            
+            .navbar-fixed {
+                position: relative !important;
+            }
+            
+            .modal {
+                display: none !important;
+            }
+        }
+
+        /* Advanced search styling */
+        .advanced-search {
+            position: relative;
+        }
+
+        .advanced-search-input {
+            width: 100%;
+            padding-right: 40px;
+        }
+
+        .advanced-search-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            background: transparent;
+            border: none;
+            color: #d4af37;
+            cursor: pointer;
+        }
+
+        /* Category pills styling */
+        .category-pill {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-pill:hover {
+            background-color: #d4af37;
+            color: white;
+        }
+
+        .category-pill.active {
+            background-color: #d4af37;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification System -->
+    <div id="notification" class="notification bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="notificationText">Action completed successfully!</span>
+            <button onclick="hideNotification()" class="ml-4 text-white hover:text-gray-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-900 bg-opacity-95 backdrop-filter backdrop-blur-lg shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 lg:px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="text-xl lg:text-2xl font-bold text-white title-font">
+                        <i class="fas fa-book"></i>
+                        Quaf publications
+                    </div>
+                </div>
+                
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="search-container">
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Search by title, author, or topic..." 
+                                   class="search-input pl-10 pr-4 py-2 rounded-lg text-white placeholder-gray-300 w-64 focus:outline-none"
+                                   oninput="performSearch()">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300"></i>
+                            
+                            <!-- Search Results Dropdown -->
+                            <div id="searchResults" class="search-results">
+                                <!-- Results will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openModal('loginModal')" class="text-white hover:text-yellow-400 transition-colors">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+                
+                <button onclick="toggleMobileMenu()" class="lg:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu lg:hidden fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 shadow-lg">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8">
+                    <div class="text-xl font-bold text-white title-font">
+                        <i class="fas fa-book"></i>
+                       Quaf publications
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                    <div class="pt-4 border-t border-gray-700">
+                        <div class="advanced-search relative">
+                            <input type="text" id="mobileSearchInput" placeholder="Search articles..." 
+                                  class="advanced-search-input w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-yellow-400"
+                                  oninput="performSearch('mobile')">
+                            <button class="advanced-search-btn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <!-- Mobile Search Results -->
+                        <div id="mobileSearchResults" class="search-results bg-gray-800 border border-gray-700 mt-1">
+                            <!-- Results will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <section id="home" class="journal-header py-12 lg:py-20 text-white relative">
+            <div class="container mx-auto px-4 lg:px-6 text-center relative z-10">
+                <h1 class="hero-text title-font text-3xl md:text-5xl lg:text-7xl font-bold mb-6 fade-in">
+                    Quaf publications
+                </h1>
+                <p class="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto fade-in">
+                    Qualitative Union For Academic Focus, 27th Batch Of Darul Hidaya Da'wa College,Manoor
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 justify-center items-center fade-in">
+                    <button onclick="scrollToSection('articles')" class="btn-primary px-6 lg:px-8 py-3 rounded-lg font-semibold text-gray-800 hover:text-gray-900">
+                        <i class="fas fa-book-open mr-2"></i>
+                        Latest Issue
+                    </button>
+                    <button onclick="openModal('subscribeModal')" class="border-2 border-white text-white px-6 lg:px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-gray-800 transition-all">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Search Section -->
+        <section class="py-8 bg-gray-50">
+            <div class="container mx-auto px-4 lg:px-6">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 title-font">Find Articles</h2>
+                    
+                    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="flex-grow">
+                            <div class="relative">
+                                <input type="text" id="advancedSearchInput" 
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                       placeholder="Search by title, author..."
+                                       oninput="performAdvancedSearch()">
+                                <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-48">
+                            <select id="categoryFilter" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                    onchange="performAdvancedSearch()">
+                                <option value="">All Categories</option>
+                                <option value="Updates">Updates</option>
+                                <option value="Arabic">Arabic</option>
+                                <option value="English">English</option>
+                                <option value="Urdu">Urdu</option>
+                                <option value="Malayalam">Malayalam</option>
+                                <option value="Hindi">Hindi</option>
+                                
+                            </select>
+                        </div>
+                        
+                        <div class="md:w-48">
+                            <select id="sortFilter" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                    onchange="performAdvancedSearch()">
+                                <option value="date">Sort by Date</option>
+                                <option value="title">Sort by Title</option>
+                                <option value="author">Sort by Author</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                   
+                    
+                    <!-- Search Metrics -->
+                    <div id="searchMetrics" class="mt-4 text-sm text-gray-500 hidden">
+                        <span id="resultsCount">0</span> results found
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       
+
+        <!-- Articles Grid -->
+        <section id="articles" class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4 lg:px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                    <h2 class="title-font text-3xl lg:text-4xl font-bold text-gray-800 mb-4 md:mb-0">Featured Articles</h2>
+                </div>
+                
+                <div id="articlesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+                    <!-- Articles will be populated by JavaScript -->
+                </div>
+                
+                <div id="noResults" class="hidden text-center py-12">
+                    <i class="fas fa-search text-6xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No articles found</h3>
+                    <p class="text-gray-500">Try adjusting your search or filter criteria</p>
+                </div>
+            </div>
+        </section>
+
+       
+
+        
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-16">
+            <div class="container mx-auto px-4 lg:px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="title-font text-2xl font-bold mb-4">
+                            <i class="fas fa-mosque text-yellow-400 mr-2"></i>
+                            Quaf Publications
+                        </h3>
+                        <p class="text-gray-300 mb-4">Qualitative Union For Academic Focus</p>
+                       
+                    </div>
+                    
+                   
+                    
+                    
+                    
+                    <div>
+                        <h4 class="font-semibold text-lg mb-4">Update</h4>
+                        <p class="text-gray-300 mb-4">Stay updated with our latest publications and scholarly insights.</p>
+                        <div class="flex">
+                            <input type="email" id="newsletterEmail" placeholder="Your email" class="flex-1 px-3 py-2 bg-gray-700 text-white rounded-l-lg border-0 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                            <button onclick="subscribeNewsletter()" class="btn-primary px-4 py-2 rounded-r-lg">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                    <p class="text-gray-300">&copy; 2025 Quaf. All rights reserved. | ISSN: 2786-1234</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Login</h3>
+                    <button onclick="closeModal('loginModal')" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg font-semibold text-gray-800">
+                        Login
+                    </button>
+                </form>
+                <div class="mt-4 text-center">
+                    <a href="#" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscribe Modal -->
+    <div id="subscribeModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold">Subscribe to Journal</h3>
+                    <button onclick="closeModal('subscribeModal')" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form onsubmit="handleSubscription(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Institution</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-yellow-400">
+                    </div>
+                    <button type="submit" class="w-full btn-primary py-3 rounded-lg font-semibold text-gray-800">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Reading Modal -->
+    <div id="articleModal" class="modal hidden fixed inset-0 z-50">
+        <div class="bg-white w-full h-full overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b shadow-sm z-10">
+                <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                    <button onclick="closeModal('articleModal')" class="flex items-center text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to Articles
+                    </button>
+                    <div class="flex space-x-4">
+                        <button onclick="shareArticle()" class="text-gray-600 hover:text-blue-600">
+                            <i class="fas fa-share-alt text-xl"></i>
+                        </button>
+                        
+                        <button onclick="bookmarkArticle()" class="text-gray-600 hover:text-red-600">
+                            <i class="fas fa-bookmark text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="container mx-auto px-4 py-8 max-w-4xl">
+                <div id="fullArticleContent">
+                    <!-- Article content will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Article data
+        const articles = [
+            {
+                id: 1,
+                title: "HOW THINGS MADE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic5.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">HOW THINGS MADE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic5.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+The trees are 
+<br>
+Poems that the
+<br>
+Earth writes upon
+<br>
+The sky.
+<br>
+The plants are
+<br>
+Stories that the 
+<br>
+Earth writes upon 
+<br>
+The tree branches
+<br>
+The leafs are 
+<br>
+Essays that the 
+<br>
+Earth writes on 
+<br>
+Trees roots 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 2,
+                title: "MALABART",
+                excerpt: "",
+                author: "Quaf",
+                authorImage: "images/logo.jpg",
+                image: "blog-images/frame.jpg",
+                date: "April 18, 2024",
+                category: "Updates",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">MALABART</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/images/logo.jpg" alt="Quaf" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Quaf</p>
+                            <p class="text-sm">April 18, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="blog-images/frame.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ 27th Batch of Darul Hidaya Da'wa College, class union (QUAF) Qualitative Union for 
+
+Academic Focus, organized a class Artsfest under the name "MALABART." Inspired 
+
+by history of Malabar Muslims.10/11/2024 The logo was launched by Ustad Abdul 
+
+Kareem Thangal, Three teams and names were announced by class teacher
+
+Munavvar Hudawi.
+
+Coordinators: Ustad Nasik, Ustad Ramees, Ustad Mazin Sha.
+</p>
+<br>
+<p> 
+ Behind The Teams Name 
+
+These Names (ARAKKAL, MARAKKAR, MAKHDOOM) were more 
+
+important in the history of Malabar, especially, when the time of 
+
+Portuguese and British colonialization. These dynasties were 
+
+attacked against them to get freedom to India.
+</p>
+<div class="img-scroll">
+            <img src="https://quaf.netlify.app/blog-images/arakkal.jpg" alt="img" >
+        </div>
+
+        <div class="img-scroll">
+            <img src="https://quaf.netlify.app/blog-images/marakkar.jpg" alt="img" >
+        </div>
+        <div class="img-scroll">
+            <img src="https://quaf.netlify.app/blog-images/makhdoom.jpg" alt="img" >
+        </div>
+    </div>
+    <p>3 Teams, 33 Candidates, 30+ Stage Programs, 20+ Non-stage Programs </p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 3,
+                title: "ഘടികാരം",
+                excerpt: "",
+                author: "Muhammed Sahl",
+                authorImage: "pic/pic/1011.jpg",
+                image: "blog-images/pic4.jpg",
+                date: "December 20, 2024",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">ഘടികാരം</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1011.jpg" alt="Muhammed Sahl" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Sahl</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic4.jpg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+  ഒന്നായി നിൽക്കുന്ന
+<br> 
+കുടിലിൽ
+<br>
+ഉണ്ടൊരു മൂന്ന് മുറികൾ
+<br>
+മൂന്ന് മുറികളിലുമുണ്ട് ഓരോരുത്തർ
+<br>
+പക്ഷെ, 
+<br>
+അവർ ചെയ്യുന്നു 
+<br>
+തെല്ല് കുസൃതികൾ
+<br>
+ഒന്നാം മുറിയിലത്തെ ആൾ
+<br>
+ഇഴയുന്നു തറയിലൂടെ
+<br>
+രണ്ടാം മുറിയിലത്തെ ആൾ
+<br>
+കൊച്ചി നടക്കുന്നു
+<br>
+മൂന്നാം മുറിയിൽ
+<br>
+ഒരു പുലി ഓടുന്നു
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 4,
+                title: "കണ്ണീരിൽ മുങ്ങിയ മഴ",
+                excerpt: "",
+                author: "Muhammed Sahl",
+                authorImage: "pic/pic/1011.jpg",
+                image: "blog-images/pic3.jpg",
+                date: "December 20, 2024",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">കണ്ണീരിൽ മുങ്ങിയ മഴ</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1011.jpg" alt="Muhammed Sahl" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Sahl</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic3.jpg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ ‍ഡീസൽ കുത്തിനിറച്ച കാലന്മാർക്കും
+<br>
+സ്വപുഞ്ചിരിയിൽ വിംനാദം തീർത്ത 
+<br>
+മറ്റു ചിലകന്മാർക്കും 
+<br>
+ഇടയിൽ പെട്ട് മരിച്ച് വീണ മക്കളെയോർത്ത്
+<br>
+വാനം വിതുമ്പിയപ്പോൾ
+<br>
+നീറുന്ന കണ്ണീരുമായി മഴപെയ്തിറങ്ങി
+<br>
+മനുജൻ വീണ്ടും ചിരിച്ചു
+<br>
+ഒടുവിൽ ചിരിയും, കണ്ണീരും 
+<br>
+മാംസവും ഇരയായി
+<br>
+പിന്നെ, 
+<br>
+ഉരുൾപൊട്ടലായി
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 5,
+                title: "نبتة الصغيرة",
+                excerpt: "",
+                author: "Muhammed Musthafa SM",
+                authorImage: "pic/pic/1017.jpg",
+                image: "blog-images/pic2.jpg",
+                date: "December 20, 2024",
+                category: "Arabic",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">نبتة الصغيرة</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1017.jpg" alt="Muhammed Musthafa SM" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Musthafa SM</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic2.jpg" alt="Arabic" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ 
+    في القلب البدور 
+      <br>
+مدفونة عميقا عميقا جدا
+      <br>
+نبتة الصغيرة
+      <br>
+مستلق نائما بعمق
+      <br>
+استيقظ بقول الشمس
+      <br>
+و يزحف نحو النور
+      <br>
+استيقظ بقول الصوت الأقطار
+      <br>
+يا لها من رائمة القلم
+      <br>
+يقول بدور 
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 6,
+                title: "OWLS",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic6.jpg",
+                date: "December 20, 2024",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">OWLS</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic6.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ The owls why 
+<br>
+They are sleeping
+<br>
+In morning! Why 
+<br>
+They are awake
+<br>
+In night! They
+<br>
+Are robbing in
+<br>
+Night! Or the 
+<br>
+Making foods in
+<br>
+Night! They can’t
+<br>
+See in morning!
+<br>
+Then why some 
+<br>
+Owl is awake 
+<br>
+In morning? Did 
+<br>
+Their eyes is 
+<br>
+Beautiful. They can
+<br>
+Turn their head
+<br>
+Like the fan
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 7,
+                title: "പുതുമ",
+                excerpt: "",
+                author: "Muhammed Sahl",
+                authorImage: "pic/pic/1011.jpg",
+                image: "blog-images/pic7.jpg",
+                date: "December 20, 2024",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">പുതുമ</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1011.jpg" alt="Muhammed Sahl" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Sahl</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic7.jpg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ ‍ഒരു ലോകമഹായുദ്ധം കഴിഞ്ഞ്<br>
+ ശാന്തിയുടെയും <br>സമാധാനത്തിന്റെയും ഒരു തൈ<br> ഉയർന്നു. അന്നേരം ആകട്ടെ ലോകത്തിലെ <br>വെളിച്ചം മേലോട്ടു ഉയർന്നു<br> മേഘങ്ങളുടെ കൂട്ടം പറയാൻ തുടങ്ങി <br>കഴിഞ്ഞ ആകാശം വെളുത്തു വന്നു<br> സമാധാനത്തിന്റെ സ്വരമായ<br> മാരി ഇറങ്ങി
+
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 8,
+                title: " മരം",
+                excerpt: "",
+                author: "Muhammed Sahl",
+                authorImage: "pic/pic/1011.jpg",
+                image: "blog-images/pic8.jpg",
+                date: "December 20, 2024",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> മരം</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1011.jpg" alt="Muhammed Sahl" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Sahl</p>
+                            <p class="text-sm">December 20, 2024 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic8.jpg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ ‍ ആടി രസിക്കുന്ന 
+        <br>
+        മരത്തെ നോക്കി 
+        <br>
+        ഞാൻ ഒരു കവിതയെഴുതി 
+        <br>
+        കുട്ടി പിറന്ന സന്തോഷത്തിൽ 
+        <br>
+        മരം ജോലിക്കാർക്ക് 
+        <br>
+        ഊണു കൊടുത്തു 
+        <br>
+        കുറേ ദിവസം 
+        <br>
+        മാഞ്ഞുപോയതിനു ശേഷം 
+        <br>
+        പഴം വലുതായി 
+        <br>
+        കനം താങ്ങാൻ 
+        <br>
+        കഴിയാത്ത സമയം 
+        <br>
+        പഴത്തോട് വെറുത്ത മരം 
+        <br>
+        പഴം താഴോട്ട് ഇട്ടു
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 9,
+                title: "കടയുടെ ഉദ്ഘാടനം",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic9.jpeg",
+                date: "MAY 16, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">കടയുടെ ഉദ്ഘാടനം</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 16, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic9.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+പതിവുപോലെ ഒരു ദിവസം കിട്ടു എഴുന്നേറ്റിട്ടുണ്ട് അവൻ പത്രം വന്നിട്ടുണ്ടോ എന്ന് നോക്കാൻ ഇറങ്ങിയതാണ്. അപ്പോഴാണ് അവിടെ ഒരു ബലൂണും അതിന്മേൽ കെട്ടിയിട്ട ഒരു കത്ത് അവന്റെ ശ്രദ്ധയിൽ പെടുന്നത്, കിട്ടു വേഗം പോയി അമ്മയെ കൂട്ടി.
+  <br>
+  അമ്മ കത്ത് വായിച്ചു നോക്കി അതിൽ എഴുതിയിരുന്നത് ഇങ്ങനെയാണ് നിങ്ങൾ ഈ മാപ്പ് കാണിക്കുന്ന സ്ഥലത്തേക്ക് വരണം കെട്ടും അമ്മയും ബലൂൺ വണ്ടിയുടെ മേലെ കെട്ടി പക്ഷേ വണ്ടി ഓടാൻ തുടങ്ങിയപ്പോൾ ബലൂണിന്റെ കെട്ടഴിഞ്ഞു പോകുന്നതിന്റെ ഇടയിൽ നല്ല കാറ്റും മഴയും ഒക്കെ വന്നു ബലൂൺ അതുമൊക്കെ മറികടന്നു പോയി അങ്ങനെ അവർ ആ സ്ഥലത്ത് എത്തി അവരെപ്പോലെ കുറെ ആളുകൾ എത്തിയിട്ടുണ്ട് എന്നിട്ട് മൈക്കയിൽ ഒരാൾ ഒച്ചയിൽ പറഞ്ഞു ഇത് നിങ്ങളെ വിളിച്ചുകൂട്ടിയത് എന്റെ കടയുടെ ഉദ്ഘാടനം ആയതുകൊണ്ടാണ് കിട്ടുവും അമ്മയും ഉദ്ഘാടനം ഒക്കെ കഴിഞ്ഞതിനു ശേഷം കുറേ കഥകളൊക്കെ പറഞ്ഞ് സന്തോഷത്തോടെ മടങ്ങി.
+  
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 10,
+                title: " മുയലിന്റെ അവസാനം",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic10.jpeg",
+                date: "MAY 18, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> മുയലിന്റെ അവസാനം</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 18, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic10.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ പണ്ട് പണ്ട് പറവകൾ സന്തോ ഷത്തോടെ പാറി നടക്കുന്ന മൃഗങ്ങൾ ആനന്ദത്തോടെകളി ച്ചിരുന്ന ഒരു വിശാലമായ കാടു ണ്ടായിരുന്നു പതിവു പോലെ കുഞ്ഞുകുറുമ്പൻ മുയൽ ഇന്നും കളിക്കാൻ ഇറങ്ങിയിട്ടു ണ്ട്. വഴിയിൽ വച്ച് ഒരു തടാകം കണ്ണിൽപ്പെട്ടു. 
+   <br>
+   തടാകത്തിന്റെ അക്കരെയാണ് അവന്റെ കൂട്ടുകാർ അവനെ കാത്തുനിൽക്കുന്നത് കുഞ്ഞിക്കുറുമ്പ് എങ്ങനെ കടക്കും എന്ന് ആലോചിച്ചിരിക്കുമ്പോഴാണ് അപ്പുറത്തായിട്ട് രണ്ട് താറാവുകൾ നീന്തുന്നത് കാണുന്നുണ്ട് അവരോട് സഹായം ചോദിക്കാം എന്ന് കരുതി താറാവുകളുടെ അടുത്തേക്ക് ചെന്നു. എന്നിട്ട് കുഞ്ഞുകുറുമ്പൻ ചോദിച്ചു എന്നെ ഒന്ന് അക്കരെ എത്തിക്കാമോ അവർ ആദ്യം വിലങ്ങിയെങ്കിലും പിന്നീട് അവനെ കൊണ്ടുപോയി വഴിയിൽ വെച്ച് അവർ അവനോട് കുറെ സംസാരിച്ചു അപ്പോഴാണ് നടുവിൽ ഒരു കല്ലിന്റെ മുകളിൽ ഒരു തവള ഉള്ളതായി താറാവുകൾ കണ്ടത് താറാവുകൾ രണ്ടുപേരും വേർതിരിഞ്ഞു പാവം മുയൽ വെള്ളത്തിൽ വീണ് മുങ്ങി മരിച്ചു 
+ഗുണപാഠം: ആരെയും കണ്ണടച്ച് വിശ്വസിക്കരുത്.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 11,
+                title: " ബന്ധം മുറിക്കരുത്",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic11.jpeg",
+                date: "MAY 20, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> ബന്ധം മുറിക്കരുത്</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 20, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic11.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ ഒരിക്കൽ ഒരു കാട്ടിൽ വലിയ സുഹൃത്തുക്കളായിരുന്നു രണ്ട് ആടുകളുണ്ടായിരുന്നു അവർ രണ്ടുപേരും നല്ല സന്തോഷ ത്തോടെ ജീവിക്കുകയായിരു ന്നു. ഇത് കണ്ട് കുറുമ്പൻ കുറു ക്കന് അസൂയ വന്നു. അങ്ങനെ ഒരിക്കൽ ഒരു ദിവസം കുറു മ്പൻ കുറുക്കൻ ബിണ്ടു എന്ന 
+   <br>
+   ആടിനോട് പറഞ്ഞു നിനക്ക് മിണ്ടുവിനെ അറിയാമോ? അവൻ എന്നോട് പറഞ്ഞു നിന്നെ ആക്രമിക്കാൻ ആണത്രേ അവന്‍റെ പ്ലാൻ ഇതേ കാര്യം തന്നെ കുഞ്ഞു കുറുക്കൻ മിണ്ടുവിനോടും പറഞ്ഞു അങ്ങനെ ഒരു പ്രാവശ്യം അവർ കണ്ടുമുട്ടി രണ്ടുപേരും ദേഷ്യത്തോടെ ഓടിയടുത്തു എന്നിട്ട് കൊമ്പുകൾ രണ്ടും കോർത്തു, തലമേൽ മുറിവ് പറ്റിപ്പിച്ചു, രക്തം വന്നു ഇത് കണ്ടു കുറക്കൻ കൊതി മൂത്ത് അവരുടെ അടുത്തെത്തി ഇത് കണ്ട് ആടുകൾ കുളത്തിൽ വീണു  പിന്നെ ആടുകൾക്ക് മനസ്സിലായി ഇത് കുറുമ്പൻ കുറുക്കൻ ഞങ്ങളെ പറ്റിച്ചതാണെന്ന് ബിണ്ടുവും മിണ്ടുവും എങ്ങനെയൊക്കെയോ കുളത്തിൽ നിന്ന് കരകയറി എന്നിട്ട് രണ്ടു പേരും പോയി ഒരു സൂത്രം കാണിച്ചു. രണ്ടുപേരും കുറുക്കനെ വളഞ്ഞു എന്നിട്ട് അവർ കുറുക്കനെ പിടിച്ച് കുളത്തിൽ കൊണ്ടുപോയി ഇട്ടു.
+  
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 12,
+                title: "MYSTERY",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic12.jpg",
+                date: "May 22, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">MYSTERY</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 22, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic12.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+        I wake up
+        <br>
+        In morning to
+        <br>
+        Take a bath
+        <br>
+        For going to school 
+        <br>
+        While i go to
+        <br>
+        School i just check
+        <br> 
+        My bag i see
+        <br>
+        A mystery in it.
+        <br>
+        What is that 
+        <br>
+        Just a mystery 
+        <br>
+        Box another mystery 
+        <br>
+        I see there 
+        <br>
+        Nothing more than
+        <br>
+        A magic po...
+        <br>
+        The second lay...
+        <br>
+        Of the box
+        <br>
+        Another mystery nothing 
+        <br>
+        Just a mystery 
+        <br>
+        That ia a 
+        <br>
+        Eraser and sharpner
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 13,
+                title: " ദുഷ്ടനായ ആന",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic13.jpeg",
+                date: "MAY 28, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> ദുഷ്ടനായ ആന</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic13.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+  ആ കാട്ടിലെ ഗുണ്ട ആനയായിരുന്നു. അവൻ എന്തോ ദേഷ്യത്തോടെഒരു മരക്കൊമ്പിൽ എടുത്തു കൊണ്ടുവന്നു എന്നിട്ട് ഒരു പാവം കിളി താമസിച്ചിരുന്ന മരത്തിൽ അടിച്ചു കൊണ്ടിരുന്നു. അമ്മക്കിളി  വന്നു നോക്കുമ്പോൾ തന്റെ  വിരിയിക്കാൻ വെച്ചിരുന്ന മുട്ടകൾ എല്ലാം താഴെ വീണു പൊട്ടിയിരിക്കുന്നു
+  <br>
+    അമ്മക്കിളിക്ക് സങ്കടം സഹിക്കാൻ കഴിഞ്ഞില്ല സങ്കടത്തോടെ അച്ഛൻ കിളിയെ വിവരം അറിയിച്ചു  അച്ഛൻ കിളി അവൻക്ക് ഒരു പണി കൊടുക്കാം എന്ന് വിചാരിച്ച് അമ്മക്കിളിയെയും കൂട്ടി പോയി അവർ പോയത് ഒരു മരംക്കൊത്തിയുടെ അടുത്തേക്ക് ആയിരുന്നു സങ്കടത്തോടെ ഈ നടന്ന കാര്യങ്ങളൊക്ക അവരെ അറിയിച്ചു അവനെ ഒരുപാട് പഠിപ്പിക്കണം എന്ന് പറഞ്ഞുകൊണ്ട് മരംകൊത്തി പോയി വേഗത്തിൽ ആനയുടെ അടുത്ത് പറന്നുവന്നു എന്നിട്ട് തലക്ക് ഒരു രണ്ടു കൊട്ടും കൊടുത്തു ആനക്ക് വേദന സഹിക്കാൻ കഴിഞ്ഞില്ല അവിടെ ചെരിഞ്ഞു പിന്നെ ആനക്ക് എഴുന്നേൽക്കാൻ സാധിക്കുന്നില്ല അമ്മക്കിളിക്കും അച്ഛൻ കുളിക്കും സന്തോഷമായി.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 14,
+                title: " കൊക്കും ആമയും ",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic14.jpeg",
+                date: "MAY 28, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> കൊക്കും ആമയും </h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic14.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+      ഒരു പുലരിയിൽ കൊക്ക് തീറ്റ തേടിയിറങ്ങി അങ്ങനെ പറക്കുന്നിടയിൽ ഒരു തടാകം അവർ കണ്ടു കൊക്കുകൾ അങ്ങോട്ടേക്ക് തിരിച്ചു അവിടെ ഇറങ്ങി വെള്ളം കുടിക്കുമ്പോഴാണ് അവിടെ ഒരു ആമ വന്നത് എന്നിട്ട് ആമ പറഞ്ഞു
+      <br>
+    എനിക്കും നിങ്ങളെപ്പോലെ പറക്കണം കൊക്ക് ഒന്ന് മടിച്ചെങ്കിലും പിന്നീട് കൊണ്ടുപോകാൻ തീരുമാനിച്ചു. ഒരു കൊക്ക് ഒരു കൊള്ളിയെടുത്തു കൊണ്ടുവന്നു എന്നിട്ട് കൊക്ക് വടിയുടെ ഒരു ഭാഗത്ത് കടിച്ചു പിടിച്ചു പിന്നെ മറ്റൊരു കോക്ക് ഇതേ പണി തന്നെ ചെയ്തു  എന്നിട്ട് പറഞ്ഞു നല്ലവണ്ണം കടിച്ചു പിടിച്ചോ ഞങ്ങൾ നിന്നെ പറത്താം എന്ന് പറഞ്ഞുകൊണ്ട് അവർ യാത്രയായി പറക്കുന്നതിന്റെ  ഇടയിൽ അമ്മയെ നോക്കി കുറേപേർ ചിരിക്കുന്നു ഒരു ചിരി അങ്ങോട്ടും കൊടുത്തേക്കാം എന്ന് വിചാരിച്ചു ഒരു ചിരി അങ്ങോട്ടും കൊടുത്തു കൊക്ക് പറഞ്ഞത് ആമ മറന്നിട്ടുണ്ട് അതാണ് കാരണം മാത്രമല്ല ആമ വീണു മരിക്കുകയും ചെയ്തു അങ്ങനെ ഈ കഥ ഇവിടെ അവസാനിച്ചു.
+    </p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 15,
+                title: " ബുദ്ധിമാനായ തൊപ്പിക്കാരൻ ",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic15.jpeg",
+                date: "MAY 28, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> ബുദ്ധിമാനായ തൊപ്പിക്കാരൻ </h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic15.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+     ഒരു പണിപ്പൂർ എന്ന ഗ്രാമ ത്തിൽ ഒരു തൊപ്പിക്കാരൻ ഉണ്ടായിരുന്നു അയാളുടെ പേര് കുട്ടപ്പൻ എന്നായിരുന്നു കുട്ടപ്പൻ എന്നും ഇറങ്ങുന്നത് പോലെ ഇന്നും ഇറങ്ങിയിട്ടുണ്ട് അത്ര വലിയ വരുമാനം ഇല്ലെ ങ്കിലും എന്നാലും കുറച്ചൊക്കെ യുണ്ട്.
+     <br>
+    കുട്ടപ്പൻ എന്നും പോകുന്ന വഴിയിലൂടെ അല്ല ഇന്ന് പോകുന്നത് വലിയ കുട്ട തലയിൽ വച്ചിട്ടുണ്ട് അങ്ങനെ നടന്നു നടന്ന് കുട്ടപ്പൻ ക്ഷീണിതനായി അപ്പുറത്ത് ഉണ്ടായിരുന്ന ഒരു മരത്തിൻ ചുവട്ടിൽ വിശ്രമിക്കാം എന്ന് കരുതി മാത്രമല്ല ഒന്ന് ഉറങ്ങുകയും ചെയ്തു അങ്ങനെ കുറെ നേരത്തിനു ശേഷം കുട്ടപ്പൻ ഉണർന്നു നോക്കുമ്പോൾ കുട്ടയിൽ ഒരു തൊപ്പിയും ഇല്ല കുട്ടപ്പൻ ദേഷ്യത്തോടെ ചുറ്റുപാടും ഒന്നും നോക്കി അപ്പോഴാണ് എന്തോ ഒരു ശബ്ദം മുഴങ്ങിയത് അതാ താൻ കൊണ്ടുവന്നിരുന്ന എല്ലാ തൊപ്പികളും താൻ വിശ്രമിക്കാൻ കിടന്നിരുന്ന മരത്തിന്റെ മുകളിൽ കുരങ്ങന്മാരുടെ തലയിൽ ഉണ്ടായിരുന്നു കുട്ടപ്പൻ പറഞ്ഞു കുരങ്ങാ ആ തൊപ്പി ഇങ്ങോട്ട്  ഇടൂ  ഞങ്ങൾ മണ്ടന്മാരല്ല കുരങ്ങന്മാർ മറുപടി പറഞ്ഞു.
+    <br>
+    ഞങ്ങൾ ഇത് ഇട്ടു തന്നാൽ നിനക്ക് എടുക്കാൻ അല്ലേ? കുട്ടപ്പൻ ദേഷ്യത്തോടെ ഒന്ന് നോക്കി, അപ്പോഴാണ് കുട്ടപ്പൻ ആ ബുദ്ധി പ്രയോഗിച്ചത്. തന്റെ കയ്യിലുള്ള വടിയെടുത്ത് അവരുടെ മേൽ എറിഞ്ഞു, മണ്ടൻ കുരങ്ങന്മാർ അവർ ദേഷ്യത്തോടെ അവരുടെ കൈയിൽ ഉണ്ടായിരുന്ന തൊപ്പിയും എറിഞ്ഞു തക്കസമയം നോക്കി കുട്ടപ്പൻ തൊപ്പികൾ എല്ലാം എടുത്ത് അവിടെ നിന്നുപോയി.
+    </p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 16,
+                title: " സൗഹൃദം ",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic16.jpeg",
+                date: "MAY 28, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> സൗഹൃദം </h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic16.jpeg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+     ഒരു പുലരിയിൽ അച്ഛൻ എല്ലാവരെയും വിളിച്ചുകൂട്ടി പറഞ്ഞു നമുക്ക് ഒരു ടൂർ പോകാം അച്ഛന്റെ അനിയൻ വീട്ടിൽ ഉണ്ടായിരുന്നു അനിയനെ കൂട്ടാതെ പോകാൻ ആയിരുന്നു അവരുടെ പ്ലാൻ അനിയൻ ഒന്ന് ചോദിച്ചു നോക്കി എന്നെ കൂടി കൊണ്ടുപോകാമോ അച്ഛൻ സമ്മതിച്ചില്ല അച്ഛൻ പറഞ്ഞു നിന്നെ കൂടി കൊണ്ട്പോകാനുള്ള ക്യാഷും കാറിൽ സ്ഥലവും ഇല്ല,
+     <br>
+     അനിയന് ഒരുപാട് വിഷമമായി അവൻ വിചാരിച്ചു ഒന്ന് ഹോട്ടലിലേക്ക് പോകാം അച്ഛനും കുട്ടികളും യാത്രയായി അനിയനും യാത്രയായി ഹോട്ടലിന്റെ അടുത്തെത്തി അവിടെ പോലീസുകാർ ഉണ്ടായിരുന്നു അച്ഛനും കൂട്ടരും അവിടെ എത്തിയപ്പോൾ പോലീസുകാർ അവരെ തടഞ്ഞുവച്ചു വാഹനം സ്പീഡ് കൂടിയതിനാൽ ആയിരുന്നു അവരെ തടഞ്ഞുവെച്ചത് അനിയൻ ഇതൊക്കെ കാണുന്നുണ്ടായിരുന്നു അവൻ ആദ്യം ഒന്ന് സഹായിക്കേണ്ട എന്ന് വിചാരിച്ചു പിന്നീട് സഹായിക്കാം എന്ന് കരുതി അങ്ങോട്ടേക്ക് ചെന്നു. എന്നിട്ട് പറഞ്ഞു ഞാൻ നിങ്ങളെ സഹായിക്കാം പോലീസിന് കുറച്ചു പൈസ കൊടുത്ത് അവരെ അവിടുന്ന് രക്ഷപ്പെടുത്തി അച്ഛനും കുട്ടികൾക്കും വളരെ വിഷമമായി പിന്നീട് അവർ ഒരുമിച്ചു ടൂർ പോയി പിന്നീട് വളരെ സ്നേഹത്തോടെ ജീവിതം മുന്നോട്ടു കൊണ്ടുപോയി.
+    </p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 17,
+                title: " മിണ്ടുവിന്റെ സന്തോഷം ",
+                excerpt: "",
+                author: "Muhammed Rabeeh",
+                authorImage: "pic/pic/995.jpg",
+                image: "blog-images/pic17.jpg",
+                date: "MAY 28, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> മിണ്ടുവിന്റെ സന്തോഷം </h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/995.jpg" alt="Muhammed Rabeeh" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Rabeeh</p>
+                            <p class="text-sm">MAY 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic17.jpg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+     ഒരു ശാന്തമായ പ്രദേശം കിളികളുടെ മൂളക്കവും കേട്ട് മിണ്ടു എഴുന്നേറ്റിട്ടുണ്ട് എന്തോ സ്വപ്നം കണ്ടിട്ടാണ് എഴുന്നേറ്റത് മിണ്ടുവിന്റെ പുഞ്ചിരിയിൽ നിന്ന് നമുക്കത് മനസ്സിലാക്കാൻ കഴിയും മിണ്ടു പുറത്തേക്കൊന്നു നോക്കി അവൻ വിചാരിച്ചത് പോലെ തന്നെ പ്രകൃതിരമണീയമായ സ്ഥലം മിണ്ടു പെട്ടെന്ന് പോയി അമ്മയോട് ചോദിച്ചു അമ്മേ എനിക്കൊരു മരം നടാൻ ഒരു വിത്ത് തരാമോ? അമ്മ പുഞ്ചിരിയോടെ ചോദിച്ചു എന്തിനാ മോനെ ഈ വിത്ത് നിനക്ക് മിണ്ടു പറഞ്ഞു എനിക്ക് ഊഞ്ഞാൽ കെട്ടാൻ വേണ്ടി ഒരു മരം നടാനാണ് അമ്മ വിത്ത് നൽകി സന്തോഷത്തോടെ അതും എടുത്തു പുറത്തേക്കോടി എന്നിട്ട് മിണ്ടു ഒരു കുഴി കുഴിച്ചു ആ കുഴിയിൽ വിത്തിട്ടതിനുശേഷം അത് മണ്ണിട്ടു മൂടി മാത്രമല്ല ഇടയ്ക്കിടെ വെള്ളവും അതിലൊഴിച്ചു കൊടുക്കും ഈ ദിവസം മാത്രം ഇല്ല അവൻ എന്നും അവിടെ വെള്ളം ഒഴിച്ചു കൊടുക്കാറുണ്ട് മാത്രമല്ല എന്നും അതിന്റെ മാറ്റവും ഒന്ന് ശ്രദ്ധിക്കാറുണ്ടായിരുന്നു അങ്ങനെ കുറെ ദിവസങ്ങൾക്ക് ശേഷം മരം വലുതായിട്ടുണ്ട്.
+     <br>
+    മിണ്ടു ഇന്നും വെള്ളം ഒഴിക്കാൻ മറന്നിട്ടില്ല അവൻ പെട്ടെന്ന് പോയി ഒരു കയറെടുത്ത് മരത്തിന്റെ കൊമ്പിൽ കെട്ടി എന്നിട്ട് അവൻ സന്തോഷത്തോടെ ഇതുകൊണ്ട് അവന്റെ കൂട്ടുകാർ ആവന്റെ അടുത്തേക്ക് ഓടിയെത്തി എന്നിട്ട് ചോദിച്ചു മിണ്ടൂ ഞങ്ങളെയും കളിക്കാൻ കൂട്ടുമോ? പുഞ്ചിരിച്ചുകൊണ്ട് പറഞ്ഞു ആ വരൂ നമുക്ക് കളിക്കാം, മിണ്ടു ഒരുപാട് അഭിമാനത്തോടെയും സന്തോഷത്തോടെയും തുള്ളിച്ചാടി.
+    </p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 18,
+                title: "THE FIRE",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic18.jpg",
+                date: "May 28, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">THE FIRE</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic18.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ The fire will eat
+ <br>
+All, it can burn
+<br>
+All thing, the
+<br>
+Fire is danger. Also in
+<br>
+The flag of indians
+<br>
+Orange is for fire
+<br>
+The fire will spread 
+<br>
+In fast. With the 
+<br>
+Hot, water can kill
+<br>
+The fire, with fire
+<br>
+Only, we can live
+<br>
+For making foods. The
+<br>
+Fire is strong.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 19,
+                title: "WIND",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic19.jpg",
+                date: "May 28, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">WIND</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic19.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+When wind come 
+<br>
+To a place 
+<br>
+The strong things 
+<br>
+Will get weak
+<br>
+The wind is 
+<br>
+Three type like 
+<br>
+Cold, hot and
+<br>
+Normal type wind
+<br>
+Without the wind 
+<br>
+No one can 
+<br>
+Live here because 
+<br>
+Wind is air
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+             {
+                id: 20,
+                title: "SIBAQ",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic20.jpg",
+                date: "May 28, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">SIBAQ</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic20.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+In the stage 
+<br>
+Of the national
+<br>
+Sibaq of darul 
+<br>
+Huda! What will
+<br>
+Feel the leg 
+<br>
+Will matter or not.
+<br>
+We will confidence 
+<br>
+On the stage in 
+<br>
+Sibaq. Not over
+<br>
+Confidence. We 
+<br>
+Practice get
+<br>
+Perfect in sibaq 
+<br>
+Don't fear in the stage.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 21,
+                title: "JACKFRUIT",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic21.jpg",
+                date: "May 28, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">JACKFRUIT</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic21.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+Jackfruit is 
+<br>
+Very big like 
+<br>
+Fat it tasty
+<br>
+To eat. In
+<br>
+Jackfruit inside 
+<br>
+There will be
+<br>
+Glue that will
+<br>
+Stuck on my
+<br>
+Hand, but inside 
+<br>
+Of jackfruit 
+<br>
+There is the 
+<br>
+Tasty thing inside.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 22,
+                title: "The heath cliff revenge",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic22.jpg",
+                date: "May 28, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">The heath cliff revenge</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic22.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+No one no 
+<br>
+Were he come
+<br>
+From one day
+<br>
+The bell rang
+<br>
+<br>
+In Catherine's home!
+<br>
+Heath cliff come that
+<br>
+They two are child
+<br>
+Catherine's father 
+<br>
+<br>
+Care heath cliff but
+<br>
+The brother of 
+<br>
+Catherine don't like
+<br>
+Heath cliff! They always 
+<br>
+<br>
+Fight! The last 
+<br>
+The heath cliff revenge 
+<br>
+On Catherine brother 
+<br>
+Child name Linton.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 23,
+                title: "Forest",
+                excerpt: "",
+                author: "Hisham Rahmathulla",
+                authorImage: "pic/pic/1008.jpg",
+                image: "blog-images/pic23.jpg",
+                date: "May 28, 2025",
+                category: "English",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6">Forest</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1008.jpg" alt="Hisham Rahmathulla" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Hisham Rahmathulla</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic23.jpg" alt="English" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+I was walking 
+<br>
+In a forest
+<br>
+I see more
+<br>
+Animals because the
+<br>
+<br>
+Forest is filled
+<br>
+With more animals 
+<br>
+Then i took 
+<br>
+To tree also
+<br>
+<br>
+I see birds 
+<br>
+Because the forest
+<br>
+Is also filled 
+<br>
+With birds.
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            {
+                id: 24,
+                title: " നിഴൽ",
+                excerpt: "",
+                author: "Muhammed Sahl",
+                authorImage: "pic/pic/1011.jpg",
+                image: "blog-images/pic24.jpg",
+                date: "May 28, 2025",
+                category: "Malayalam",
+                readTime: "12 min read",
+                content: `
+                    <h1 class="title-font text-3xl font-bold text-gray-800 mb-6"> നിഴൽ</h1>
+                    
+                    <div class="flex items-center mb-8 text-gray-600">
+                        <img src="https://easy-peasy.ai/cdn-cgi/image/quality=80,format=auto,width=700/https://quaf.netlify.app/pic/pic/1011.jpg" alt="Muhammed Sahl" class="author-avatar mr-4">
+                        <div>
+                            <p class="font-semibold">Muhammed Sahl</p>
+                            <p class="text-sm">May 28, 2025 • 12 min read</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://quaf.netlify.app/blog-images/pic24.jpg" alt="Malayalam" class="w-full h-64 object-cover rounded-lg mb-8">
+                    
+                    <div class="prose prose-lg max-w-none">
+
+<p> 
+ ‍ ഏതോ ഒരു ദിനം 
+ <br>
+ഒരു ബാലന്റെ അമ്മയുടെ 
+<br>
+നിഴൽ മാഞ്ഞുപോയി 
+<br>
+ആ നിഴലിനെ കാത്തിരുന്നു 
+<br>
+പക്ഷേ നിഴൽ തിരികെ 
+<br>
+വരുന്നുമില്ല 
+<br>
+മേലോട്ടു പടർന്നു പിടിച്ചു 
+<br>
+അവൻ ഒരു യാത്ര പോകാൻ 
+<br>
+തീരുമാനിച്ചു 
+<br>
+അതിന്റെ മുമ്പേ 
+<br>
+അവന്റെ കണ്ണ് ഒന്ന് അടഞ്ഞു 
+<br>
+അമ്മയുടെ നിഴൽ പ്രത്യക്ഷപ്പെട്ടു
+</p>
+                        
+                        
+                    </div>
+                `
+            },
+            
+        ];
+
+        let currentArticles = articles;
+        let mobileMenuOpen = false;
+
+        // Utility Functions
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            const bgClass = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+            
+            notification.className = `notification ${bgClass} text-white px-6 py-3 rounded-lg shadow-lg show`;
+            notification.querySelector('i').className = `fas ${iconClass} mr-2`;
+            notificationText.textContent = message;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function hideNotification() {
+            document.getElementById('notification').classList.remove('show');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenuOpen = !mobileMenuOpen;
+            
+            if (mobileMenuOpen) {
+                mobileMenu.classList.add('active');
+            } else {
+                mobileMenu.classList.remove('active');
+            }
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Search and Filter Functions
+        function performSearch(type = 'desktop') {
+            const searchTerm = type === 'mobile' ? 
+                document.getElementById('mobileSearchInput').value.toLowerCase() : 
+                document.getElementById('searchInput').value.toLowerCase();
+                
+            const resultsContainer = type === 'mobile' ?
+                document.getElementById('mobileSearchResults') :
+                document.getElementById('searchResults');
+                
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+            
+            if (searchTerm.length < 2) {
+                resultsContainer.classList.remove('active');
+                return;
+            }
+            
+            // Filter articles based on search term
+            const matchedArticles = articles.filter(article => 
+                article.title.toLowerCase().includes(searchTerm) ||
+                article.author.toLowerCase().includes(searchTerm) ||
+                article.category.toLowerCase().includes(searchTerm) ||
+                article.excerpt.toLowerCase().includes(searchTerm)
+            );
+            
+            // Display results
+            if (matchedArticles.length === 0) {
+                resultsContainer.innerHTML = `<div class="p-4 text-center text-gray-500">No results found</div>`;
+            } else {
+                matchedArticles.forEach(article => {
+                    // Highlight the matching term
+                    let titleWithHighlight = article.title;
+                    let authorWithHighlight = article.author;
+                    
+                    if (article.title.toLowerCase().includes(searchTerm)) {
+                        const regex = new RegExp(searchTerm, 'gi');
+                        titleWithHighlight = article.title.replace(regex, match => `<span class="search-highlight">${match}</span>`);
+                    }
+                    
+                    if (article.author.toLowerCase().includes(searchTerm)) {
+                        const regex = new RegExp(searchTerm, 'gi');
+                        authorWithHighlight = article.author.replace(regex, match => `<span class="search-highlight">${match}</span>`);
+                    }
+                    
+                    const resultItem = `
+                        <div class="search-result-item" onclick="openArticle(${article.id}); closeSearchResults('${type}')">
+                            <div class="font-medium">${titleWithHighlight}</div>
+                            <div class="flex justify-between mt-1">
+                                <span class="text-sm text-gray-500">By ${authorWithHighlight}</span>
+                                <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">${article.category}</span>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.innerHTML += resultItem;
+                });
+            }
+            
+            resultsContainer.classList.add('active');
+        }
+        
+        function closeSearchResults(type = 'desktop') {
+            const resultsContainer = type === 'mobile' ?
+                document.getElementById('mobileSearchResults') :
+                document.getElementById('searchResults');
+                
+            resultsContainer.classList.remove('active');
+        }
+        
+        // Advanced search functionality
+        function performAdvancedSearch() {
+            const searchTerm = document.getElementById('advancedSearchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+            
+            // Filter articles based on search criteria
+            let filteredArticles = articles.filter(article => {
+                // If there's a search term, filter by it
+                if (searchTerm) {
+                    if (!(
+                        article.title.toLowerCase().includes(searchTerm) ||
+                        article.excerpt.toLowerCase().includes(searchTerm) ||
+                        article.author.toLowerCase().includes(searchTerm) ||
+                        article.category.toLowerCase().includes(searchTerm)
+                    )) {
+                        return false;
+                    }
+                }
+                
+                // If there's a category filter, filter by it
+                if (categoryFilter && article.category !== categoryFilter) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Sort articles
+            if (sortFilter === 'title') {
+                filteredArticles.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (sortFilter === 'author') {
+                filteredArticles.sort((a, b) => a.author.localeCompare(b.author));
+            } else {
+                filteredArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+            
+            // Update the search metrics
+            const searchMetrics = document.getElementById('searchMetrics');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            if (searchTerm || categoryFilter) {
+                searchMetrics.classList.remove('hidden');
+                resultsCount.textContent = filteredArticles.length;
+            } else {
+                searchMetrics.classList.add('hidden');
+            }
+            
+            // Display the filtered articles
+            currentArticles = filteredArticles;
+            displayArticles(currentArticles);
+        }
+
+        // Handle category pill clicks
+        function initCategoryPills() {
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.addEventListener('click', function() {
+                    // Remove active class from all pills
+                    document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+                    
+                    // Add active class to clicked pill
+                    this.classList.add('active');
+                    
+                    // Update the category filter and perform search
+                    const category = this.getAttribute('data-category');
+                    document.getElementById('categoryFilter').value = category;
+                    performAdvancedSearch();
+                });
+            });
+        }
+
+        function displayArticles(articlesToShow = articles) {
+            const grid = document.getElementById('articlesGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (articlesToShow.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            grid.innerHTML = '';
+            
+            articlesToShow.forEach(article => {
+                const articleCard = `
+                    <div class="article-card rounded-xl shadow-lg overflow-hidden">
+                        <div class="relative">
+                            <img src="${article.image}" alt="${article.title}" class="w-full h-48 object-cover">
+                            <div class="absolute top-4 left-4 bg-yellow-400 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                ${article.category}
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="title-font text-xl font-bold text-gray-800 mb-3 cursor-pointer hover:text-blue-600 transition-colors" onclick="openArticle(${article.id})">
+                                ${article.title}
+                            </h3>
+                            <p class="text-gray-600 mb-4">${article.excerpt}</p>
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center">
+                                    <img src="${article.authorImage}" alt="${article.author}" class="author-avatar mr-3">
+                                    <div>
+                                        <p class="font-semibold text-sm text-gray-800">${article.author}</p>
+                                        <p class="text-xs text-gray-500">${article.date}</p>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-500">${article.readTime}</span>
+                            </div>
+                            
+                            <div class="flex space-x-2">
+                                <button onclick="openArticle(${article.id})" class="flex-1 btn-primary py-2 rounded-lg font-semibold text-gray-800 hover:text-gray-900">
+                                    <i class="fas fa-book-open mr-2"></i>
+                                    Read More
+                                </button>
+                                <button onclick="shareArticle(${article.id})" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += articleCard;
+            });
+        }
+
+        // Article Functions
+        function openArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (article) {
+                document.getElementById('fullArticleContent').innerHTML = article.content;
+                openModal('articleModal');
+            }
+        }
+
+        function shareArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (article && navigator.share) {
+                navigator.share({
+                    title: article.title,
+                    text: article.excerpt,
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                // Fallback: copy to clipboard
+                const url = `${window.location.href}#article-${articleId}`;
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('Article link copied to clipboard!');
+                }).catch(() => {
+                    showNotification('Unable to copy link', 'error');
+                });
+            }
+        }
+
+        function downloadArticle(articleId) {
+            const article = articles.find(a => a.id === articleId);
+            if (article) {
+                // Create a simple PDF-like content
+                const content = `
+                    <html>
+                    <head>
+                        <title>${article.title}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2cm; }
+                            h1 { color: #1a365d; border-bottom: 2px solid #d4af37; }
+                            .author { color: #666; margin-bottom: 2em; }
+                            .content { text-align: justify; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>${article.title}</h1>
+                        <div class="author">By ${article.author} - ${article.date}</div>
+                        <div class="content">${article.content}</div>
+                    </body>
+                    </html>
+                `;
+                
+                const blob = new Blob([content], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${article.title.replace(/[^a-zA-Z0-9]/g, '_')}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification('Article downloaded successfully!');
+            }
+        }
+
+        function bookmarkArticle() {
+            showNotification('Article bookmarked!');
+        }
+
+        // Form Handlers
+        function handleLogin(event) {
+            event.preventDefault();
+            showNotification('Login successful!');
+            closeModal('loginModal');
+        }
+
+        function handleSubscription(event) {
+            event.preventDefault();
+            showNotification('Subscription successful! Welcome to Islamic Insight Journal.');
+            closeModal('subscribeModal');
+        }
+
+        function handleContactForm(event) {
+            event.preventDefault();
+            showNotification('Message sent successfully! We will respond shortly.');
+        }
+
+        function subscribeNewsletter() {
+            const email = document.getElementById('newsletterEmail').value;
+            if (email) {
+                showNotification('Newsletter subscription successful!');
+                document.getElementById('newsletterEmail').value = '';
+            } else {
+                showNotification('Please enter a valid email address', 'error');
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            displayArticles();
+            initCategoryPills();
+            
+            // Close search results when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.search-container')) {
+                    closeSearchResults();
+                }
+                if (!event.target.closest('.advanced-search')) {
+                    closeSearchResults('mobile');
+                }
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (mobileMenuOpen && !event.target.closest('#mobileMenu') && !event.target.closest('button[onclick="toggleMobileMenu()"]')) {
+                    toggleMobileMenu();
+                }
+            });
+            
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        closeModal(modal.id);
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Add fade-in animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

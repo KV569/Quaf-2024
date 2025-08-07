@@ -1,0 +1,24 @@
+quaf-backend/
+├── config/
+│   ├── db.js
+│   └── cloudinary.js
+├── controllers/
+│   ├── authController.js
+│   ├── articleController.js
+│   └── newsletterController.js
+├── models/
+│   ├── User.js
+│   ├── Article.js
+│   └── Subscriber.js
+├── routes/
+│   ├── authRoutes.js
+│   ├── articleRoutes.js
+│   └── newsletterRoutes.js
+├── middlewares/
+│   ├── auth.js
+│   └── errorHandler.js
+├── utils/
+│   ├── emailSender.js
+│   └── upload.js
+├── .env
+└── server.js

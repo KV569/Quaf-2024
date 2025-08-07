@@ -1,0 +1,3 @@
+heroku login
+heroku create quaf-publications
+git push heroku main
