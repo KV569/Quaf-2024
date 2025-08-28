@@ -137,4 +137,101 @@ body {
         grid-auto-columns: 100%;
 
     }
+
+}
+
+/* SEO and Accessibility Improvements - ADD THESE TO YOUR EXISTING CSS */
+
+/* Header styling for better SEO structure */
+header {
+    text-align: center;
+    padding: 20px 0;
+    background: linear-gradient(135deg, #2c5f2d, #4a7c59);
+    color: white;
+    margin-bottom: 30px;
+    width: 100%;
+    position: relative;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #2c5f2d;
+    color: white;
+    margin-top: 30px;
+    width: 100%;
+}
+
+/* Update body to accommodate header/footer */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 0;
+    background: rgb(228, 220, 220);
+}
+
+/* Wrapper adjustment for new layout */
+.wrapper-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    width: 100%;
+    padding: 0 35px;
+}
+
+/* Focus states for accessibility */
+.card:focus-within {
+    outline: 2px solid #4a7c59;
+    outline-offset: 2px;
+}
+
+.wrapper i:focus {
+    outline: 2px solid #4a7c59;
+    outline-offset: 2px;
+}
+
+/* Better responsive design for header/footer */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .wrapper-container {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 15px 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .wrapper-container {
+        padding: 0 15px;
+    }
 }
