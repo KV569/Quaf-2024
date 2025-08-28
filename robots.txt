@@ -1,4 +1,17 @@
 User-agent: *
 Allow: /
 
+# Sitemap location
 Sitemap: https://quaf.me/sitemap.xml
+
+# Crawl-delay for better server performance
+Crawl-delay: 1
+
+# Allow indexing of images
+User-agent: Googlebot-Image
+Allow: /pic/
+Allow: /quaf/
+
+# Disallow admin or sensitive areas (if any)
+Disallow: /admin/
+Disallow: /private/
