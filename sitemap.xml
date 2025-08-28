@@ -7,204 +7,251 @@
     <loc>https://quaf.me/</loc>
     <lastmod>2025-08-28T00:00:00+00:00</lastmod>
     <priority>1.0</priority>
+    <changefreq>monthly</changefreq>
 
     <image:image>
       <image:loc>https://quaf.me/quaf/1.jpg</image:loc>
       <image:title>Quaf DHDC 1</image:title>
+      <image:caption>Quaf DHDC Organization Image 1</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/2.jpg</image:loc>
       <image:title>Quaf DHDC 2</image:title>
+      <image:caption>Quaf DHDC Organization Image 2</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/3.jpg</image:loc>
       <image:title>Quaf DHDC 3</image:title>
+      <image:caption>Quaf DHDC Organization Image 3</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/4.jpg</image:loc>
       <image:title>Quaf DHDC 4</image:title>
+      <image:caption>Quaf DHDC Organization Image 4</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/5.jpg</image:loc>
       <image:title>Quaf DHDC 5</image:title>
+      <image:caption>Quaf DHDC Organization Image 5</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/6.jpg</image:loc>
       <image:title>Quaf DHDC 6</image:title>
+      <image:caption>Quaf DHDC Organization Image 6</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/7.jpg</image:loc>
       <image:title>Quaf DHDC 7</image:title>
+      <image:caption>Quaf DHDC Organization Image 7</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/8.jpg</image:loc>
       <image:title>Quaf DHDC 8</image:title>
+      <image:caption>Quaf DHDC Organization Image 8</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/9.jpg</image:loc>
       <image:title>Quaf DHDC 9</image:title>
+      <image:caption>Quaf DHDC Organization Image 9</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/10.jpg</image:loc>
       <image:title>Quaf DHDC 10</image:title>
+      <image:caption>Quaf DHDC Organization Image 10</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/arakkal.jpg</image:loc>
       <image:title>Quaf Arakkal</image:title>
+      <image:caption>Quaf Arakkal Historical Image</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/marakkar.jpg</image:loc>
       <image:title>Quaf Marakkar</image:title>
+      <image:caption>Quaf Marakkar Historical Image</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/makhdoom.jpg</image:loc>
       <image:title>Quaf Makhdoom</image:title>
+      <image:caption>Quaf Makhdoom Historical Image</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/quaf1.jpg</image:loc>
       <image:title>Quaf DHDC Logo</image:title>
+      <image:caption>Official Quaf DHDC Organization Logo</image:caption>
     </image:image>
   </url>
 
-        <!-- Quaf Page -->
+  <!-- Members Page -->
   <url>
     <loc>https://quaf.me/members.html</loc>
-    <lastmod>2025-08-28</lastmod>
+    <lastmod>2025-08-28T00:00:00+00:00</lastmod>
     <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
 
-   <image:image>
+    <image:image>
       <image:loc>https://quaf.me/pic/pic/986.jpg</image:loc>
-      <image:title>MUHAMMED YASEEN K</image:title>
+      <image:title>MUHAMMED YASEEN K - AD:NO 986</image:title>
+      <image:caption>MUHAMMED YASEEN K - Quaf DHDC Member AD:NO 986</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/987.jpg</image:loc>
-      <image:title>MUHAMMED LASIN KC</image:title>
+      <image:title>MUHAMMED LASIN KC - AD:NO 987</image:title>
+      <image:caption>MUHAMMED LASIN KC - Quaf DHDC Member AD:NO 987</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/988.jpg</image:loc>
-      <image:title>MOHAMMED HADI V</image:title>
+      <image:title>MOHAMMED HADI V - AD:NO 988</image:title>
+      <image:caption>MOHAMMED HADI V - Quaf DHDC Member AD:NO 988</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/989.jpg</image:loc>
-      <image:title>MUHAMMED HAYYAN VP</image:title>
+      <image:title>MUHAMMED HAYYAN VP - AD:NO 989</image:title>
+      <image:caption>MUHAMMED HAYYAN VP - Quaf DHDC Member AD:NO 989</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/990.jpg</image:loc>
-      <image:title>MOHAMMED AFRAH N</image:title>
+      <image:title>MOHAMMED AFRAH N - AD:NO 990</image:title>
+      <image:caption>MOHAMMED AFRAH N - Quaf DHDC Member AD:NO 990</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/991.jpg</image:loc>
-      <image:title>MUHAMMED ZIYAD C</image:title>
+      <image:title>MUHAMMED ZIYAD C - AD:NO 991</image:title>
+      <image:caption>MUHAMMED ZIYAD C - Quaf DHDC Member AD:NO 991</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/992.jpg</image:loc>
-      <image:title>MUHAMMED SHAHAL</image:title>
+      <image:title>MUHAMMED SHAHAL - AD:NO 992</image:title>
+      <image:caption>MUHAMMED SHAHAL - Quaf DHDC Member AD:NO 992</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/993.jpg</image:loc>
-      <image:title>AQIB MUHAMMED KT</image:title>
+      <image:title>AQIB MUHAMMED KT - AD:NO 993</image:title>
+      <image:caption>AQIB MUHAMMED KT - Quaf DHDC Member AD:NO 993</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/995.jpg</image:loc>
-      <image:title>MUHAMMED RABEEH PP</image:title>
+      <image:title>MUHAMMED RABEEH PP - AD:NO 995</image:title>
+      <image:caption>MUHAMMED RABEEH PP - Quaf DHDC Member AD:NO 995</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/996.jpg</image:loc>
-      <image:title>MUHAMMED SHAFEEQUE T</image:title>
+      <image:title>MUHAMMED SHAFEEQUE T - AD:NO 996</image:title>
+      <image:caption>MUHAMMED SHAFEEQUE T - Quaf DHDC Member AD:NO 996</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/997.jpg</image:loc>
-      <image:title>MUHAMMED QASIM MP</image:title>
+      <image:title>MUHAMMED QASIM MP - AD:NO 997</image:title>
+      <image:caption>MUHAMMED QASIM MP - Quaf DHDC Member AD:NO 997</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/998.jpg</image:loc>
-      <image:title>MUHAMMED HASHIM V</image:title>
+      <image:title>MUHAMMED HASHIM V - AD:NO 998</image:title>
+      <image:caption>MUHAMMED HASHIM V - Quaf DHDC Member AD:NO 998</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/999.jpg</image:loc>
-      <image:title>MUHAMMED RASAL PP</image:title>
+      <image:title>MUHAMMED RASAL PP - AD:NO 999</image:title>
+      <image:caption>MUHAMMED RASAL PP - Quaf DHDC Member AD:NO 999</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1000.jpg</image:loc>
-      <image:title>ALI RAFI EP</image:title>
+      <image:title>ALI RAFI EP - AD:NO 1000</image:title>
+      <image:caption>ALI RAFI EP - Quaf DHDC Member AD:NO 1000</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1001.jpg</image:loc>
-      <image:title>MUHAMMED SINAN CK</image:title>
+      <image:title>MUHAMMED SINAN CK - AD:NO 1001</image:title>
+      <image:caption>MUHAMMED SINAN CK - Quaf DHDC Member AD:NO 1001</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1002.jpg</image:loc>
-      <image:title>HAMDAN CC</image:title>
+      <image:title>HAMDAN CC - AD:NO 1002</image:title>
+      <image:caption>HAMDAN CC - Quaf DHDC Member AD:NO 1002</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1003.jpg</image:loc>
-      <image:title>MUHAMMED ALI M</image:title>
+      <image:title>MUHAMMED ALI M - AD:NO 1003</image:title>
+      <image:caption>MUHAMMED ALI M - Quaf DHDC Member AD:NO 1003</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1004.jpg</image:loc>
-      <image:title>MUHAMMED SHAFAN A</image:title>
+      <image:title>MUHAMMED SHAFAN A - AD:NO 1004</image:title>
+      <image:caption>MUHAMMED SHAFAN A - Quaf DHDC Member AD:NO 1004</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1005.jpg</image:loc>
-      <image:title>MUHAMMED ANSHAD VP</image:title>
+      <image:title>MUHAMMED ANSHAD VP - AD:NO 1005</image:title>
+      <image:caption>MUHAMMED ANSHAD VP - Quaf DHDC Member AD:NO 1005</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1006.jpg</image:loc>
-      <image:title>MUHAMMED NASWIH IK</image:title>
+      <image:title>MUHAMMED NASWIH IK - AD:NO 1006</image:title>
+      <image:caption>MUHAMMED NASWIH IK - Quaf DHDC Member AD:NO 1006</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1008.jpg</image:loc>
-      <image:title>HISHAM RAHMATHULLAH O</image:title>
+      <image:title>HISHAM RAHMATHULLAH O - AD:NO 1008</image:title>
+      <image:caption>HISHAM RAHMATHULLAH O - Quaf DHDC Member AD:NO 1008</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1009.jpg</image:loc>
-      <image:title>SAHL SHAN O</image:title>
+      <image:title>SAHL SHAN O - AD:NO 1009</image:title>
+      <image:caption>SAHL SHAN O - Quaf DHDC Member AD:NO 1009</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1010.jpg</image:loc>
-      <image:title>SADHAQATHULLA C</image:title>
+      <image:title>SADHAQATHULLA C - AD:NO 1010</image:title>
+      <image:caption>SADHAQATHULLA C - Quaf DHDC Member AD:NO 1010</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1011.jpg</image:loc>
-      <image:title>MUHAMMED SAHL</image:title>
+      <image:title>MUHAMMED SAHL - AD:NO 1011</image:title>
+      <image:caption>MUHAMMED SAHL - Quaf DHDC Member AD:NO 1011</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1012.jpg</image:loc>
-      <image:title>MUHAMMED HASHIM KH</image:title>
+      <image:title>MUHAMMED HASHIM KH - AD:NO 1012</image:title>
+      <image:caption>MUHAMMED HASHIM KH - Quaf DHDC Member AD:NO 1012</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1013.jpg</image:loc>
-      <image:title>SAIDALAVI SHAMIL MC</image:title>
+      <image:title>SAIDALAVI SHAMIL MC - AD:NO 1013</image:title>
+      <image:caption>SAIDALAVI SHAMIL MC - Quaf DHDC Member AD:NO 1013</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1014.jpg</image:loc>
-      <image:title>MISHAB PT</image:title>
+      <image:title>MISHAB PT - AD:NO 1014</image:title>
+      <image:caption>MISHAB PT - Quaf DHDC Member AD:NO 1014</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1015.jpg</image:loc>
-      <image:title>MUHAMMED RASIN KP</image:title>
+      <image:title>MUHAMMED RASIN KP - AD:NO 1015</image:title>
+      <image:caption>MUHAMMED RASIN KP - Quaf DHDC Member AD:NO 1015</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1016.jpg</image:loc>
-      <image:title>MUHAMMED ASLAM</image:title>
+      <image:title>MUHAMMED ASLAM - AD:NO 1016</image:title>
+      <image:caption>MUHAMMED ASLAM - Quaf DHDC Member AD:NO 1016</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1017.jpg</image:loc>
-      <image:title>MUHAMMED MUSTHAFA SM</image:title>
+      <image:title>MUHAMMED MUSTHAFA SM - AD:NO 1017</image:title>
+      <image:caption>MUHAMMED MUSTHAFA SM - Quaf DHDC Member AD:NO 1017</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1018.jpg</image:loc>
-      <image:title>MUHAMMED SHAFIN</image:title>
+      <image:title>MUHAMMED SHAFIN - AD:NO 1018</image:title>
+      <image:caption>MUHAMMED SHAFIN - Quaf DHDC Member AD:NO 1018</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1019.jpg</image:loc>
-      <image:title>MUHAMMED RAMEES VP</image:title>
+      <image:title>MUHAMMED RAMEES VP - AD:NO 1019</image:title>
+      <image:caption>MUHAMMED RAMEES VP - Quaf DHDC Member AD:NO 1019</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/pic/pic/1020.jpg</image:loc>
-      <image:title>ABDAUL HADI</image:title>
+      <image:title>ABDUL HADI - AD:NO 1020</image:title>
+      <image:caption>ABDUL HADI - Quaf DHDC Member AD:NO 1020</image:caption>
     </image:image>
   </url>
-        
-
 </urlset>
