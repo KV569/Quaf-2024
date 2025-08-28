@@ -1,13 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Home Page -->
   <url>
     <loc>https://quaf.me/</loc>
     <lastmod>2025-08-28</lastmod>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/1.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    
+    <image:image>
+      <image:loc>https://quaf.me/quaf/1.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/2.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/3.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/4.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/5.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/6.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/7.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/8.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/9.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/10.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/arakkal.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/marakkar.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/makhdoom.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://quaf.me/quaf/quaf1.jpg</image:loc>
+      <image:title>quaf dhdc</image:title>
+    </image:image>
+    <!-- Add more images if you want -->
   </url>
-  <url>
-    <loc>https://quaf.me/dhdc</loc>
-    <lastmod>2025-08-28</lastmod>
-    <priority>0.9</priority>
-  </url>
+
 </urlset>
