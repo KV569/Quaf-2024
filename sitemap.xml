@@ -5,70 +5,65 @@
   <!-- Home Page -->
   <url>
     <loc>https://quaf.me/</loc>
-    <lastmod>2025-08-28</lastmod>
+    <lastmod>2025-08-28T00:00:00+00:00</lastmod>
     <priority>1.0</priority>
+
     <image:image>
       <image:loc>https://quaf.me/quaf/1.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
-    </image:image>
-    
-    <image:image>
-      <image:loc>https://quaf.me/quaf/1.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 1</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/2.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 2</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/3.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 3</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/4.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 4</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/5.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 5</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/6.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 6</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/7.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 7</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/8.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 8</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/9.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 9</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/10.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC 10</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/arakkal.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf Arakkal</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/marakkar.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf Marakkar</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/makhdoom.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf Makhdoom</image:title>
     </image:image>
     <image:image>
       <image:loc>https://quaf.me/quaf/quaf1.jpg</image:loc>
-      <image:title>quaf dhdc</image:title>
+      <image:title>Quaf DHDC Logo</image:title>
     </image:image>
-    <!-- Add more images if you want -->
   </url>
 
 </urlset>
